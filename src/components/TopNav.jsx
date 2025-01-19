@@ -75,6 +75,7 @@ const TopNav = () => {
               alt="user photo"
             />
           </button>
+          <NavLink to={"/signup"}>Login</NavLink>
 
           {isUserDropdownOpen && (
             <div
