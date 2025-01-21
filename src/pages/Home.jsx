@@ -6,7 +6,9 @@ import FallBackHome from '../components/widgets/FallBackHome'
 const Home = () => {
   
   return (
-   <FallBackHome/>
+    <div className="w-full min-screen">
+      <FallBackHome/>
+    </div>
   )
 }
 

@@ -7,7 +7,6 @@ import TopNav from '../components/widgets/TopNav'
 const RootLayout = () => {
     return (
         <>
-           
             <TopNav />
             <Outlet />
         </>
