@@ -5,6 +5,7 @@ import YouTubePlaylistFetcher from './components/YouTubePlaylistFetcher'
 import Profile from './pages/Profile';
 import RootLayout from './pages/RootLayout';
 import Signup from './pages/Signup';
+import Home from './pages/Home';
 
 function App() {
   const router = createBrowserRouter([
@@ -14,7 +15,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <YouTubePlaylistFetcher />
+          element: <Home/>
         },
         { path: "/profile", 
         element: <Profile /> },
