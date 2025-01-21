@@ -1,8 +1,17 @@
 import React from 'react'
+import CheckBox from '../components/ui/CheckBox'
+import YtListView from '../components/ui/YtListView'
+
+
+
 
 const Home = () => {
+  
   return (
-    <div>Home</div>
+    <div> 
+      <CheckBox label="Normal Checkbox" />
+      <YtListView/>
+    </div>
   )
 }
 

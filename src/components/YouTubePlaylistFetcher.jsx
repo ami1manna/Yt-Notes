@@ -1,103 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { PlaylistProvider, usePlaylist } from '../context/PlaylistContext';
 
 function YouTubePlaylistFetcher() {
-  // State variables
-  const [playlistId, setPlaylistId] = useState('');
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [nextPageToken, setNextPageToken] = useState('');
-
-  // Your YouTube Data API Key (IMPORTANT: Use environment variable in production)
-  const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
-
-  // Function to fetch playlist videos
-  const fetchPlaylistVideos = async (pageToken = '') => {
-    // Input validation
-    if (!playlistId) {
-      setError('Please enter a valid Playlist ID');
-      return;
-    }
-
-    if (!API_KEY) {
-      setError('YouTube API Key is missing');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Fetch playlist items with pagination support
-      const response = await axios.get(
-        `https://www.googleapis.com/youtube/v3/playlistItems`, 
-        {
-          params: {
-            part: 'snippet',
-            playlistId: playlistId,
-            maxResults: 50,
-            pageToken: pageToken,
-            key: API_KEY
-          }
-        }
-      );
-      
-      console.log(response.data.items);
-      // Extract video details
-      const fetchedVideos = response.data.items.map(item => ({
-        title: item.snippet.title,
-        videoId: item.snippet.resourceId.videoId,
-        thumbnailUrl: item.snippet.thumbnails.medium.url,
-        channelTitle: item.snippet.channelTitle,
-        publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString()
-      }));
-
-      videos.map(video => {
-        console.log(video.title);
-      })
-      // Update videos - append for pagination or set new
-      setVideos(prev => 
-        pageToken ? [...prev, ...fetchedVideos] : fetchedVideos
-      );
-
-      // Update next page token
-      setNextPageToken(response.data.nextPageToken || '');
-    } catch (err) {
-      // Detailed error handling
-      console.error('Fetch Error:', err);
-
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        switch (err.response.status) {
-          case 400:
-            setError('Invalid Playlist ID or Bad Request');
-            break;
-          case 403:
-            setError('API Quota Exceeded or Invalid API Key');
-            break;
-          case 404:
-            setError('Playlist Not Found');
-            break;
-          default:
-            setError(`Error: ${err.response.status} - ${err.response.data.error.message}`);
-        }
-      } else if (err.request) {
-        setError('No response from YouTube API. Check your internet connection.');
-      } else {
-        setError('Error setting up the request. Please try again.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load more videos function
-  const loadMoreVideos = () => {
-    if (nextPageToken) {
-      fetchPlaylistVideos(nextPageToken);
-    }
-  };
+  const { 
+    videos, 
+    loading, 
+    error, 
+    playlistId, 
+    nextPageToken,
+    fetchPlaylistVideos,
+    setPlaylistUrl,
+    loadMoreVideos
+  } = usePlaylist();
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
@@ -110,7 +24,7 @@ function YouTubePlaylistFetcher() {
         <input 
           type="text"
           value={playlistId}
-          onChange={(e) => setPlaylistId(e.target.value)}
+          onChange={(e) => setPlaylistUrl(e.target.value)}
           placeholder="Enter YouTube Playlist ID"
           className="flex-grow p-3 border-2 border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-red-500"
         />
@@ -151,7 +65,7 @@ function YouTubePlaylistFetcher() {
                 <img 
                   src={video.thumbnailUrl} 
                   alt={video.title} 
-                  className="w-full h-48 object-cover"
+                   className="w-full h-48 object-cover"
                 />
                 
                 {/* Video Details */}
