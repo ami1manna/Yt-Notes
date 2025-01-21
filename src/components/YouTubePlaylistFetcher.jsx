@@ -42,7 +42,8 @@ function YouTubePlaylistFetcher() {
           }
         }
       );
-
+      
+      console.log(response.data.items);
       // Extract video details
       const fetchedVideos = response.data.items.map(item => ({
         title: item.snippet.title,
@@ -52,6 +53,9 @@ function YouTubePlaylistFetcher() {
         publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString()
       }));
 
+      videos.map(video => {
+        console.log(video.title);
+      })
       // Update videos - append for pagination or set new
       setVideos(prev => 
         pageToken ? [...prev, ...fetchedVideos] : fetchedVideos
