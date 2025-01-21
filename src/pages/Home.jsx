@@ -1,17 +1,12 @@
 import React from 'react'
-import CheckBox from '../components/ui/CheckBox'
-import YtListView from '../components/ui/YtListView'
-
+import FallBackHome from '../components/widgets/FallBackHome'
 
 
 
 const Home = () => {
   
   return (
-    <div> 
-      <CheckBox label="Normal Checkbox" />
-      <YtListView/>
-    </div>
+   <FallBackHome/>
   )
 }
 
