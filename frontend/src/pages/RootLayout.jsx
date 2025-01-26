@@ -6,10 +6,14 @@ import TopNav from '../components/widgets/TopNav'
 
 const RootLayout = () => {
     return (
-        <>
+          
+        <div className='w-screen h-screen'>
             <TopNav />
-            <Outlet />
-        </>
+            <div className='w-full h-full'>
+            <Outlet  />
+            </div>
+        </div>
+        
     )
 }
 
