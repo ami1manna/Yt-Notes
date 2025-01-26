@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NetworkImage from '../../../src/assets/svg/NetworkImg.svg';
+import NetworkImage from '../../assets/svg/NetworkImg.svg';
 
 const NetworkImg = ({ src, alt, skeletonHeight = '200px', skeletonWidth = '100%' }) => {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,6 +1,5 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './App.css'
 import YouTubePlaylistFetcher from './components/YouTubePlaylistFetcher'
 import Profile from './pages/Profile';
 import RootLayout from './pages/RootLayout';
@@ -16,24 +15,28 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home/>
+          element: <Home />
         },
         {
-          path:"/addPlaylist",
-          element:<AddPlaylist/>
+          path: "/addPlaylist",
+          element: <AddPlaylist />
         },
-        { path: "/profile", 
-        element: <Profile /> },
-        { path: "/signup", 
-        element: <Signup /> },
-        
+        {
+          path: "/profile",
+          element: <Profile />
+        },
+        {
+          path: "/signup",
+          element: <Signup />
+        },
+
       ]
     }
   ]);
   return (
-    < >
-     <RouterProvider router={router}></RouterProvider>
-    </>
+    
+      <RouterProvider router={router}></RouterProvider>
+     
   )
 }
 

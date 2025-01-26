@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ThreeDots from '../../../src/assets/svg/ThreeDots.svg';
+import ThreeDots from '../../assets/svg/ThreeDots.svg';
 import NetworkImg from './NetworkImg';
 
 const Card = () => {
