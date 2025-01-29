@@ -1,4 +1,3 @@
-// playlistModel.js
 const mongoose = require('mongoose');
 
 const videoSchema = new mongoose.Schema({
@@ -9,11 +8,15 @@ const videoSchema = new mongoose.Schema({
   publishedAt: String
 });
 
-const playlistSchema = new mongoose.Schema({
-  userEmail: { type: String, required: true },
-  playlistId: { type: String, required: true },
-  playlistUrl: { type: String, required: true },
+const singlePlaylistSchema = new mongoose.Schema({
+  playlistId: {type :String, unique: true},
+  playlistUrl: String,
   videos: [videoSchema]
 });
 
-module.exports = mongoose.model('Playlist', playlistSchema);
+const userPlaylistSchema = new mongoose.Schema({
+  userEmail: { type: String, required: true, unique: true },
+  playlists: [singlePlaylistSchema]
+});
+
+module.exports = mongoose.model('UserPlaylist', userPlaylistSchema);

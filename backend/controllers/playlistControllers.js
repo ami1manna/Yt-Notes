@@ -1,12 +1,10 @@
-// playlistController.js
-const Playlist = require('../models/playlistModel');
+ const UserPlaylist = require('../models/playlistModel');
 const axios = require('axios');
 
 exports.addPlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId, playlistUrl } = req.body;
-    
-    // Fetch videos using YouTube API
+
     const API_KEY = process.env.YOUTUBE_API_KEY;
     const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
       params: {
@@ -16,7 +14,7 @@ exports.addPlaylist = async (req, res) => {
         key: API_KEY,
       },
     });
-    
+
     const videos = response.data.items.map(item => ({
       videoId: item.snippet.resourceId.videoId,
       title: item.snippet.title,
@@ -25,9 +23,28 @@ exports.addPlaylist = async (req, res) => {
       publishedAt: item.snippet.publishedAt,
     }));
 
-    const playlist = new Playlist({ userEmail, playlistId, playlistUrl, videos });
-    await playlist.save();
+    let userPlaylist = await UserPlaylist.findOne({ userEmail });
 
+    if (!userPlaylist) {
+      userPlaylist = new UserPlaylist({
+        userEmail,
+        playlists: [{ playlistId, playlistUrl, videos }]
+      });
+    } else {
+      // Check if the playlist with the same playlistId already exists for the user
+      const existingPlaylist = userPlaylist.playlists.find(
+        playlist => playlist.playlistId === playlistId
+      );
+
+      if (existingPlaylist) {
+        return res.status(400).json({ error: 'Playlist already added' });
+      }
+
+      // Add the new playlist
+      userPlaylist.playlists.push({ playlistId, playlistUrl, videos });
+    }
+
+    await userPlaylist.save();
     res.status(201).json({ message: 'Playlist added successfully' });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -37,9 +54,20 @@ exports.addPlaylist = async (req, res) => {
 exports.getPlaylistsByUser = async (req, res) => {
   try {
     const { userEmail } = req.params;
-    const playlists = await Playlist.find({ userEmail });
+    const playlists = await UserPlaylist.find({ userEmail });
     res.json(playlists);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.deletePlaylist = async (req, res) => {
+    try{
+        const {userEmail,playlistId} = req.body;
+        
+
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+}
