@@ -6,9 +6,10 @@ import { extractPlaylistId, validatePlaylistUrl } from '../../utils/playlistUtil
 import CustomInput from '../ui/CustomInput'
 import AddIcon from '../../assets/png/plus.png'
 import { PlaylistContext } from '../../context/PlaylistsContext'
+import CourseList from './CourseList'
 
 const AddPlaylist = () => {
-    const { userPlaylists, setUserPlaylists } = useContext(PlaylistContext);
+    const { userPlaylists, setPlaylistData } = useContext(PlaylistContext);
     const [playlistUrl, setPlaylistUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const inputRef = useRef(null);
@@ -41,9 +42,11 @@ const AddPlaylist = () => {
 
             // Update context with new playlist if available
             if (response.data.playlist) {
-                setUserPlaylists(prevPlaylists => [...prevPlaylists, response.data.playlist]);
+               
+                setPlaylistData(response.data.playlist);
+              
             }
-
+            console.log(userPlaylists);
             // Success handling
             toast.success(response.data.message || 'Playlist added successfully');
             setPlaylistUrl(''); // Clear input
@@ -76,9 +79,7 @@ const AddPlaylist = () => {
                 disabled={loading}
             />
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-3">
-                {/* Future playlist display */}
-            </div>
+            <CourseList/>   
             
             <ToastContainer />
         </motion.div>
