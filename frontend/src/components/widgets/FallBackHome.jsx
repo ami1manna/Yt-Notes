@@ -4,12 +4,12 @@ import { NavLink } from 'react-router-dom';
 
 const FallBackHome = () => {
   return (
-    <div className='bg-gradient-to-br from-blue-50 to-blue-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 flex justify-center items-center h-full'>
+    <div className='bg-gradient-to-br from-blue-50 to-blue-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 flex justify-center items-center h-full w-full'>
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center lg:p-8 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl "
+        className="text-center lg:p-8 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl w-full h-full"
       >
         <motion.img
           src="./empty.gif"

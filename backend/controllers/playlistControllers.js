@@ -1,4 +1,4 @@
- const UserPlaylist = require('../models/playlistModel');
+const UserPlaylist = require('../models/playlistModel');
 const axios = require('axios');
 
 exports.addPlaylist = async (req, res) => {
@@ -49,7 +49,16 @@ exports.addPlaylist = async (req, res) => {
     }
 
     await userPlaylist.save();
-    res.status(201).json({ message: 'Playlist added successfully' });
+    res.status(201).json({
+      message: 'Playlist added successfully' ,
+        playlist: {
+          playlistId,
+          playlistUrl,
+          videos
+        }
+      }
+
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -66,23 +75,22 @@ exports.getPlaylistsByUser = async (req, res) => {
 };
 
 exports.deletePlaylist = async (req, res) => {
-    try {
-      const { userEmail, playlistId } = req.body;
-      // Find the user's playlist
-      const userPlaylist = await UserPlaylist.findOne({ userEmail });
-      if (!userPlaylist) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-      // Find the index of the playlist to delete
-      const playlistIndex = userPlaylist.playlists.findIndex(playlist => playlist.playlistId === playlistId);
-      if (playlistIndex === -1) {
-        return res.status(404).json({ error: 'Playlist not found' });
-      }
-      userPlaylist.playlists.splice(playlistIndex, 1);
-      await userPlaylist.save();
-      res.status(200).json({ message: 'Playlist deleted successfully' });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+  try {
+    const { userEmail, playlistId } = req.body;
+    // Find the user's playlist
+    const userPlaylist = await UserPlaylist.findOne({ userEmail });
+    if (!userPlaylist) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  };
-  
+    // Find the index of the playlist to delete
+    const playlistIndex = userPlaylist.playlists.findIndex(playlist => playlist.playlistId === playlistId);
+    if (playlistIndex === -1) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    userPlaylist.playlists.splice(playlistIndex, 1);
+    await userPlaylist.save();
+    res.status(200).json({ message: 'Playlist deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

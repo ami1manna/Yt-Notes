@@ -47,11 +47,11 @@ const TopNav = () => {
   ];
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
-      <div className=" w-full flex flex-wrap items-center justify-between mx-auto px-4 ">
+    <nav className="bg-white border-gray-200 dark:bg-gray-900 h-16">
+      <div className=" w-full flex flex-wrap items-center justify-between px-4 ">
         {/* Logo Section */}
         <NavLink to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="../src/assets/logo.png" className="h-10 md:h-14 lg:h-20" alt="YouLearn Logo" />
+          <img src="../src/assets/logo.png" className="h-10 md:h-14 lg:h-18" alt="YouLearn Logo" />
           <span className="hidden md:block lg:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white">YouLearn</span>
         </NavLink>
 
