@@ -8,7 +8,6 @@ const noteSchema = new mongoose.Schema({
 const videoSchema = new mongoose.Schema({
   videoId: String,
   title: String,
-  channelTitle: String,
   thumbnailUrl: String,
   publishedAt: String,
   done:{ type: Boolean, default: false },
@@ -18,6 +17,9 @@ const videoSchema = new mongoose.Schema({
 const singlePlaylistSchema = new mongoose.Schema({
   playlistId: String,
   playlistUrl: String,
+  channelTitle: String,
+  playlistLength: Number,
+  playlistThumbnailUrl: String,
   videos: [videoSchema]
 });
 

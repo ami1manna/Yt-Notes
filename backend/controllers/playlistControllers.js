@@ -18,17 +18,21 @@ exports.addPlaylist = async (req, res) => {
     const videos = response.data.items.map(item => ({
       videoId: item.snippet.resourceId.videoId,
       title: item.snippet.title,
-      channelTitle: item.snippet.channelTitle,
       thumbnailUrl: item.snippet.thumbnails.default.url,
       publishedAt: item.snippet.publishedAt,
     }));
+
+    // common data for each playlist
+    const channelTitle = response.data.items[0].snippet.channelTitle;
+    const playlistLength = response.data.pageInfo.totalResults;
+    const playlistThumbnailUrl = response.data.items[0].snippet.thumbnails.default.url;
 
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
 
     if (!userPlaylist) {
       userPlaylist = new UserPlaylist({
         userEmail,
-        playlists: [{ playlistId, playlistUrl, videos }]
+        playlists: [{ playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos }]
       });
     } else {
       // Check if the playlist with the same playlistId already exists for the user
