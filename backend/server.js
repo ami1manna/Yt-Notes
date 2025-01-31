@@ -5,11 +5,14 @@ const authRoutes = require('./routes/authRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const videoRoutes = require('./routes/videoRouters')
+const cors = require('cors');
+
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
+    
 mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDB connected')).catch(err => console.log(err));
 
 app.use('/auth', authRoutes);

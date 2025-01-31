@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useReducer } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useReducer } from 'react';
+
 
 // Initial State
 const initialState = {
