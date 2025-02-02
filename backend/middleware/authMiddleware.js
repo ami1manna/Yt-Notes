@@ -1,14 +1,29 @@
+// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
 
-module.exports = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (!token) return res.status(401).json({ message: 'Access Denied' });
-
+exports.protect = async (req, res, next) => {
   try {
+    // Get token from cookie
+    const token = req.cookies.jwt;
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    
+    // Check if user still exists
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(401).json({ message: 'User no longer exists' });
+    }
+
+    // Attach user to request
+    req.user = user;
     next();
-  } catch {
-    res.status(403).json({ message: 'Invalid token' });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
   }
 };

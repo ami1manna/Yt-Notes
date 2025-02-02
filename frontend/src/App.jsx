@@ -1,10 +1,11 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Profile from './pages/Profile';
+ 
 import RootLayout from './pages/RootLayout';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import AddPlaylist from './components/widgets/AddPlaylist';
+import Login from './pages/Login';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,14 +21,15 @@ function App() {
           path: "/addPlaylist",
           element: <AddPlaylist />
         },
-        {
-          path: "/profile",
-          element: <Profile />
-        },
+        
         {
           path: "/signup",
           element: <Signup />
         },
+        {
+          path: "/login",
+          element: <Login />
+        }
 
       ]
     }
