@@ -5,6 +5,8 @@ const authRoutes = require('./routes/authRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const videoRoutes = require('./routes/videoRouters')
+const authMiddleware = require('../middleware/authMiddleware');
+
 const cors = require('cors');
 
 require('dotenv').config();
@@ -19,6 +21,10 @@ app.use('/auth', authRoutes);
 app.use('/playlist', playlistRoutes);
 app.use('/video', notesRoutes);
 app.use('/video',videoRoutes);
+app.get('/protected', authMiddleware, (req, res) => {
+  res.json({ message: 'Protected data accessed', user: req.user });
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
