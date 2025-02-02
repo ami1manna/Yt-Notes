@@ -51,11 +51,7 @@ exports.addPlaylist = async (req, res) => {
     await userPlaylist.save();
     res.status(201).json({
       message: 'Playlist added successfully' ,
-        playlist: {
-          playlistId,
-          playlistUrl,
-          videos
-        }
+        playlist: { playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos }
       }
 
     );

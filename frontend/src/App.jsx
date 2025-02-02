@@ -1,6 +1,5 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import YouTubePlaylistFetcher from './components/YouTubePlaylistFetcher'
 import Profile from './pages/Profile';
 import RootLayout from './pages/RootLayout';
 import Signup from './pages/Signup';

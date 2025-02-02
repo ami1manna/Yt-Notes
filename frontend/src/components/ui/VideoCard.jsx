@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ThreeDots from '../../assets/svg/ThreeDots.svg';
 import NetworkImg from './NetworkImg';
 
-const Card = () => {
+const VideoCard = ({title,thumbnailUrl}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -78,49 +78,23 @@ const Card = () => {
           transition={{ type: 'spring', stiffness: 300 }}
         >
           <NetworkImg
-            src="https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
+            src={thumbnailUrl}
+            alt="img"
+            className=""
           />
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center"
-            >
-              <span className="text-white text-xs">View Profile</span>
-            </motion.div>
-          )}
+         
         </motion.div>
 
         {/* User Details */}
-        <h5 className="mb-1 text-xl font-semibold text-gray-900 dark:text-white">
-          Bonnie Green
+        {/* <h5 className="mb-1 text-xl font-semibold text-gray-900 dark:text-white">
+          {title}
         </h5>
-        <span className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Visual Designer
-        </span>
+          */}
 
-        {/* Action Buttons */}
-        <div className="flex space-x-3">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Add Friend
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-          >
-            Message
-          </motion.button>
-        </div>
+   
       </div>
     </motion.div>
   );
 };
 
-export default Card;
+export default VideoCard;
