@@ -1,133 +1,76 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
-  });
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signup } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-   
+    await signup((firstName + " " + lastName), email, password);
+    navigate("/login");
   };
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
-    }}>
-      <h2 style={{
-        textAlign: 'center',
-        color: '#333',
-        marginBottom: '20px'
-      }}>
-        Create Account
-      </h2>
-
-      <form onSubmit={handleSubmit} style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '15px'
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '5px', color: '#555' }}>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            placeholder="Choose a unique username"
-            style={{
-              padding: '10px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '5px', color: '#555' }}>Email Address</label>
+    <div className="flex flex-col justify-center items-center w-full h-screen bg-gray-100 dark:bg-gray-900 px-5">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-6">
+          Signup
+        </h2>
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div className="flex gap-3">
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+              className="w-1/2 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              className="w-1/2 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="Enter your email"
-            style={{
-              padding: '10px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label style={{ marginBottom: '5px', color: '#555' }}>Password</label>
           <input
             type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={8}
-            placeholder="Create a strong password"
-            style={{
-              padding: '10px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-        </div>
-
-        <button 
-          type="submit"
-          style={{
-            padding: '12px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
-        >
-          Create Account
-        </button>
-      </form>
-
-      <p style={{
-        textAlign: 'center',
-        marginTop: '20px',
-        color: '#666'
-      }}>
-        Already have an account?{' '}
-        <a 
-          href="/login" 
-          style={{ 
-            color: '#4CAF50',
-            textDecoration: 'none' 
-          }}
-        >
-          Log In
-        </a>
-      </p>
+          <button
+            type="submit"
+            className="w-full mt-4 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all"
+          >
+            Signup
+          </button>
+        </form>
+        <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm">
+          Already have an account?{" "}
+          <a href="/login" className="text-orange-500 font-semibold">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 };

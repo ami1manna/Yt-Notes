@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import ThemeToggle from '../ui/ThemeToggle';
+import Profile from '../ui/Profile';
+
+
  
 const TopNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,24 +60,8 @@ const TopNav = () => {
 
         {/* Desktop User Menu */}
         <div className="hidden md:flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
-            ref={buttonRef}
-            type="button"
-            className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            onClick={toggleUserDropdown}
-            aria-expanded={isUserDropdownOpen}
-            aria-haspopup="true"
-          >
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://avatar.iran.liara.run/public"
-              alt="user photo"
-            />
-          </button>
-          <NavLink to={"/signup"} className="ml-2 text-sm text-gray-700 dark:text-white">
-            Login
-          </NavLink>
+          
+        <Profile/>
 
           {/* User Dropdown */}
           {isUserDropdownOpen && (

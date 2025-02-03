@@ -1,42 +1,28 @@
-
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Profile from './pages/Profile';
+import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } from 'react-router-dom';
 import RootLayout from './pages/RootLayout';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import AddPlaylist from './components/widgets/AddPlaylist';
+import Login from './pages/Login';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      {/* Routes inside RootLayout */}
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<Home />} />
+        <Route path="addPlaylist" element={<AddPlaylist />} />
+      </Route>
+
+      {/* Separate Routes for Login and Signup (No RootLayout) */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+    </>
+  )
+);
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <RootLayout />,
-      children: [
-        {
-          path: "/",
-          element: <Home />
-        },
-        {
-          path: "/addPlaylist",
-          element: <AddPlaylist />
-        },
-        {
-          path: "/profile",
-          element: <Profile />
-        },
-        {
-          path: "/signup",
-          element: <Signup />
-        },
-
-      ]
-    }
-  ]);
-  return (
-    
-      <RouterProvider router={router}></RouterProvider>
-     
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
