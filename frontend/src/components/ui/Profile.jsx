@@ -1,16 +1,21 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PlainButton from './PlainButton';
 
 export default function Profile() {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();  
 
-  if (!user) return <NavLink to='/login'>Please log in</NavLink>;
+  if (!user)
+    return (
+      <PlainButton onClick={() => navigate('/login')}>Login</PlainButton>
+    );
 
   return (
     <div>
-      <h1>Welcome {user.username}!</h1>
-      <button onClick={logout}>Logout</button>
+      {/* <h1>Welcome {user.username}!</h1> */}
+      <PlainButton onClick={logout}>Logout</PlainButton>
     </div>
   );
 }

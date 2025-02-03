@@ -1,18 +1,19 @@
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import {useState,useRef} from 'react';
-function Login() {
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
   const { login, error, loading } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-      // Redirect on success
+      navigate("/"); // Redirect to home or another page on success
     } catch (err) {
-      // Error is handled by context, but you can add additional handling here
       console.error(err);
     }
   };
@@ -20,24 +21,49 @@ function Login() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="flex flex-col justify-center items-center w-full h-screen bg-gray-100 dark:bg-gray-900 px-5">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-6">
+          Login
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="text-red-500 text-center font-semibold">
+              {error}
+            </div>
+          )}
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Password"
+            className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <button
+            type="submit"
+            className="w-full mt-4 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-orange-500 font-semibold">
+            Sign up
+          </a>
+        </p>
+      </div>
+    </div>
   );
-}
+};
+
 export default Login;
