@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 
-const FallBackHome = () => {
+const FallBackScreen = () => {
   return (
-    <div className='bg-gradient-to-br from-blue-50 to-blue-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 flex justify-center items-center h-full w-full'>
+    <div className=' flex justify-center items-center h-full w-full '>
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center lg:p-8 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl w-full h-full"
+        className="text-center w-full h-full flex flex-col justify-center items-center"
       >
         <motion.img
           src="./empty.gif"
@@ -23,12 +23,12 @@ const FallBackHome = () => {
         <p className="text-gray-600 dark:text-gray-300 mb-6">
           Looks like this space is waiting to be filled
         </p>
-        <NavLink to='/addPlaylist' className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+        {/* <NavLink to='/addPlaylist' className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
           Add Playlist
-        </NavLink>
+        </NavLink> */}
       </motion.div>
     </div>
   );
 };
 
-export default FallBackHome;
+export default FallBackScreen;

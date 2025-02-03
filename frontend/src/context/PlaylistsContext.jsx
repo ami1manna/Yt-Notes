@@ -7,23 +7,24 @@ export const PlaylistProvider = ({ children }) => {
 
     const setPlaylistData = useCallback((data) => {
         setUserPlaylists((prevPlaylists) => {
-            // Check if the playlist already exists to prevent duplicates
+            if (Array.isArray(data)) {
+                const newPlaylists = data.filter(
+                    (playlist) => !prevPlaylists.some((p) => p.playlistId === playlist.playlistId)
+                );
+                return [...prevPlaylists, ...newPlaylists];
+            }
             const isDuplicate = prevPlaylists.some(
-                playlist => playlist.playlistId === data.playlistId
+                (playlist) => playlist.playlistId === data.playlistId
             );
-
-            // If not a duplicate, add the new playlist
             if (!isDuplicate) {
                 return [...prevPlaylists, data];
             }
-
-            // If duplicate, return existing playlists
             return prevPlaylists;
         });
     }, []);
 
     return (
-        <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData }}>
+        <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData, setUserPlaylists }}>
             {children}
         </PlaylistContext.Provider>
     );
