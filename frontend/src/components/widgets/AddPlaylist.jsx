@@ -35,7 +35,7 @@ const AddPlaylist = () => {
             }
 
             setLoading(true);
-            console.log(user.email)
+             
             const response = await axios.post('http://localhost:5000/playlists/add', {
                 userEmail: user.email, // TODO: Replace with actual user email
                 playlistId: extractPlaylistId(trimmedUrl),
@@ -48,7 +48,7 @@ const AddPlaylist = () => {
                 setPlaylistData(response.data.playlists);
               
             }
-            console.log(userPlaylists);
+            console.log(response.data.playlists);
             // Success handling
             toast.success(response.data.message || 'Playlist added successfully');
             setPlaylistUrl(''); // Clear input
