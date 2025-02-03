@@ -48,7 +48,7 @@ const AddPlaylist = () => {
                 setPlaylistData(response.data.playlists);
               
             }
-            console.log(response.data.playlists);
+             
             // Success handling
             toast.success(response.data.message || 'Playlist added successfully');
             setPlaylistUrl(''); // Clear input

@@ -27,6 +27,8 @@ exports.addPlaylist = async (req, res) => {
     const playlistLength = response.data.pageInfo.totalResults;
     const playlistThumbnailUrl = response.data.items[0].snippet.thumbnails.default.url;
 
+     
+
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
 
     if (!userPlaylist) {
@@ -45,7 +47,7 @@ exports.addPlaylist = async (req, res) => {
       }
 
       // Add the new playlist
-      userPlaylist.playlists.push({ playlistId, playlistUrl, videos });
+      userPlaylist.playlists.push({ playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos });
     }
 
     await userPlaylist.save();
