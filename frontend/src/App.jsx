@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import AddPlaylist from './components/widgets/AddPlaylist';
 import Login from './pages/Login';
+import CourseScreen from './pages/CourseScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,8 @@ const router = createBrowserRouter(
       {/* Separate Routes for Login and Signup (No RootLayout) */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/courseScreen" element={<CourseScreen />} />
+
     </>
   )
 );

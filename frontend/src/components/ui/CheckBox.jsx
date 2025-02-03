@@ -1,6 +1,6 @@
 import React from "react";
 
-const CheckBox = () => {
+const CheckBox = ({children}) => {
   return (
     <label
       htmlFor="Option1"
@@ -16,7 +16,7 @@ const CheckBox = () => {
 
       <div>
         <strong className="text-sm font-medium text-gray-900 dark:text-white">
-          John Clapton
+          {children}
         </strong>
       </div>
     </label>
