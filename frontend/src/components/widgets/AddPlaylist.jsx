@@ -80,7 +80,7 @@ const AddPlaylist = () => {
                 ref={inputRef}
                 disabled={loading}
             />
-            <div className='flex flex-1'>
+            <div className='flex flex-col flex-1'>
             <CourseList/>   
             </div>
             
