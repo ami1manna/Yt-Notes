@@ -1,13 +1,12 @@
 import React from 'react'
-import FallBackHome from '../components/widgets/FallBackHome'
-
+import AddPlaylist from '../components/widgets/AddPlaylist'
 
 
 const Home = () => {
   
   return (
     <div className="w-full h-full">
-      <FallBackHome/>
+      <AddPlaylist/>
     </div>
   )
 }

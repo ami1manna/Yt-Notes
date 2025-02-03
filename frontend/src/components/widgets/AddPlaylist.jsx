@@ -6,14 +6,16 @@ import { extractPlaylistId, validatePlaylistUrl } from '../../utils/playlistUtil
 import CustomInput from '../ui/CustomInput'
 import AddIcon from '../../assets/png/plus.png'
 import { PlaylistContext } from '../../context/PlaylistsContext'
+import { AuthContext } from '../../context/AuthContext'
 import CourseList from './CourseList'
 
 const AddPlaylist = () => {
     const { userPlaylists, setPlaylistData } = useContext(PlaylistContext);
+    const {user} = useContext(AuthContext);
     const [playlistUrl, setPlaylistUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const inputRef = useRef(null);
-
+    
     const handleAddPlaylist = async () => {
         try {
             // Trim and validate URL 
@@ -33,17 +35,17 @@ const AddPlaylist = () => {
             }
 
             setLoading(true);
-
-            const response = await axios.post('http://localhost:5000/playlist/add', {
-                userEmail: "test@gmail.com", // TODO: Replace with actual user email
+            console.log(user.email)
+            const response = await axios.post('http://localhost:5000/playlists/add', {
+                userEmail: user.email, // TODO: Replace with actual user email
                 playlistId: extractPlaylistId(trimmedUrl),
                 playlistUrl: trimmedUrl
             });
 
             // Update context with new playlist if available
-            if (response.data.playlist) {
+            if (response.data.playlists) {
                
-                setPlaylistData(response.data.playlist);
+                setPlaylistData(response.data.playlists);
               
             }
             console.log(userPlaylists);
@@ -65,7 +67,7 @@ const AddPlaylist = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-center lg:p-8 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl w-full"
+            className="text-center lg:p-8 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl w-full h-full flex flex-col"
         >
             <CustomInput
                 inputType="search"
@@ -78,8 +80,9 @@ const AddPlaylist = () => {
                 ref={inputRef}
                 disabled={loading}
             />
-
+            <div className='flex flex-1'>
             <CourseList/>   
+            </div>
             
             <ToastContainer />
         </motion.div>

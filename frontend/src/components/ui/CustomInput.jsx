@@ -16,7 +16,7 @@ const CustomInput = React.forwardRef(({
     }
 
     return (
-        <form className="w-full" onSubmit={handleSubmit}>
+        <form className="w-full " onSubmit={handleSubmit}>
             <label htmlFor="input-custom" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
                 Search
             </label>
@@ -39,7 +39,7 @@ const CustomInput = React.forwardRef(({
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     {textButton}
-                    <img src={iconPath} alt="Icon" className="w-6 h-6" />
+                    <img src={iconPath} alt="Icon" className="w-5 h-5" />
                 </button>
             </div>
         </form>
