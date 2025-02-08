@@ -1,10 +1,20 @@
-import { createContext, useState, useCallback } from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
 
 export const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
-    const [userPlaylists, setUserPlaylists] = useState([]);
+    const [userPlaylists, setUserPlaylists] = useState(() => {
+        // Load data from localStorage when initializing
+        const storedPlaylists = localStorage.getItem("userPlaylists");
+        return storedPlaylists ? JSON.parse(storedPlaylists) : [];
+    });
 
+    // Save playlists to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem("userPlaylists", JSON.stringify(userPlaylists));
+    }, [userPlaylists]);
+
+    // Add playlist
     const setPlaylistData = useCallback((data) => {
         setUserPlaylists((prevPlaylists) => {
             if (Array.isArray(data)) {
@@ -23,8 +33,6 @@ export const PlaylistProvider = ({ children }) => {
         });
     }, []);
 
-    // toggle user Video status
-    const toggleVideoStatus = useCallback((videoId) => {})
     return (
         <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData, setUserPlaylists }}>
             {children}
