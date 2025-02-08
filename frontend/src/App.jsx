@@ -24,6 +24,13 @@ const router = createBrowserRouter(
   )
 );
 
+
+/**
+ * The main App component. Returns a RouterProvider with the router.
+ * The router contains all the routes for the application.
+ * @returns {JSX.Element} The main App component.
+ * @constructor
+ */
 function App() {
   return <RouterProvider router={router} />;
 }

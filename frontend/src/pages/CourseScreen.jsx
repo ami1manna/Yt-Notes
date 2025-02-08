@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { PlaylistContext } from '../context/PlaylistsContext';
 import CheckBox from '../components/ui/CheckBox';
-import ScrollArea from '../components/ui/ScrollArea';
+ 
 
 const CourseScreen = () => {
   const { userPlaylists } = useContext(PlaylistContext);
@@ -13,7 +13,7 @@ const CourseScreen = () => {
       {/* Sidebar with Playlist */}
       <div className="h-full w-80 bg-gray-900 p-4 shadow-lg overflow-y-auto">
         <h2 className="text-white text-lg font-semibold mb-4">Playlist</h2>
-        <ScrollArea className="h-[90vh] pr-2">
+        {/* <ScrollArea className="h-[90vh] pr-2"> */}
           {playListData.videos.map((video) => (
             <div 
               key={video.videoId} 
@@ -25,9 +25,9 @@ const CourseScreen = () => {
               </CheckBox>
             </div>
           ))}
-        </ScrollArea>
+        {/* </ScrollArea> */}
       </div>
-
+         
       {/* Video Player */}
       <div className="flex-1 bg-gray-950 flex items-center justify-center">
         {selectedVideo ? (

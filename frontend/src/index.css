@@ -9,3 +9,24 @@
 body {
     @apply bg-white text-black dark:bg-gray-900 dark:text-white;
   }
+
+  /* For ScrollBar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Blurred effect */
+  border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 255, 0.4); /* Semi-transparent blue */
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2); /* White border for glass effect */
+}
+ 
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 0, 0.5); /* Semi-transparent red */
+}
