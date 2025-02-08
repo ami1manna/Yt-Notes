@@ -34,6 +34,7 @@ const CourseScreen = () => {
       <div className="flex-1 bg-gray-950 flex items-center justify-center">
         {selectedVideo ? (
           <iframe
+            key={selectedVideo}
             className='w-[90%] h-[80%] rounded-xl shadow-xl'
             src={`https://www.youtube.com/embed/${selectedVideo}`}
             frameBorder="0"
