@@ -23,6 +23,8 @@ export const PlaylistProvider = ({ children }) => {
         });
     }, []);
 
+    // toggle user Video status
+    const toggleVideoStatus = useCallback((videoId) => {})
     return (
         <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData, setUserPlaylists }}>
             {children}

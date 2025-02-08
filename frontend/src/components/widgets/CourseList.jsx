@@ -13,8 +13,8 @@ const CourseList = () => {
       {userPlaylists.length === 0 && <FallBackScreen />} {/* Show fallback if no playlists */}
       <div className=" h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 w-full auto-rows-auto">
 
-         {userPlaylists.map((playlist) => (
-          <NavLink to='courseScreen'>
+         {userPlaylists.map((playlist, index) => (
+          <NavLink to={`/courseScreen/${index}`}>
           <VideoCard
             key={playlist.playlistId} // Use playlistId as the unique key
             title={playlist.channelTitle || 'Untitled Playlist'} // Use channelTitle or a fallback

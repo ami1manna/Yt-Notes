@@ -1,15 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { PlaylistContext } from '../context/PlaylistsContext';
 import CheckBox from '../components/ui/CheckBox';
- 
+import { useParams } from 'react-router-dom';
 
 const CourseScreen = () => {
   const { userPlaylists } = useContext(PlaylistContext);
-  const playListData = userPlaylists[0];
+  const { playlistIndex } = useParams();
+  const playListData = userPlaylists[playlistIndex];
   const [selectedVideo, setSelectedVideo] = useState(playListData?.videos[0]?.videoId || '');
 
   return (
     <div className="flex w-screen h-screen">
+      {console.log(playListData)}
       {/* Sidebar with Playlist */}
       <div className="h-full w-80 bg-gray-900 p-4 shadow-lg overflow-y-auto">
         <h2 className="text-white text-lg font-semibold mb-4">Playlist</h2>
