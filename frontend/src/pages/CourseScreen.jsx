@@ -3,6 +3,7 @@ import { PlaylistContext } from '../context/PlaylistsContext';
 import CheckBox from '../components/ui/CheckBox';
 import { useParams } from 'react-router-dom';
 import QuillEditor from '../components/ui/QuillEditor';
+import Tiles from '../components/ui/Tiles';
  
 
 const CourseScreen = () => {
@@ -14,26 +15,30 @@ const CourseScreen = () => {
   return (
     <div className="flex w-screen h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
       {/* Sidebar */}
-      <div className="h-full w-80 p-4 shadow-lg overflow-y-auto bg-white dark:bg-gray-800 dark:text-white">
-        <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Playlist</h2>
+      <div className="h-full w-80 p-4 shadow-lg overflow-y-auto bg-white dark:bg-gray-800 dark:text-white rounded-lg">
+  <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Playlist</h2>
 
-        {playListData.videos.map((video) => (
-          <div
-            key={video.videoId}
-            className={`w-full p-3 border rounded-lg shadow-md transition duration-200 overflow-hidden cursor-pointer flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              selectedVideo === video.videoId ? 'bg-gray-300 dark:bg-gray-600' : ''
-            }`}
-            onClick={() => setSelectedVideo(video.videoId)}
-          >
-            <CheckBox
-              onChange={() => setVideoStatus(video.videoId, playListData.playlistId, 'amitmannasm@gmail.com')}
-              checked={video.done}
-            >
-              <h3 className="text-sm text-gray-700 dark:text-white">{video.title}</h3>
-            </CheckBox>
-          </div>
-        ))}
-      </div>
+  {playListData.videos.map((video) => (
+    <div
+    key={video.videoId}
+    className={`w-full p-2 mb-2 border rounded-xl shadow-md transition-all duration-300 cursor-pointer flex items-center
+      ${selectedVideo === video.videoId ? "bg-blue-500 dark:bg-blue-600 text-white" : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white"}`}
+  >
+    {/* Checkbox with custom style */}
+    <CheckBox
+      onChange={() => setVideoStatus(video.videoId, playListData.playlistId, "amitmannasm@gmail.com")}
+      checked={video.done}
+    />
+  
+    {/* Tiles Component */}
+    <Tiles onClick={() => setSelectedVideo(video.videoId)}>
+      {video.title}
+    </Tiles>
+  </div>
+  
+  ))}
+</div>
+
 
       {/* Video Player */}
       <div className="h-screen flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4  ">

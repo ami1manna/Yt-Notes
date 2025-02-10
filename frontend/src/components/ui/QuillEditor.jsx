@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill"; // Import ReactQuill
 import "react-quill/dist/quill.snow.css"; // Import Quill's styles
-import Container from "./Container";
+ 
 
 const QuillEditor = () => {
   const [editorValue, setEditorValue] = useState("");
