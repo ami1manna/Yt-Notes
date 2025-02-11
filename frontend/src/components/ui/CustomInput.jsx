@@ -1,6 +1,7 @@
 import React from 'react'
 import IconButton from './IconButton';
-import Plus from '../../assets/svg/plus.svg'
+import { Plus, PlusCircle } from 'lucide-react';
+
 const CustomInput = React.forwardRef(({ 
     inputType, 
     iconPath, 
@@ -17,6 +18,7 @@ const CustomInput = React.forwardRef(({
     }
 
     return (
+          
         <form className="w-full " onSubmit={handleSubmit}>
             <label htmlFor="input-custom" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
                 Search
@@ -33,7 +35,7 @@ const CustomInput = React.forwardRef(({
                     onChange={onChange}
                     disabled={disabled}
                 />
-                 <IconButton type="submit" className='w-28 h-full p-4' icon={Plus}>Add</IconButton>
+                 <IconButton type="submit" className='w-28 h-full p-4 ' icon={PlusCircle} >Add</IconButton>
             </div>
         </form>
     )
