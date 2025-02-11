@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import TextButton from "../components/ui/TextButton";
 
 const Login = () => {
   const { login, error, loading } = useContext(AuthContext);
@@ -48,12 +49,9 @@ const Login = () => {
             placeholder="Password"
             className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <button
-            type="submit"
-            className="w-full mt-4 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all"
-          >
+          <TextButton type="submit">
             Login
-          </button>
+          </TextButton>
         </form>
         <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm">
           Don't have an account?{" "}
