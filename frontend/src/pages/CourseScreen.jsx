@@ -5,12 +5,12 @@ import { useParams } from "react-router-dom";
 // components
 import SideNav from "../components/ui/SideNav";
 import IconButton from "../components/ui/IconButton";
- 
-// Importing assets
-import Next from "../assets/svg/next.svg";
-import Prev from "../assets/svg/prev.svg";
-// import WindowTab from "../components/ui/WindowTab";
-import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
+
+import WindowTab from "../components/ui/SideNote";
+// Icon
+import { ArrowBigLeftDash, ArrowBigRightDash, Icon, NotebookPenIcon } from "lucide-react";
+import SideNote from "../components/ui/SideNote";
+import QuillEditor from "../components/ui/QuillEditor";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus } = useContext(PlaylistContext);
@@ -51,9 +51,8 @@ const CourseScreen = () => {
           <>
             <div className="flex justify-between items-center mb-4">
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
-                  selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`bg-blue-500 hover:bg-blue-600 w-28 ${selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 icon={ArrowBigLeftDash}
                 iconPosition="left"
                 onClick={handlePrevVideo}
@@ -65,9 +64,8 @@ const CourseScreen = () => {
               <span className="text-lg font-semibold">{selectedVideo.title}</span>
 
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
-                  selectedVideoIndex === playListData.videos.length - 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`bg-blue-500 hover:bg-blue-600 w-28 ${selectedVideoIndex === playListData.videos.length - 1 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 icon={ArrowBigRightDash}
                 iconPosition="right"
                 onClick={handleNextVideo}
@@ -91,12 +89,17 @@ const CourseScreen = () => {
         )}
       </div>
 
-        {/* <WindowTab>
-          <p className="text-gray-700 dark:text-gray-300">This is a floating panel with options.</p>
-          <p>You can add any content here.</p>
-        </WindowTab> */}
+     <SideNote>
+      <QuillEditor />
+     </SideNote>
+      {/* <IconButton
+        icon={NotebookPenIcon}
+        className="absolute bottom-4 right-4 w-16 h-16  flex items-center justify-center shadow-lg"
+        title="Notes"
+      /> */}
 
     </div>
+
   );
 };
 
