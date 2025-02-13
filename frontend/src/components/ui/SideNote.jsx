@@ -120,9 +120,6 @@ const SideNote = ({
 
             >
                
-                {!isMaximized && (
-                  <>
-                    {/* Left resize handle */}
                     <div
                       className="flex items-center  cursor-ew-resize group"
                       onMouseDown={(e) => startResizing(e, 'left')}
@@ -137,9 +134,7 @@ const SideNote = ({
                         {title}
                       </span>
                     </div>
-
-                  </>
-                )}
+ 
                
               <div className="flex gap-1">
                 <button
