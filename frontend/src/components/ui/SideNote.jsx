@@ -4,8 +4,8 @@ import { Maximize2, Pin, NotebookPen, Minus, FoldHorizontal } from "lucide-react
 
 const SideNote = ({
   children,
-  defaultWidth = 400,
-  minWidth = 400,
+  defaultWidth = 700,
+  minWidth = 500,
   maxWidth = 1000,
   title = "Notes"
 }) => {
@@ -183,7 +183,7 @@ const SideNote = ({
                 <>
                   {/* Left resize handle */}
                   <div
-                    className="absolute top-0 bottom-0 left-0 w-4 cursor-ew-resize group"
+                    className="absolute top-[88%] bottom-0 left-0   cursor-ew-resize group"
                     onMouseDown={(e) => startResizing(e, 'left')}
                     onTouchStart={(e) => startResizing(e, 'left')}
                     role="separator"
