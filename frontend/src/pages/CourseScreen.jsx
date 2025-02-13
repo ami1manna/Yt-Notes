@@ -10,7 +10,7 @@ import WindowTab from "../components/ui/SideNote";
 // Icon
 import { ArrowBigLeftDash, ArrowBigRightDash, Icon, NotebookPenIcon } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
-import QuillEditor from "../components/ui/QuillEditor";
+import SunEditorComponent from "../components/ui/SunEditor";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus } = useContext(PlaylistContext);
@@ -90,13 +90,10 @@ const CourseScreen = () => {
       </div>
 
      <SideNote>
-      <QuillEditor />
+       
+      <SunEditorComponent/>
      </SideNote>
-      {/* <IconButton
-        icon={NotebookPenIcon}
-        className="absolute bottom-4 right-4 w-16 h-16  flex items-center justify-center shadow-lg"
-        title="Notes"
-      /> */}
+      
 
     </div>
 
