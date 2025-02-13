@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Move, Minimize, Maximize2, Pin, NotebookPen, Minus, PanelLeftClose } from "lucide-react";
+import { Maximize2, Pin, NotebookPen, Minus, FoldHorizontal } from "lucide-react";
 
 const SideNote = ({
   children,
@@ -119,12 +119,12 @@ const SideNote = ({
               className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 select-none"
 
             >
-              <div className="flex items-center gap-2">
+               
                 {!isMaximized && (
                   <>
                     {/* Left resize handle */}
                     <div
-                      className="w-5 cursor-ew-resize group"
+                      className="flex items-center  cursor-ew-resize group"
                       onMouseDown={(e) => startResizing(e, 'left')}
                       onTouchStart={(e) => startResizing(e, 'left')}
                       role="separator"
@@ -132,16 +132,15 @@ const SideNote = ({
                     >
 
 
-                      <PanelLeftClose></PanelLeftClose>
-
+                      <FoldHorizontal/>
+                      <span className="font-medium text-gray-700 dark:text-gray-200 mx-7">
+                        {title}
+                      </span>
                     </div>
 
                   </>
                 )}
-                <span className="font-medium text-gray-700 dark:text-gray-200 mx-7">
-                  {title}
-                </span>
-              </div>
+               
               <div className="flex gap-1">
                 <button
                   onClick={() => setIsPinned(!isPinned)}

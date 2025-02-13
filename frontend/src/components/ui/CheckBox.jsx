@@ -20,7 +20,7 @@ const CheckBox = ({ checked, onChange }) => {
   return (
     <div className="relative flex flex-col items-center">
       <label
-        className="cursor-pointer p-3 transition-all duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+        className="cursor-pointer p-3 transition-all duration-300 ease-in-out rounded-lg"
         onClick={handleChange}
       >
         {/* Custom Checkbox Container */}

@@ -4,12 +4,12 @@ const Tiles = ({ children, onClick }) => {
   return (
     <div
       className="relative w-full h-16 p-3 text-gray-800 dark:text-white
-                 rounded-lg flex items-center justify-start text-left cursor-pointer
+                 rounded-lg flex items-center justify-start text-balance cursor-pointer
                  transition-transform duration-200 hover:scale-105 active:scale-95 overflow-hidden"
       onClick={onClick}
     >
       {/* Truncated Text */}
-      <span className="block w-full overflow-hidden text-ellipsis line-clamp-2">
+      <span className="w-full overflow-hidden text-ellipsis line-clamp-2">
         {children}
       </span>
 
