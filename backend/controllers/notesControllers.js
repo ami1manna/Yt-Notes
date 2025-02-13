@@ -15,13 +15,20 @@ exports.addNoteToVideo = async (req, res) => {
       if (!playlist) {
         return res.status(404).json({ error: 'Playlist not found' });
       }
-  
+      
       // Find the video
       const video = playlist.videos.find(v => v.videoId === videoId);
       if (!video) {
         return res.status(404).json({ error: 'Video not found' });
       }
-  
+      
+      const timeStampedNote = video.notes.find(note => note.timestamp === timestamp);
+      if (timeStampedNote) {
+        //  update the note
+        timeStampedNote.text = text;
+        await userPlaylist.save();
+        return res.status(200).json({ message: 'Note updated successfully', video });
+      }
       // Add the note
       video.notes.push({ timestamp, text });
   
