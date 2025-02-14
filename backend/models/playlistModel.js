@@ -19,6 +19,7 @@ const singlePlaylistSchema = new mongoose.Schema({
   playlistUrl: String,
   channelTitle: String,
   playlistLength: Number,
+  playlistProgress:{type:Number, default: 0},
   playlistThumbnailUrl: String,
   videos: [videoSchema]
 });
