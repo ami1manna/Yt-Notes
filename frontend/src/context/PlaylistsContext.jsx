@@ -40,16 +40,17 @@ export const PlaylistProvider = ({ children }) => {
     
      const setVideoStatus = useCallback(async (videoId, playlistId, userEmail) => {
         try {
-            console.log(videoId, playlistId, userEmail);
+            
             // Call the API first to toggle the video status in the backend
-            const updatedVideo = await toggleVideo(videoId, playlistId, userEmail);
-            console.log(updatedVideo);
+            const result = await toggleVideo(videoId, playlistId, userEmail);
+            const updatedVideo = result.video;
             // Update the local state with the updated video data
             setUserPlaylists((prevPlaylists) =>
                 prevPlaylists.map((playlist) =>
                     playlist.playlistId === playlistId
                         ? {
                               ...playlist,
+                              playlistProgress: result.progress,
                               videos: playlist.videos.map((video) =>
                                   video.videoId === videoId ? updatedVideo : video
                               ),

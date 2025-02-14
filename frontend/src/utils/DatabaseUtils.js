@@ -8,7 +8,7 @@ export const toggleVideo = async (videoId, playlistId, userEmail) => {
             playlistId,
         });
 
-        return response.data.video; // Return updated video object
+        return response.data; // Return updated video object
     } catch (error) {
         console.error("Error toggling video:", error);
         throw error;

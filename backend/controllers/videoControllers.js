@@ -20,13 +20,16 @@ exports.toggleVideo = async (req, res) => {
             return res.status(404).json({ error: 'Video not found' });
         }
 
-        // Add the note
+        // also update count of video done
+        playlist.playlistProgress =  video.done ? --playlist.playlistProgress:++playlist.playlistProgress;
+ 
+        //toggle video done    
         video.done = !video.done;
-
+        
         // Save the updated user playlist
         await userPlaylist.save();
 
-        res.status(201).json({ message: 'Note added successfully', video });
+        res.status(201).json({ message: 'Note added successfully', video , progress : playlist.playlistProgress });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
