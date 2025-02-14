@@ -120,7 +120,7 @@ exports.login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax', // Changed to 'lax' for cross-site requests
-      maxAge: 60 * 60 * 1000 // 1 hour
+      maxAge: 60 * 60 * 1000  *24 * 30 * 6 // 6 month
     });
 
     res.json({

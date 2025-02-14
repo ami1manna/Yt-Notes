@@ -90,6 +90,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      // clear localstorage
+      localStorage.clear();
       await axios.post(
         "http://localhost:5000/auth/logout", 
         {}, 
