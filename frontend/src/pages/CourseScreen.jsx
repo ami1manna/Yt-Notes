@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import SideNav from "../components/ui/SideNav";
 import IconButton from "../components/ui/IconButton";
 
-import WindowTab from "../components/ui/SideNote";
 // Icon
 import { ArrowBigLeftDash, ArrowBigRightDash, Icon, NotebookPenIcon } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
@@ -90,8 +89,7 @@ const CourseScreen = () => {
       </div>
 
      <SideNote>
-       
-      <SunEditorComponent/>
+      <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo.videoId} />
      </SideNote>
       
 

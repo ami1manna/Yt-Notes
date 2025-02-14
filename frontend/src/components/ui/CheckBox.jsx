@@ -1,20 +1,9 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
-const CheckBox = ({ checked, onChange }) => {
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [prevChecked, setPrevChecked] = useState(checked);
-
+const CheckBox = ({ checked , onChange }) => {
   const handleChange = () => {
-    onChange(!checked); // Calls the external onChange function
-
-    // Trigger confetti effect only when checkbox is checked
-    if (!checked) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 1500); // Hide confetti after 1.5s
-    }
-
-    setPrevChecked(checked);
+    onChange(!checked);
   };
 
   return (
@@ -59,46 +48,6 @@ const CheckBox = ({ checked, onChange }) => {
           </div>
         </div>
       </label>
-
-      {/* Confetti Party Effect BELOW Checkbox */}
-      <AnimatePresence>
-        {showConfetti && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.5 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.5 }}
-            transition={{ duration: 0.5 }}
-            className="absolute top-12 w-full flex justify-center"
-          >
-            <div className="relative w-24 h-10">
-              {/* Random confetti circles */}
-              {[...Array(10)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-2 h-2 rounded-full"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    backgroundColor: ["#ff4757", "#1e90ff", "#2ed573", "#ffa502"][
-                      Math.floor(Math.random() * 4)
-                    ],
-                  }}
-                  initial={{ opacity: 0, y: 0 }}
-                  animate={{
-                    opacity: 1,
-                    y: Math.random() * 20 + 10,
-                    x: (Math.random() - 0.5) * 20,
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    ease: "easeOut",
-                    delay: Math.random() * 0.5,
-                  }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
