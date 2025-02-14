@@ -29,7 +29,7 @@ exports.toggleVideo = async (req, res) => {
         // Save the updated user playlist
         await userPlaylist.save();
 
-        res.status(201).json({ message: 'Note added successfully', video });
+        res.status(201).json({ message: 'Note added successfully', video , progress : playlist.playlistProgress });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

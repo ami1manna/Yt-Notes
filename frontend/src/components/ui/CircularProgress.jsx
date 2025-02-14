@@ -1,6 +1,6 @@
 import React from "react";
 
-const CircularProgress = ({ progress = 75, target = 100, radius = 17}) => {
+const CircularProgress = ({ progress = 0, target = 100, radius = 17}) => {
   const percentage = Math.min(100, Math.max(0, (progress / target) * 100));
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
