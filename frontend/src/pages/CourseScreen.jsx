@@ -42,6 +42,7 @@ const CourseScreen = () => {
         selectedVideoIndex={selectedVideoIndex}
         setSelectedVideoIndex={setSelectedVideoIndex}
         setVideoStatus={setVideoStatus}
+        
       />
 
       {/* Video Player */}

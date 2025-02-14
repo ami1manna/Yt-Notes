@@ -2,11 +2,15 @@ import Tiles from "./Tiles";
 import CheckBox from "./CheckBox";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import CircularProgress from "./CircularProgress";
 const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setVideoStatus }) => {
   const {user} = useContext(AuthContext);
   return (
     <div className="h-full w-80 p-4 shadow-lg overflow-y-auto bg-white dark:bg-gray-800 dark:text-white rounded-lg">
-      <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Playlist</h2>
+      <div className="w-full flex h-16 justify-between items-center">
+      <h2 className="text-xl font-semibold  text-gray-800 dark:text-white">Playlist</h2>
+      <CircularProgress target={playListData.playListLength} progress={playListData.playlistProgress} />
+      </div>
 
       {playListData.videos.map((video, index) => (
         <div
