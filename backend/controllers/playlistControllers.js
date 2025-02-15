@@ -18,14 +18,14 @@ exports.addPlaylist = async (req, res) => {
     const videos = response.data.items.map(item => ({
       videoId: item.snippet.resourceId.videoId,
       title: item.snippet.title,
-      thumbnailUrl: item.snippet.thumbnails.default.url,
+      thumbnailUrl: item.snippet.thumbnails.high.url,
       publishedAt: item.snippet.publishedAt,
     }));
 
     // common data for each playlist
     const channelTitle = response.data.items[0].snippet.channelTitle;
     const playlistLength = response.data.pageInfo.totalResults;
-    const playlistThumbnailUrl = response.data.items[0].snippet.thumbnails.default.url;
+    const playlistThumbnailUrl = response.data.items[0].snippet.thumbnails.high.url;
 
      
 

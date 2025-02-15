@@ -73,8 +73,17 @@ export const PlaylistProvider = ({ children }) => {
         }
     }, []);
 
+    // Reset playlist
+    const resetPlaylist = useCallback(() => {
+        try {
+            setUserPlaylists([]);
+        } catch (error) {
+            console.error("Error resetting playlist:", error);
+        }
+    }, []);
+
     return (
-        <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData, setUserPlaylists, setVideoStatus, setSelectedVideo }}>
+        <PlaylistContext.Provider value={{ userPlaylists, setPlaylistData, setUserPlaylists, setVideoStatus, setSelectedVideo , resetPlaylist}}>
             {children}
         </PlaylistContext.Provider>
     );

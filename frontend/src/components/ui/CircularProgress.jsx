@@ -5,7 +5,7 @@ const CircularProgress = ({ progress = 0, target = 100, radius = 17}) => {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
   const strokeWidth = radius * 0.4; // Adjust stroke width relative to radius
-  const textSize = `${radius * 0.7}px`; // Dynamically adjust text size
+  const textSize = `${radius * 0.6}px`; // Dynamically adjust text size
 
   return (
           <div className=" relative" style={{ width: radius * 5, height: radius * 5 }}>

@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const{ setPlaylistData } = useContext(PlaylistContext); // Access the PlaylistContext
+  const{ setPlaylistData , resetPlaylist} = useContext(PlaylistContext); // Access the PlaylistContext
 
   // Check if the user is logged in and fetch data
   useEffect(() => {
@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
+   
     try {
       setError(null);
       const res = await axios.post(
@@ -92,6 +93,8 @@ export const AuthProvider = ({ children }) => {
     try {
       // clear localstorage
       localStorage.clear();
+      // clear provider
+      resetPlaylist();
       await axios.post(
         "http://localhost:5000/auth/logout", 
         {}, 
