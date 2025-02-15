@@ -92,3 +92,26 @@ exports.deletePlaylist = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+
+exports.selectedVideoIndex = async (req, res) => {
+  try {
+      const { userEmail, playlistId, playlistIndex } = req.body;
+      const userPlaylist = await UserPlaylist.findOne({ userEmail });
+      if (!userPlaylist) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+      const playlist = userPlaylist.playlists.find(pl => pl.playlistId === playlistId);
+      if (!playlist) {
+          return res.status(404).json({ error: 'Playlist not found' });
+      }
+
+      playlist.selectedVideoIndex = playlistIndex;
+      await userPlaylist.save();
+
+      res.status(200).json({ message: 'Selected video index updated successfully' });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+}

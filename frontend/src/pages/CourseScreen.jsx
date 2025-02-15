@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../context/PlaylistsContext";
 import { useParams } from "react-router-dom";
 
@@ -6,23 +6,35 @@ import { useParams } from "react-router-dom";
 import SideNav from "../components/ui/SideNav";
 import IconButton from "../components/ui/IconButton";
 
-// Icon
-import { ArrowBigLeftDash, ArrowBigRightDash, Icon, NotebookPenIcon } from "lucide-react";
+// Icons
+import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
+import { AuthContext } from "../context/AuthContext";
 
 const CourseScreen = () => {
-  const { userPlaylists, setVideoStatus } = useContext(PlaylistContext);
+  const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
   const { playlistIndex } = useParams();
   const playListData = userPlaylists[playlistIndex];
+  const { user } = useContext(AuthContext);
+  // Get the initial selected video index from the provider if available
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(
+    playListData?.selectedVideoIndex || 0
+  );
 
-  // Get the initial selected video
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
-  const selectedVideo = playListData?.videos[selectedVideoIndex] || null;
+  const selectedVideo = playListData?.videos?.[selectedVideoIndex] || null;
+
+  // Sync selected video index with the provider & backend
+  useEffect(() => {
+    if (playListData && selectedVideoIndex !== playListData.selectedVideoIndex) {
+    
+      setSelectedVideo(user.email, playListData.playlistId, selectedVideoIndex);
+    }
+  }, [selectedVideoIndex, playListData, setSelectedVideo]);
 
   // Function to go to the next video
   const handleNextVideo = () => {
-    if (selectedVideoIndex < playListData.videos.length - 1) {
+    if (playListData && selectedVideoIndex < playListData.videos.length - 1) {
       setSelectedVideoIndex((prevIndex) => prevIndex + 1);
     }
   };
@@ -34,15 +46,18 @@ const CourseScreen = () => {
     }
   };
 
+  if (!playListData) {
+    return <p className="text-gray-800 dark:text-white text-lg">Playlist not found.</p>;
+  }
+
   return (
     <div className="flex w-screen h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
-      {/* Using SideNav Component */}
+      {/* Side Navigation */}
       <SideNav
         playListData={playListData}
         selectedVideoIndex={selectedVideoIndex}
         setSelectedVideoIndex={setSelectedVideoIndex}
         setVideoStatus={setVideoStatus}
-        
       />
 
       {/* Video Player */}
@@ -51,8 +66,9 @@ const CourseScreen = () => {
           <>
             <div className="flex justify-between items-center mb-4">
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
+                  selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 icon={ArrowBigLeftDash}
                 iconPosition="left"
                 onClick={handlePrevVideo}
@@ -64,8 +80,11 @@ const CourseScreen = () => {
               <span className="text-lg font-semibold">{selectedVideo.title}</span>
 
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${selectedVideoIndex === playListData.videos.length - 1 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
+                  selectedVideoIndex === playListData.videos.length - 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
                 icon={ArrowBigRightDash}
                 iconPosition="right"
                 onClick={handleNextVideo}
@@ -89,13 +108,11 @@ const CourseScreen = () => {
         )}
       </div>
 
-     <SideNote>
-      <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo.videoId} />
-     </SideNote>
-      
-
+      {/* Side Notes */}
+      <SideNote>
+        <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+      </SideNote>
     </div>
-
   );
 };
 
