@@ -29,3 +29,4 @@ export const setPlaylistIndex = async (userEmail, playlistId, playlistIndex) => 
         return { success: false, error: error.response?.data || "An error occurred" };
     }
 };
+

@@ -11,6 +11,7 @@ import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
+import { secondsToHHMMSS } from "../utils/Coverter";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
@@ -78,7 +79,7 @@ const CourseScreen = () => {
               </IconButton>
 
               <span className="text-lg font-semibold">{selectedVideo.title}</span>
-
+               
               <IconButton
                 className={`bg-blue-500 hover:bg-blue-600 w-28 ${
                   selectedVideoIndex === playListData.videos.length - 1
