@@ -12,17 +12,19 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
   return (
     <div className="h-full w-80 flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl overflow-hidden">
       {/* Header Section */}
-      <div className="sticky top-5 z-20 p-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between items-center mb-4">
+      <div className="sticky top-0 z-20 p-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center ">
           <div className="flex items-center gap-2">
             <ListChecks className="w-5 h-5 text-green-500" />
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">
               Course Progress
             </h2>
+           
           </div>
           <CircularProgress 
-            target={playListData.playListLength} 
+            target={playListData.playlistLength} 
             progress={playListData.playlistProgress}
+            radius={19}
           />
         </div>
         
