@@ -11,7 +11,7 @@ import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
-import { secondsToHHMMSS } from "../utils/Coverter";
+ 
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
