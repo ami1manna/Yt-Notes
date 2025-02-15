@@ -1,11 +1,22 @@
 const UserPlaylist = require('../models/playlistModel');
 const axios = require('axios');
 
+ 
+// Helper function to convert ISO 8601 duration (PT5M30S) to seconds
+function isoDurationToSeconds(duration) {
+  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  const hours = parseInt(match[1] || 0, 10);
+  const minutes = parseInt(match[2] || 0, 10);
+  const seconds = parseInt(match[3] || 0, 10);
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 exports.addPlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId, playlistUrl } = req.body;
-
     const API_KEY = process.env.YOUTUBE_API_KEY;
+
+    // Fetch playlist videos
     const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
       params: {
         part: 'snippet',
@@ -15,52 +26,100 @@ exports.addPlaylist = async (req, res) => {
       },
     });
 
-    const videos = response.data.items.map(item => ({
-      videoId: item.snippet.resourceId.videoId,
-      title: item.snippet.title,
-      thumbnailUrl: item.snippet.thumbnails.high.url,
-      publishedAt: item.snippet.publishedAt,
-    }));
+    const videosData = response.data.items;
+    if (!videosData.length) {
+      return res.status(404).json({ error: 'Playlist is empty or invalid' });
+    }
 
-    // common data for each playlist
-    const channelTitle = response.data.items[0].snippet.channelTitle;
+    // Extract video IDs
+    const videoIds = videosData.map(item => item.snippet.resourceId.videoId).join(',');
+
+    // Fetch video details including duration
+    const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
+      params: {
+        part: 'contentDetails',
+        id: videoIds,
+        key: API_KEY,
+      },
+    });
+
+    const videoDetails = videoResponse.data.items;
+
+    let totalDurationSeconds = 0;
+
+    // Map videos with duration and calculate total duration
+    const videos = videosData.map(item => {
+      const videoDetail = videoDetails.find(v => v.id === item.snippet.resourceId.videoId);
+      const durationSeconds = videoDetail ? isoDurationToSeconds(videoDetail.contentDetails.duration) : 0;
+
+      totalDurationSeconds += durationSeconds;
+
+      return {
+        videoId: item.snippet.resourceId.videoId,
+        title: item.snippet.title,
+        thumbnailUrl: item.snippet.thumbnails.high.url,
+        publishedAt: item.snippet.publishedAt,
+        duration: durationSeconds, // Store duration only in seconds
+      };
+    });
+
+    // Common playlist data
+    const channelTitle = videosData[0].snippet.channelTitle;
     const playlistLength = response.data.pageInfo.totalResults;
-    const playlistThumbnailUrl = response.data.items[0].snippet.thumbnails.high.url;
+    const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high.url;
 
-     
-
+    // Check if user has playlists
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
 
     if (!userPlaylist) {
       userPlaylist = new UserPlaylist({
         userEmail,
-        playlists: [{ playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos }]
+        playlists: [{ 
+          playlistId, 
+          playlistUrl, 
+          channelTitle, 
+          playlistLength, 
+          playlistThumbnailUrl, 
+          totalDuration: totalDurationSeconds, // Store total duration only in seconds
+          videos 
+        }]
       });
+       
     } else {
-      // Check if the playlist with the same playlistId already exists for the user
-      const existingPlaylist = userPlaylist.playlists.find(
-        playlist => playlist.playlistId === playlistId
-      );
-
+      const existingPlaylist = userPlaylist.playlists.find(playlist => playlist.playlistId === playlistId);
       if (existingPlaylist) {
         return res.status(400).json({ error: 'Playlist already added' });
       }
-
-      // Add the new playlist
-      userPlaylist.playlists.push({ playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos });
+      userPlaylist.playlists.push({ 
+        playlistId, 
+        playlistUrl, 
+        channelTitle, 
+        playlistLength, 
+        playlistThumbnailUrl, 
+        totalDuration: totalDurationSeconds, // Store total duration only in seconds
+        videos 
+      });
     }
 
     await userPlaylist.save();
     res.status(201).json({
-      message: 'Playlist added successfully' ,
-        playlists: { playlistId, playlistUrl,channelTitle,playlistLength,playlistThumbnailUrl, videos }
+      message: 'Playlist added successfully',
+      playlists: { 
+        playlistId, 
+        playlistUrl, 
+        channelTitle, 
+        playlistLength, 
+        playlistThumbnailUrl, 
+        totalDuration: totalDurationSeconds, // Return total duration in seconds
+        videos 
       }
+    });
 
-    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 exports.getPlaylistsByUser = async (req, res) => {
   try {
