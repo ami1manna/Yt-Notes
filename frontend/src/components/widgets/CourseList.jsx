@@ -17,9 +17,13 @@ const CourseList = () => {
           <NavLink to={`/courseScreen/${index}`} key={playlist.playlistId}>
           <VideoCard
              // Use playlistId as the unique key
-            title={playlist.channelTitle || 'Untitled Playlist'} // Use channelTitle or a fallback
-            thumbnailUrl={playlist.playlistThumbnailUrl} // Use playlistThumbnailUrl
+            title={playlist.channelTitle || 'Untitled Playlist'}  
+            thumbnailUrl={playlist.playlistThumbnailUrl}  
+            progress={playlist.playlistProgress} 
+            target={playlist.playlistLength}
             />
+            
+            
             </NavLink> 
 
         ))}
