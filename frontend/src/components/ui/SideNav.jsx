@@ -1,3 +1,5 @@
+
+// SideNav.jsx
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Tiles from "./Tiles";
@@ -11,11 +13,11 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className={`relative h-full transition-all duration-300 ease-in-out ${isOpen ? 'w-80' : 'w-5'}`}>
-      {/* Toggle Button */}
+    <div className={`relative h-full transition-all duration-300 ease-in-out 
+      ${isOpen ? 'w-full lg:w-80' : 'w-5'}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="absolute -right-4 top-7 z-30 p-2 rounded-full bg-white dark:bg-gray-800 
+        className="hidden lg:block absolute -right-4 top-7 z-30 p-2 rounded-full bg-white dark:bg-gray-800 
                   shadow-lg border border-gray-200 dark:border-gray-700
                   hover:bg-gray-50 dark:hover:bg-gray-700 
                   transition-all duration-300 ease-in-out"
@@ -26,12 +28,11 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
         />
       </button>
 
-      <div className="h-full flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 
+      <div className="text-sm   h-full flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 
                       shadow-xl overflow-hidden">
-        {/* Header Section */}
         <div className="sticky top-0 z-20 px-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 
-                      border-b border-gray-200 dark:border-gray-700">
-          <div className="flex justify-between items-center">
+                       border-b border-gray-200 dark:border-gray-700">
+          <div className=" justify-between items-center hidden lg:flex">
             <div className={`flex items-center gap-2 ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
               <ListChecks className="w-5 h-5 text-green-500" />
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
@@ -41,24 +42,30 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
             <CircularProgress 
               target={playListData.playlistLength} 
               progress={playListData.playlistProgress}
-              radius={23}
-               
+              radius={20}
             />
           </div>
           
-          <div className={`flex items-center gap-3 bg-green-500/10 p-3 mb-2 rounded-xl 
+          <div className={`flex items-center gap-3 bg-green-500/10 p-3 my-2 rounded-xl  
                           ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
-            <Clock className="w-5 h-5 text-green-500" />
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-600 dark:text-gray-300">Total Duration</span>
+            <Clock className="w-5 h-5  text-green-500" />
+            <div className="flex lg:flex-col justify-center items-center lg:items-start gap-4 lg:gap-0">
+              <span className="text-lg text-gray-600 dark:text-gray-300">Total Duration</span>
               <span className="text-lg font-bold text-green-500">
                 {formatDuration(playListData.totalDuration)}
               </span>
+              
             </div>
+            <div className="lg:hidden flex-1 flex justify-end">
+            <CircularProgress 
+              target={playListData.playlistLength} 
+              progress={playListData.playlistProgress}
+              radius={20}
+              />
+              </div>
           </div>
         </div>
 
-        {/* Videos List */}
         <div className={`flex-1 overflow-hidden overflow-y-auto p-4 space-y-3
                         ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
           {playListData.videos.map((video, index) => (
@@ -76,7 +83,6 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
                 }
               `}
             >
-              {/* Duration Badge */}
               <div className="absolute -top-1 -left-1 z-10
                             transform -rotate-12 transition-transform duration-300
                             group-hover:rotate-0 group-hover:-translate-y-1">
@@ -89,14 +95,12 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
                 </div>
               </div>
 
-              {/* Shimmer Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
                             translate-x-[-200%] group-hover:translate-x-[200%] 
                             transition-transform duration-1000 ease-in-out 
                             rounded-xl overflow-hidden" />
 
-              {/* Content */}
-              <div className="relative flex items-center gap-3 p-3">
+              <div className="relative flex items-center gap-3 p-1 lg:p-3 ">
                 <CheckBox
                   onChange={() => setVideoStatus(video.videoId, playListData.playlistId, user.email)}
                   checked={video.done}

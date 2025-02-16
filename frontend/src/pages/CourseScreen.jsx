@@ -1,46 +1,35 @@
+// CourseScreen.jsx
 import React, { useContext, useState, useEffect } from "react";
 import { PlaylistContext } from "../context/PlaylistsContext";
 import { useParams } from "react-router-dom";
-
-// components
 import SideNav from "../components/ui/SideNav";
 import IconButton from "../components/ui/IconButton";
-
-// Icons
-import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
+import { ArrowBigLeftDash, ArrowBigRightDash, PenLine } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
- 
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
   const { playlistIndex } = useParams();
   const playListData = userPlaylists[playlistIndex];
   const { user } = useContext(AuthContext);
-  // Get the initial selected video index from the provider if available
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(
-    playListData?.selectedVideoIndex || 0
-  );
-
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(playListData?.selectedVideoIndex || 0);
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
   const selectedVideo = playListData?.videos?.[selectedVideoIndex] || null;
 
-  // Sync selected video index with the provider & backend
   useEffect(() => {
     if (playListData && selectedVideoIndex !== playListData.selectedVideoIndex) {
-    
       setSelectedVideo(user.email, playListData.playlistId, selectedVideoIndex);
     }
   }, [selectedVideoIndex, playListData, setSelectedVideo]);
 
-  // Function to go to the next video
   const handleNextVideo = () => {
     if (playListData && selectedVideoIndex < playListData.videos.length - 1) {
       setSelectedVideoIndex((prevIndex) => prevIndex + 1);
     }
   };
 
-  // Function to go to the previous video
   const handlePrevVideo = () => {
     if (selectedVideoIndex > 0) {
       setSelectedVideoIndex((prevIndex) => prevIndex - 1);
@@ -52,22 +41,22 @@ const CourseScreen = () => {
   }
 
   return (
-    <div className="flex w-screen h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
-      {/* Side Navigation */}
-      <SideNav
-        playListData={playListData}
-        selectedVideoIndex={selectedVideoIndex}
-        setSelectedVideoIndex={setSelectedVideoIndex}
-        setVideoStatus={setVideoStatus}
-      />
+    <div className="flex flex-col-reverse lg:flex-row w-full h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
+      <div className="h-[40vh] lg:h-full">
+        <SideNav
+          playListData={playListData}
+          selectedVideoIndex={selectedVideoIndex}
+          setSelectedVideoIndex={setSelectedVideoIndex}
+          setVideoStatus={setVideoStatus}
+        />
+      </div>
 
-      {/* Video Player */}
-      <div className="h-screen flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4">
+      <div className="h-[60vh] lg:h-full lg:flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4">
         {selectedVideo ? (
           <>
-            <div className="flex justify-around items-center mb-4">
+            <div className="flex justify-between items-center mb-4 gap-2">
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
+                className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${
                   selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 icon={ArrowBigLeftDash}
@@ -75,13 +64,13 @@ const CourseScreen = () => {
                 onClick={handlePrevVideo}
                 disabled={selectedVideoIndex === 0}
               >
-                Prev
+                <span className="hidden sm:inline">Prev</span>
               </IconButton>
 
-              <span className="text-lg font-semibold">{selectedVideo.title}</span>
+              <span className="text-sm lg:text-lg font-semibold truncate">{selectedVideo.title}</span>
                
               <IconButton
-                className={`bg-blue-500 hover:bg-blue-600 w-28 ${
+                className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${
                   selectedVideoIndex === playListData.videos.length - 1
                     ? "opacity-50 cursor-not-allowed"
                     : ""
@@ -91,28 +80,58 @@ const CourseScreen = () => {
                 onClick={handleNextVideo}
                 disabled={selectedVideoIndex === playListData.videos.length - 1}
               >
-                Next
+                <span className="hidden sm:inline">Next</span>
               </IconButton>
             </div>
 
-            <iframe
-              key={selectedVideo.videoId}
-              className="w-[100%] h-[80%] rounded-xl shadow-xl mb-4"
-              src={`https://www.youtube.com/embed/${selectedVideo.videoId}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            <div className="relative w-full pt-[56.25%]">
+              <iframe
+                key={selectedVideo.videoId}
+                className="absolute top-0 left-0 w-full h-full rounded-xl shadow-xl"
+                src={`https://www.youtube.com/embed/${selectedVideo.videoId}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
           </>
         ) : (
           <p className="text-gray-800 dark:text-white text-lg">Select a video to play</p>
         )}
       </div>
 
-      {/* Side Notes */}
-      <SideNote>
-        <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
-      </SideNote>
+      <button
+        onClick={() => setIsNotesOpen(!isNotesOpen)}
+        className="fixed bottom-4 right-4 lg:hidden bg-white dark:bg-gray-800 
+                   shadow-lg rounded-full p-3 flex items-center justify-center
+                   hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
+                   border border-gray-200 dark:border-gray-700 z-40"
+        aria-label="Toggle notes"
+      >
+        <PenLine className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+      </button>
+
+       
+        <SideNote  >
+          <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+        </SideNote>
+       
+
+      {isNotesOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
+          <div className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl">
+            <div className="p-4">
+              <button
+                onClick={() => setIsNotesOpen(false)}
+                className="absolute top-2 right-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="sr-only">Close notes</span>
+                ×
+              </button>
+              <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
