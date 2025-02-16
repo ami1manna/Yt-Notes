@@ -36,7 +36,7 @@ const AddPlaylist = () => {
 
             setLoading(true);
              
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/playlists/add`, {
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/add`, {
                 userEmail: user.email,  
                 playlistId: extractPlaylistId(trimmedUrl),
                 playlistUrl: trimmedUrl
