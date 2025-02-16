@@ -15,6 +15,7 @@ const SideNote = ({
   const [width, setWidth] = useState(defaultWidth);
   const [position, setPosition] = useState({ x: window.innerWidth - defaultWidth });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isResizing, setIsResizing] = useState(false);
   const panelRef = useRef(null);
   const resizableRef = useRef(null);
 
@@ -60,50 +61,37 @@ const SideNote = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, isPinned]);
 
-  const handleResize = (e, direction) => {
-    if (isMobile) return;
+  const handleResize = (e) => {
+    if (isMobile || isMaximized || !isResizing) return;
     
-    e.preventDefault();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-
-    if (direction === 'left') {
-      const newWidth = width + (position.x - clientX);
-      const newPosition = clientX;
-
-      if (newWidth >= minWidth && newWidth <= maxWidth) {
-        setWidth(newWidth);
-        setPosition({ x: newPosition });
-      }
-    } else {
-      const newWidth = window.innerWidth - clientX;
-      if (newWidth >= minWidth && newWidth <= maxWidth) {
-        setWidth(newWidth);
-      }
+    const newWidth = window.innerWidth - clientX;
+    
+    if (newWidth >= minWidth && newWidth <= maxWidth) {
+      setWidth(newWidth);
+      setPosition({ x: clientX });
     }
   };
 
-  const startResizing = (e, direction) => {
-    if (isMobile) return;
+  const startResizing = (e) => {
+    if (isMobile || isMaximized) return;
     
     e.preventDefault();
     e.stopPropagation();
+    setIsResizing(true);
 
-    const events = {
-      move: e.touches ? "touchmove" : "mousemove",
-      end: e.touches ? "touchend" : "mouseup"
-    };
-
-    const handleResizeWithDirection = (event) => handleResize(event, direction);
-
-    document.addEventListener(events.move, handleResizeWithDirection);
-    document.addEventListener(events.end, () => stopResizing(handleResizeWithDirection));
+    window.addEventListener('mousemove', handleResize);
+    window.addEventListener('mouseup', stopResizing);
+    window.addEventListener('touchmove', handleResize);
+    window.addEventListener('touchend', stopResizing);
   };
 
-  const stopResizing = (handler) => {
-    document.removeEventListener("mousemove", handler);
-    document.removeEventListener("mouseup", handler);
-    document.removeEventListener("touchmove", handler);
-    document.removeEventListener("touchend", handler);
+  const stopResizing = () => {
+    setIsResizing(false);
+    window.removeEventListener('mousemove', handleResize);
+    window.removeEventListener('mouseup', stopResizing);
+    window.removeEventListener('touchmove', handleResize);
+    window.removeEventListener('touchend', stopResizing);
   };
 
   return (
@@ -112,7 +100,7 @@ const SideNote = ({
         {isOpen && (
           <motion.div
             ref={panelRef}
-            drag={!isMaximized && !isMobile}
+            drag={!isMaximized && !isMobile && !isResizing}
             dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
             dragElastic={0.1}
             dragMomentum={false}
@@ -128,23 +116,19 @@ const SideNote = ({
               stiffness: 300,
               damping: 30
             }}
-            className={`
-              fixed top-0 right-0 bg-white dark:bg-gray-900 
-              shadow-lg flex flex-col border border-gray-200 
-              dark:border-gray-800 z-50 overflow-hidden
-              ${isMobile || isMaximized ? 'rounded-none' : 'rounded-lg'}
-            `}
+            style={{ 
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              zIndex: 50
+            }}
+            className="bg-white dark:bg-gray-900 shadow-lg flex flex-col border 
+              border-gray-200 dark:border-gray-800 overflow-hidden"
           >
             <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 select-none">
-              <div
-                className={`flex items-center ${!isMobile && 'cursor-ew-resize'} group`}
-                onMouseDown={(e) => startResizing(e, 'left')}
-                onTouchStart={(e) => startResizing(e, 'left')}
-                role="separator"
-                aria-label="Resize panel left"
-              >
-                {!isMobile && <FoldHorizontal />}
-                <span className="font-medium text-gray-700 dark:text-gray-200 mx-7">
+              <div className="flex items-center cursor-grab group">
+                <FoldHorizontal className="mr-2" />
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   {title}
                 </span>
               </div>
@@ -153,19 +137,23 @@ const SideNote = ({
                 {!isMobile && (
                   <button
                     onClick={() => setIsPinned(!isPinned)}
-                    className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 
+                      transition-colors"
                     aria-label={isPinned ? "Unpin panel" : "Pin panel"}
                   >
                     <Pin
                       size={18}
-                      className={`transform transition-transform ${isPinned ? "rotate-45 text-blue-500" : "text-gray-500 dark:text-gray-400"}`}
+                      className={`transform transition-transform ${
+                        isPinned ? "rotate-45 text-blue-500" : "text-gray-500 dark:text-gray-400"
+                      }`}
                     />
                   </button>
                 )}
                 {!isMobile && (
                   <button
                     onClick={() => setIsMaximized(!isMaximized)}
-                    className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 
+                      transition-colors"
                     aria-label={isMaximized ? "Restore panel" : "Maximize panel"}
                   >
                     <Maximize2
@@ -176,7 +164,8 @@ const SideNote = ({
                 )}
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 
+                    transition-colors"
                   aria-label="Close panel"
                 >
                   <Minus
@@ -190,15 +179,20 @@ const SideNote = ({
             <div className="flex-1 p-4 overflow-auto relative" ref={resizableRef}>
               {children}
               {!isMobile && !isMaximized && (
-                <div
-                  className="absolute top-[88%] bottom-0 left-0 cursor-ew-resize group"
-                  onMouseDown={(e) => startResizing(e, 'left')}
-                  onTouchStart={(e) => startResizing(e, 'left')}
-                  role="separator"
-                  aria-label="Resize panel left"
-                >
-                  <div className="absolute inset-y-0 left-0 w-1 bg-blue-600 group-hover:bg-blue-500 transition-colors" />
-                </div>
+                <>
+                  <div
+                    className="absolute top-0 left-0 w-1 h-full cursor-ew-resize 
+                      hover:bg-blue-500 transition-colors"
+                    onMouseDown={startResizing}
+                    onTouchStart={startResizing}
+                  />
+                  <div
+                    className="absolute top-0 right-0 w-1 h-full cursor-ew-resize 
+                      hover:bg-blue-500 transition-colors"
+                    onMouseDown={startResizing}
+                    onTouchStart={startResizing}
+                  />
+                </>
               )}
             </div>
           </motion.div>
