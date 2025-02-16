@@ -8,15 +8,18 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       await login(email, password);
       navigate("/"); // Redirect to home or another page on success
     } catch (err) {
       console.error(err);
     }
+    setIsLoading(false);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -49,7 +52,7 @@ const Login = () => {
             placeholder="Password"
             className="w-full px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <TextButton type="submit">
+          <TextButton type="submit" isLoading={isLoading}>
             Login
           </TextButton>
         </form>

@@ -37,7 +37,7 @@ const AddPlaylist = () => {
             setLoading(true);
              
             const response = await axios.post('http://localhost:5000/playlists/add', {
-                userEmail: user.email, // TODO: Replace with actual user email
+                userEmail: user.email,  
                 playlistId: extractPlaylistId(trimmedUrl),
                 playlistUrl: trimmedUrl
             });
@@ -79,6 +79,7 @@ const AddPlaylist = () => {
                 onClick={handleAddPlaylist}
                 ref={inputRef}
                 disabled={loading}
+                loading={loading}
             />
             <div className='flex flex-col flex-1'>
             <CourseList/>   
