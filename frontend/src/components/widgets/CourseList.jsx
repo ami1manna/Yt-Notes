@@ -14,12 +14,16 @@ const CourseList = () => {
       <div className=" h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 w-full auto-rows-auto">
         
          {userPlaylists.map((playlist, index) => (
-          <NavLink to={`/courseScreen/${index}`}>
+          <NavLink to={`/courseScreen/${index}`} key={playlist.playlistId}>
           <VideoCard
-            key={playlist.playlistId} // Use playlistId as the unique key
-            title={playlist.channelTitle || 'Untitled Playlist'} // Use channelTitle or a fallback
-            thumbnailUrl={playlist.playlistThumbnailUrl} // Use playlistThumbnailUrl
+             // Use playlistId as the unique key
+            title={playlist.channelTitle || 'Untitled Playlist'}  
+            thumbnailUrl={playlist.playlistThumbnailUrl}  
+            progress={playlist.playlistProgress} 
+            target={playlist.playlistLength}
             />
+            
+            
             </NavLink> 
 
         ))}

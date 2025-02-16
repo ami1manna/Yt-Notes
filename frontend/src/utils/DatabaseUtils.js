@@ -14,3 +14,19 @@ export const toggleVideo = async (videoId, playlistId, userEmail) => {
         throw error;
     }
 };
+ 
+export const setPlaylistIndex = async (userEmail, playlistId, playlistIndex) => {
+     
+    try {
+        const response = await axios.put("http://localhost:5000/playlists/setVideoIndex", {
+            userEmail,
+            playlistId,
+            playlistIndex,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error setting playlist index:", error.response?.data || error.message);
+        return { success: false, error: error.response?.data || "An error occurred" };
+    }
+};
+

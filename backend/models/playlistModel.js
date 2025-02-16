@@ -11,7 +11,8 @@ const videoSchema = new mongoose.Schema({
   thumbnailUrl: String,
   publishedAt: String,
   done:{ type: Boolean, default: false },
-  notes: [noteSchema] // Array of notes for this video
+  notes: [noteSchema] ,
+  duration:{type:Number, default: 0},
 });
 
 const singlePlaylistSchema = new mongoose.Schema({
@@ -19,8 +20,10 @@ const singlePlaylistSchema = new mongoose.Schema({
   playlistUrl: String,
   channelTitle: String,
   playlistLength: Number,
+  selectedVideoIndex:{type:Number, default: 0},
   playlistProgress:{type:Number, default: 0},
   playlistThumbnailUrl: String,
+  totalDuration:{type:Number, default: 0},
   videos: [videoSchema]
 });
 
