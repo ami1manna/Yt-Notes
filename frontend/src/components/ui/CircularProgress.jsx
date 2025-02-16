@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CircularProgress = ({ progress = 0, target = 100, radius = 17, color = "blue" }) => {
+const CircularProgress = ({ progress = 0, target = 100, radius = 17}) => {
   const [animatedProgress, setAnimatedProgress] = useState(0);
 
   useEffect(() => {
@@ -12,10 +12,11 @@ const CircularProgress = ({ progress = 0, target = 100, radius = 17, color = "bl
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
   const strokeWidth = radius * 0.35;
-  const textSize = `${radius * 0.51}px`;
+  const textSize = `${radius * 0.40}px`;
 
   return (
-    <div className="relative group" style={{ width: radius * 5, height: radius * 5 }}>
+    <div className="relative group" style={{width:"70px",height:"70px"}}> 
+    {/* { width: radius * 4.5, height: radius * 4.5 } */}
       <svg className="w-full h-full transform -rotate-90 transition-transform duration-500 ease-out" viewBox="0 0 100 100">
         <circle
           className="fill-none"
@@ -26,7 +27,7 @@ const CircularProgress = ({ progress = 0, target = 100, radius = 17, color = "bl
           stroke="gray"
         />
         <circle
-          className={`fill-none transition-all duration-700 ease-out stroke-${color}-500`}
+          className={`fill-none transition-all duration-700 ease-out stroke-green-500`}
           cx="50"
           cy="50"
           r={radius}

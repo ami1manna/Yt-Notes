@@ -65,7 +65,7 @@ const CourseScreen = () => {
       <div className="h-screen flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4">
         {selectedVideo ? (
           <>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-around items-center mb-4">
               <IconButton
                 className={`bg-blue-500 hover:bg-blue-600 w-28 ${
                   selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
