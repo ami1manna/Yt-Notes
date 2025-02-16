@@ -12,6 +12,7 @@ import axios from 'axios';
 import { PlaylistContext } from "../../context/PlaylistsContext";
 
 const SunEditorComponent = ({playlistId,videoId}) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [content, setContent] = useState('');
   const {user} = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
@@ -72,7 +73,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   // save content to file
   const saveContent = async () => {
     try {
-       
+       setIsLoading(true);
       const response = await axios.put('http://localhost:5000/video/notes', {
         "userEmail": user.email,
         "playlistId": playlistId,
@@ -84,12 +85,15 @@ const SunEditorComponent = ({playlistId,videoId}) => {
     } catch (error) {
       console.error(error);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="editor-container w-full ">
-     <div className="flex w-full justify-end items-center">
-      <IconButton type="button" className='w-28 h-full p-4 my-3 ' icon={Save} onClick={saveContent} >Save</IconButton>
+     <div className="flex w-full justify-end items-center ">
+      <IconButton type="button" className='  w-28 h-full p-3 lg:p-4 mb-2 lg:my-3 ' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
      </div>
 
       

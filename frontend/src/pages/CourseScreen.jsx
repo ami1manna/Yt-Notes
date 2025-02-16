@@ -99,39 +99,14 @@ const CourseScreen = () => {
         )}
       </div>
 
-      <button
-        onClick={() => setIsNotesOpen(!isNotesOpen)}
-        className="fixed bottom-4 right-4 lg:hidden bg-white dark:bg-gray-800 
-                   shadow-lg rounded-full p-3 flex items-center justify-center
-                   hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
-                   border border-gray-200 dark:border-gray-700 z-40"
-        aria-label="Toggle notes"
-      >
-        <PenLine className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-      </button>
-
+      
        
-        <SideNote  >
+        <SideNote>
           <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
         </SideNote>
        
 
-      {isNotesOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
-          <div className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl">
-            <div className="p-4">
-              <button
-                onClick={() => setIsNotesOpen(false)}
-                className="absolute top-2 right-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <span className="sr-only">Close notes</span>
-                ×
-              </button>
-              <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 };

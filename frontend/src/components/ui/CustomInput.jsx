@@ -4,9 +4,8 @@ import { Plus, PlusCircle } from 'lucide-react';
 
 const CustomInput = React.forwardRef(({ 
     inputType, 
-    iconPath, 
+    loading,
     placeholder, 
-    textButton, 
     onClick, 
     value, 
     onChange, 
@@ -35,7 +34,8 @@ const CustomInput = React.forwardRef(({
                     onChange={onChange}
                     disabled={disabled}
                 />
-                 <IconButton type="submit" className='w-28 h-full p-4 ' icon={PlusCircle} >Add</IconButton>
+               
+                 <IconButton type="submit" className='w-28 h-full p-4 ' icon={PlusCircle} isLoading={loading}>Add</IconButton>
             </div>
         </form>
     )
