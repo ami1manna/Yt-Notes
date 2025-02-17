@@ -19,8 +19,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
+     
     try {
-      const res = await axios.get("http://localhost:5000/auth/me", { 
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/me`, { 
         withCredentials: true 
       });
       setUser(res.data.user);
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   };
   const fetchUserPlaylists = async (email) => {
     try {
-      const response = await axios.get(`http://localhost:5000/playlists/${email}`);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/${email}`);
     
       // Access the playlists array from the response
       const playlists = response.data[0].playlists;
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const res = await axios.post(
-        "http://localhost:5000/auth/login", 
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/login`, 
         { email, password }, 
         { withCredentials: true }
       );
@@ -75,8 +76,9 @@ export const AuthProvider = ({ children }) => {
   const signup = async (username, email, password) => {
     try {
       setError(null);
+      console.log(`${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/login`);
       const res = await axios.post(
-        "http://localhost:5000/auth/signup", 
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/signup`, 
         { username, email, password }, 
         { withCredentials: true }
       );
@@ -96,7 +98,8 @@ export const AuthProvider = ({ children }) => {
       // clear provider
       resetPlaylist();
       await axios.post(
-        "http://localhost:5000/auth/logout", 
+         
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/logout`, 
         {}, 
         { withCredentials: true }
       );

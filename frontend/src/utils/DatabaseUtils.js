@@ -2,7 +2,7 @@ import axios from "axios";
 // Toggle video status on the backend
 export const toggleVideo = async (videoId, playlistId, userEmail) => {
     try {
-        const response = await axios.put("http://localhost:5000/video/toggle", {
+        const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/toggle`, {
             userEmail,
             videoId,
             playlistId,
@@ -18,7 +18,7 @@ export const toggleVideo = async (videoId, playlistId, userEmail) => {
 export const setPlaylistIndex = async (userEmail, playlistId, playlistIndex) => {
      
     try {
-        const response = await axios.put("http://localhost:5000/playlists/setVideoIndex", {
+        const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/setVideoIndex`, {
             userEmail,
             playlistId,
             playlistIndex,

@@ -1,4 +1,3 @@
-// authController.js
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -8,7 +7,7 @@ const generateToken = (userId) => {
     { userId }, 
     process.env.JWT_SECRET, 
     { 
-      expiresIn: '1h',
+      expiresIn: '6m', // Matching JWT expiry with cookie lifespan
       algorithm: 'HS256'
     }
   );
@@ -76,8 +75,8 @@ exports.signup = async (req, res) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', // Changed to 'lax' for cross-site requests
-      maxAge: 60 * 60 * 1000 // 1 hour
+      sameSite: 'None', // Ensure cross-origin cookies work
+      maxAge: 60 * 60 * 1000 * 24 * 30 * 6 // 6 months
     });
 
     res.status(201).json({
@@ -92,7 +91,7 @@ exports.signup = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       status: 'error',
-      message: 'Error creating user'
+      message: error.message || 'Error creating user'
     });
   }
 };
@@ -119,8 +118,8 @@ exports.login = async (req, res) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', // Changed to 'lax' for cross-site requests
-      maxAge: 60 * 60 * 1000  *24 * 30 * 6 // 6 month
+      sameSite: 'None', // Cross-origin requests
+      maxAge: 60 * 60 * 1000 * 24 * 30 * 6 // 6 months
     });
 
     res.json({
@@ -135,7 +134,7 @@ exports.login = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       status: 'error',
-      message: 'Error logging in'
+      message: error.message || 'Error logging in'
     });
   }
 };
@@ -145,7 +144,7 @@ exports.logout = (req, res) => {
   res.cookie('jwt', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: 'None',
     expires: new Date(0)
   });
 

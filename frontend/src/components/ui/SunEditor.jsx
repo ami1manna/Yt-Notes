@@ -51,7 +51,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
      
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/video/notes/${user.email}/${playlistId}/${videoId}`);
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`);
         if(response.data[0]) 
           setContent(response.data[0].text);
         else
@@ -74,7 +74,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   const saveContent = async () => {
     try {
        setIsLoading(true);
-      const response = await axios.put('http://localhost:5000/video/notes', {
+      const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`, {
         "userEmail": user.email,
         "playlistId": playlistId,
         "videoId": videoId,
