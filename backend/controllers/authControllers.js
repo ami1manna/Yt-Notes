@@ -2,12 +2,13 @@ const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// In generateToken function
 const generateToken = (userId) => {
   return jwt.sign(
-    { userId }, 
-    process.env.JWT_SECRET, 
-    { 
-      expiresIn: '6m', // Matching JWT expiry with cookie lifespan
+    { userId },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '180d', // 6 months (180 days)
       algorithm: 'HS256'
     }
   );
@@ -17,14 +18,14 @@ const generateToken = (userId) => {
 exports.getMe = async (req, res) => {
   try {
     const token = req.cookies.jwt;
-    
+
     if (!token) {
       return res.status(401).json({ message: 'Not authenticated' });
     }
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     // Get user
     const user = await User.findById(decoded.userId);
     if (!user) {
@@ -71,12 +72,12 @@ exports.signup = async (req, res) => {
     // Generate token
     const token = generateToken(user._id);
 
-    // Set cookie
+    // In cookie settings (keep the same in both login and signup routes)
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None', // Ensure cross-origin cookies work
-      maxAge: 60 * 60 * 1000 * 24 * 30 * 6 // 6 months
+      secure: true, // Since you're in production
+      sameSite: 'None',
+      maxAge: 180 * 24 * 60 * 60 * 1000 // 6 months in milliseconds
     });
 
     res.status(201).json({
@@ -114,12 +115,12 @@ exports.login = async (req, res) => {
     // Generate token
     const token = generateToken(user._id);
 
-    // Set cookie
+    // In cookie settings (keep the same in both login and signup routes)
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None', // Cross-origin requests
-      maxAge: 60 * 60 * 1000 * 24 * 30 * 6 // 6 months
+      secure: true, // Since you're in production
+      sameSite: 'None',
+      maxAge: 180 * 24 * 60 * 60 * 1000 // 6 months in milliseconds
     });
 
     res.json({
