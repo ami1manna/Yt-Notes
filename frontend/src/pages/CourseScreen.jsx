@@ -42,7 +42,7 @@ const CourseScreen = () => {
 
   return (
     <div className="flex flex-col-reverse lg:flex-row w-full h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
-      <div className="h-[40vh] lg:h-full">
+      <div className="h-[60vh] lg:h-full">
         <SideNav
           playListData={playListData}
           selectedVideoIndex={selectedVideoIndex}
@@ -51,10 +51,10 @@ const CourseScreen = () => {
         />
       </div>
 
-      <div className="h-[60vh] lg:h-full lg:flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4">
+      <div className="h-[40vh] lg:h-full lg:flex-1 bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4">
         {selectedVideo ? (
           <>
-            <div className="flex justify-between items-center mb-4 gap-2">
+            <div className="flex justify-between items-center mb-4 gap-2]">
               <IconButton
                 className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${
                   selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
