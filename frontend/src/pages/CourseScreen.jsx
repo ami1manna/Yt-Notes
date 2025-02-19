@@ -101,7 +101,10 @@ const CourseScreen = () => {
 
       
        
-        <SideNote>
+        <SideNote 
+          titles={["Notes", "Chat", ]}
+          defaultTab={0}>
+          <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
           <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
         </SideNote>
        
