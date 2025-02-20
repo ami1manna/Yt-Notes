@@ -8,6 +8,7 @@ import { ArrowBigLeftDash, ArrowBigRightDash, PenLine } from "lucide-react";
 import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
+import AIChat from "../components/AIChat";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
@@ -101,8 +102,11 @@ const CourseScreen = () => {
 
       
        
-        <SideNote>
+        <SideNote 
+          titles={["Notes", "Chat", ]}
+          defaultTab={0}>
           <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+          <AIChat/>
         </SideNote>
        
 

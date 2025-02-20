@@ -9,7 +9,7 @@ import IconButton from "./IconButton";
 import {Save} from "lucide-react";
 
 import axios from 'axios';
-import { PlaylistContext } from "../../context/PlaylistsContext";
+ 
 
 const SunEditorComponent = ({playlistId,videoId}) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -34,8 +34,10 @@ const SunEditorComponent = ({playlistId,videoId}) => {
       ['save', 'template']
     ],
     defaultTag: 'p',
-    minHeight: '300px',
+    stickyToolbar: "40",
+    rtl: false,
     showPathLabel: false,
+    
     attributesWhitelist: {
       all: 'style',
       table: 'cellpadding|width|cellspacing|height|style',
@@ -91,9 +93,9 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   };
 
   return (
-    <div className="editor-container w-full ">
+    <div className="w-full ">
      <div className="flex w-full justify-end items-center ">
-      <IconButton type="button" className='  w-28 h-full p-3 lg:p-4 mb-2 lg:my-3 ' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
+      <IconButton type="button" className='  w-24 h-full p-3 lg:p-4 mb-2   ' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
      </div>
 
       
@@ -148,7 +150,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
           font-size: 14px;
           ${isDarkMode ? 'background-color: #1a1a1a; color: #ffffff;' : ''}
         `}
-        height="400px"
+        height="500"
         setContents={content}
         hideToolbar={false}
         disable={false}
