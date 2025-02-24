@@ -1,0 +1,5 @@
+python -m uvicorn main:app --reload
+
+request
+http://127.0.0.1:8000/transcript/4b4MUYve_U8
+https://fast-api-ruby-zeta.vercel.app/transcript/4b4MUYve_U8
