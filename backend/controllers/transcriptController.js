@@ -26,7 +26,7 @@ exports.postCustomTranscript = async (req, res) => {
         const options = {
             method: 'GET',
             url: 'https://youtube-video-summarizer-gpt-ai.p.rapidapi.com/api/v1/get-transcript-v2',
-            params: { video_id: '4tfVTUrPDn8', platform: 'youtube' },
+            params: { video_id: videoId, platform: 'youtube' },
             headers: {
                 'x-rapidapi-key': process.env.RAPIDAPI_KEY,
                 'x-rapidapi-host': 'youtube-video-summarizer-gpt-ai.p.rapidapi.com'
