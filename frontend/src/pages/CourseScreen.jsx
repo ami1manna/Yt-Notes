@@ -9,6 +9,8 @@ import SideNote from "../components/ui/SideNote";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
 import AIChat from "../components/ui/AIChat";
+import Transcript from "../components/widgets/TranscriptList";
+import TranscriptList from "../components/widgets/TranscriptList";
  
 
 const CourseScreen = () => {
@@ -108,6 +110,7 @@ const CourseScreen = () => {
           defaultTab={0}>
           <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
           <AIChat/>
+          <TranscriptList videoId={selectedVideo?.videoId} />
         </SideNote>
        
 
