@@ -109,8 +109,7 @@ const CourseScreen = () => {
           titles={["Notes", "Chat", ]}
           defaultTab={0}>
           <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
-          <AIChat/>
-          <TranscriptList videoId={selectedVideo?.videoId} />
+         <TranscriptList videoId={selectedVideo?.videoId} />
         </SideNote>
        
 
