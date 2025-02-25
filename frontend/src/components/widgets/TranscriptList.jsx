@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import TranscriptTile from "../ui/TranscriptTile"; // Fixed component name import
-import { getTranscript } from "../../utils/Transcript";
+import { addTranscript, getTranscript } from "../../utils/Transcript";
 import { toast, ToastContainer } from "react-toastify";
-
-
+import {CloudDownload, Search} from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
+import IconButton from "../ui/IconButton";
 
 const TranscriptList = ({ videoId }) => {
   const [data, setData] = useState({});
@@ -45,6 +45,26 @@ const TranscriptList = ({ videoId }) => {
     return () => abortController.abort();
   }, [videoId]);
 
+  // addTranscript({ videoId });
+  const fetchTranscript = async () => {
+    setLoading(true);
+    try {
+      const result = await addTranscript({ videoId });
+      if (result.error) {
+        setData({});
+      } else {
+        setData(result);
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred.", {
+        position: "top-right",
+        icon: "❌",
+      });
+    }
+    finally{
+      setLoading(false);
+    }
+  }
   // Filter transcript based on search term
   const filteredTranscript = data.transcript?.filter(item => 
     item.text.toLowerCase().includes(searchTerm.toLowerCase())
@@ -82,7 +102,7 @@ const TranscriptList = ({ videoId }) => {
           <div className="space-y-4">
             {filteredTranscript.map((item) => (
               <TranscriptTile
-                key={item._id?.$oid || item._id}
+                key={item._id}
                 timestamp={{ start: item.start, end: item.end }}
                 text={item.text}
               />
@@ -104,6 +124,16 @@ const TranscriptList = ({ videoId }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <p className="text-gray-600 font-medium">No transcript available.</p>
+            <IconButton
+              type="button"
+              onClick={fetchTranscript}
+              className="mt-2 font-medium px-6 hover:"
+              isLoading={loading}
+              icon={CloudDownload}
+              iconPosition="right"
+            >
+              Get Transcript
+            </IconButton>
             {!videoId && (
               <p className="text-gray-500 text-sm mt-2">Please select a video to view its transcript.</p>
             )}
