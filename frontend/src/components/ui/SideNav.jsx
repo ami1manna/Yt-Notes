@@ -1,6 +1,4 @@
-
-// SideNav.jsx
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Tiles from "./Tiles";
 import CheckBox from "./CheckBox";
@@ -10,110 +8,150 @@ import { Clock, ListChecks, ChevronLeft } from 'lucide-react';
 
 const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setVideoStatus }) => {
   const { user } = useContext(AuthContext);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef(null);
+
+  // Handle hover interactions
+  const handleMouseEnter = () => setIsOpen(true);
+  const handleMouseLeave = () => setIsOpen(false);
+  
+  // Function to handle touch events for mobile
+  const handleTouchStart = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  };
+
+  // Handle clicks outside the nav to close it on mobile
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (navRef.current && !navRef.current.contains(event.target) && isOpen) {
+        setIsOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <div className={`relative h-full transition-all duration-300 ease-in-out 
-      ${isOpen ? 'w-full lg:w-80' : 'w-5'}`}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="hidden lg:block absolute -right-4 top-7 z-30 p-2 rounded-full bg-white dark:bg-gray-800 
-                  shadow-lg border border-gray-200 dark:border-gray-700
-                  hover:bg-gray-50 dark:hover:bg-gray-700 
-                  transition-all duration-300 ease-in-out"
-      >
-        <ChevronLeft 
-          className={`w-4 h-4 text-gray-600 dark:text-gray-300 transition-transform duration-300 
-                     ${isOpen ? '' : 'rotate-180'}`}
-        />
-      </button>
-
-      <div className="text-sm   h-full flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 
-                      shadow-xl overflow-hidden">
-        <div className="sticky top-0 z-20 px-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 
-                       border-b border-gray-200 dark:border-gray-700">
-          <div className=" justify-between items-center hidden lg:flex">
-            <div className={`flex items-center gap-2 ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
-              <ListChecks className="w-5 h-5 text-green-500" />
-              <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                Course Progress
-              </h2>
-            </div>
-            <CircularProgress 
-              target={playListData.playlistLength} 
-              progress={playListData.playlistProgress}
-              radius={20}
-            />
-          </div>
-          
-          <div className={`flex items-center gap-3 bg-green-500/10 p-3 my-2 rounded-xl  
-                          ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
-            <Clock className="w-5 h-5  text-green-500" />
-            <div className="flex lg:flex-col justify-center items-center lg:items-start gap-4 lg:gap-0">
-              <span className="text-lg text-gray-600 dark:text-gray-300">Total Duration</span>
-              <span className="text-lg font-bold text-green-500">
-                {formatDuration(playListData.totalDuration)}
-              </span>
-              
-            </div>
-            <div className="lg:hidden flex-1 flex justify-end">
-            <CircularProgress 
-              target={playListData.playlistLength} 
-              progress={playListData.playlistProgress}
-              radius={20}
-              />
-              </div>
-          </div>
+    <div 
+      ref={navRef}
+      className={`fixed left-0 top-0 h-full z-40 transition-all duration-300 ease-in-out
+        ${isOpen ? 'w-full sm:w-80' : 'w-8'}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+    >
+      <div className={`absolute inset-y-0 left-0 transition-all duration-300 ease-in-out
+        ${isOpen ? 'w-full sm:w-80' : 'w-8'}`}>
+        
+        {/* Hoverable tab indicator */}
+        <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-36 w-8 
+                      bg-gradient-to-r from-blue-500 to-blue-600 
+                      rounded-r-lg shadow-lg flex items-center justify-center
+                      cursor-pointer transition-opacity duration-300
+                      ${isOpen ? 'opacity-0' : 'opacity-100'}`}>
+          <ChevronLeft className="w-5 h-5 text-white rotate-180" />
         </div>
 
-        <div className={`flex-1 overflow-hidden overflow-y-auto p-4 space-y-3
-                        ${!isOpen && 'opacity-0'} transition-opacity duration-300`}>
-          {playListData.videos.map((video, index) => (
-            <div
-              key={video.videoId}
-              className={`
-                relative group
-                rounded-xl border 
-                transition-all duration-300 ease-in-out
-                hover:scale-[1.02] active:scale-[0.98]
-                ${
-                  selectedVideoIndex === index 
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 border-transparent shadow-lg shadow-blue-500/20" 
-                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-                }
-              `}
-            >
-              <div className="absolute -top-1 -left-1 z-10
-                            transform -rotate-12 transition-transform duration-300
-                            group-hover:rotate-0 group-hover:-translate-y-1">
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 
-                              text-white text-xs font-bold px-3 py-1 
-                              rounded-br-xl rounded-tl-lg shadow-md
-                              transition-colors duration-300
-                              group-hover:from-green-400 group-hover:to-emerald-500">
-                  {secondsToHHMM(video.duration)}
-                </div>
+        <div className="text-sm h-full flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 
+                      shadow-xl overflow-hidden rounded-r-xl">
+          
+          <div className="sticky top-0 z-20 px-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 
+                       border-b border-gray-200 dark:border-gray-700">
+            <div className="flex justify-between items-center py-3">
+              <div className={`flex items-center gap-2 transition-opacity duration-300 
+                              ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                <ListChecks className="w-5 h-5 text-green-500" />
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+                  Course Progress
+                </h2>
               </div>
-
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                            translate-x-[-200%] group-hover:translate-x-[200%] 
-                            transition-transform duration-1000 ease-in-out 
-                            rounded-xl overflow-hidden" />
-
-              <div className="relative flex items-center gap-3 p-1 lg:p-3 ">
-                <CheckBox
-                  onChange={() => setVideoStatus(video.videoId, playListData.playlistId, user.email)}
-                  checked={video.done}
-                  className={selectedVideoIndex === index ? "text-white" : ""}
+              <CircularProgress 
+                target={playListData.playlistLength} 
+                progress={playListData.playlistProgress}
+                radius={20}
+                className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+              />
+            </div>
+            
+            <div className={`flex items-center gap-3 bg-green-500/10 p-3 my-2 rounded-xl
+                          transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+              <Clock className="w-5 h-5 text-green-500" />
+              <div className="flex lg:flex-col justify-center items-center lg:items-start gap-4 lg:gap-0">
+                <span className="text-lg text-gray-600 dark:text-gray-300">Total Duration</span>
+                <span className="text-lg font-bold text-green-500">
+                  {formatDuration(playListData.totalDuration)}
+                </span>
+              </div>
+              <div className="lg:hidden flex-1 flex justify-end">
+                <CircularProgress 
+                  target={playListData.playlistLength} 
+                  progress={playListData.playlistProgress}
+                  radius={20}
                 />
-                <div className="flex-1">
-                  <Tiles onClick={() => setSelectedVideoIndex(index)} selected={selectedVideoIndex === index}>
-                    {video.title}
-                  </Tiles>
-                </div>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className={`flex-1 overflow-hidden overflow-y-auto p-4 space-y-3
+                        transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+            {playListData.videos.map((video, index) => (
+              <div
+                key={video.videoId}
+                className={`
+                  relative group
+                  rounded-xl border 
+                  transition-all duration-300 ease-in-out
+                  hover:scale-[1.02] active:scale-[0.98]
+                  ${
+                    selectedVideoIndex === index 
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 border-transparent shadow-lg shadow-blue-500/20" 
+                    : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                  }
+                `}
+              >
+                <div className="absolute -top-1 -left-1 z-10
+                              transform -rotate-12 transition-transform duration-300
+                              group-hover:rotate-0 group-hover:-translate-y-1">
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-600 
+                                text-white text-xs font-bold px-3 py-1 
+                                rounded-br-xl rounded-tl-lg shadow-md
+                                transition-colors duration-300
+                                group-hover:from-green-400 group-hover:to-emerald-500">
+                    {secondsToHHMM(video.duration)}
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                              translate-x-[-200%] group-hover:translate-x-[200%] 
+                              transition-transform duration-1000 ease-in-out 
+                              rounded-xl overflow-hidden" />
+
+                <div className="relative flex items-center gap-3 p-1 lg:p-3 ">
+                  <CheckBox
+                    onChange={() => setVideoStatus(video.videoId, playListData.playlistId, user.email)}
+                    checked={video.done}
+                    className={selectedVideoIndex === index ? "text-white" : ""}
+                  />
+                  <div className="flex-1">
+                    <Tiles onClick={() => {
+                      setSelectedVideoIndex(index);
+                      // Close sidebar on mobile after selection
+                      if (window.innerWidth < 640) {
+                        setIsOpen(false);
+                      }
+                    }} selected={selectedVideoIndex === index}>
+                      {video.title}
+                    </Tiles>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

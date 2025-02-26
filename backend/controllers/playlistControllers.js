@@ -15,111 +15,137 @@ exports.addPlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId, playlistUrl } = req.body;
     const API_KEY = process.env.YOUTUBE_API_KEY;
-
-    // Fetch playlist videos
-    const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
-      params: {
-        part: 'snippet',
-        maxResults: 50,
-        playlistId,
-        key: API_KEY,
-      },
-    });
-
-    const videosData = response.data.items;
+    
+    // Function to fetch all playlist items using pagination
+    async function getAllPlaylistItems(playlistId) {
+      let allItems = [];
+      let nextPageToken = '';
+      
+      do {
+        const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
+          params: {
+            part: 'snippet',
+            maxResults: 50,
+            playlistId,
+            pageToken: nextPageToken,
+            key: API_KEY,
+          },
+        });
+        
+        allItems = [...allItems, ...response.data.items];
+        nextPageToken = response.data.nextPageToken;
+      } while (nextPageToken);
+      
+      return allItems;
+    }
+    
+    // Function to fetch video details in batches
+    async function getVideoDetails(videoIds) {
+      const batchSize = 50; // YouTube API limit
+      let allVideoDetails = [];
+      
+      for (let i = 0; i < videoIds.length; i += batchSize) {
+        const batchIds = videoIds.slice(i, i + batchSize).join(',');
+        const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
+          params: {
+            part: 'contentDetails',
+            id: batchIds,
+            key: API_KEY,
+          },
+        });
+        allVideoDetails = [...allVideoDetails, ...response.data.items];
+      }
+      
+      return allVideoDetails;
+    }
+    
+    // Fetch all playlist videos
+    const videosData = await getAllPlaylistItems(playlistId);
+    
     if (!videosData.length) {
       return res.status(404).json({ error: 'Playlist is empty or invalid' });
     }
-
+    
     // Extract video IDs
-    const videoIds = videosData.map(item => item.snippet.resourceId.videoId).join(',');
-
+    const videoIds = videosData.map(item => item.snippet.resourceId.videoId);
+    
     // Fetch video details including duration
-    const videoResponse = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
-      params: {
-        part: 'contentDetails',
-        id: videoIds,
-        key: API_KEY,
-      },
-    });
-
-    const videoDetails = videoResponse.data.items;
-
+    const videoDetails = await getVideoDetails(videoIds);
+    
     let totalDurationSeconds = 0;
-
+    
     // Map videos with duration and calculate total duration
     const videos = videosData.map(item => {
       const videoDetail = videoDetails.find(v => v.id === item.snippet.resourceId.videoId);
       const durationSeconds = videoDetail ? isoDurationToSeconds(videoDetail.contentDetails.duration) : 0;
-
+      
       totalDurationSeconds += durationSeconds;
-
+      
       return {
         videoId: item.snippet.resourceId.videoId,
         title: item.snippet.title,
-        thumbnailUrl: item.snippet.thumbnails.high.url,
+        thumbnailUrl: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
         publishedAt: item.snippet.publishedAt,
-        duration: durationSeconds, // Store duration only in seconds
+        duration: durationSeconds,
       };
     });
-
+    
     // Common playlist data
     const channelTitle = videosData[0].snippet.channelTitle;
-    const playlistLength = response.data.pageInfo.totalResults;
-    const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high.url;
-
+    const playlistLength = videos.length;
+    const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high?.url || 
+                                videosData[0].snippet.thumbnails.default?.url;
+    
     // Check if user has playlists
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
-
+    
     if (!userPlaylist) {
       userPlaylist = new UserPlaylist({
         userEmail,
-        playlists: [{ 
-          playlistId, 
-          playlistUrl, 
-          channelTitle, 
-          playlistLength, 
-          playlistThumbnailUrl, 
-          totalDuration: totalDurationSeconds, // Store total duration only in seconds
-          videos 
+        playlists: [{
+          playlistId,
+          playlistUrl,
+          channelTitle,
+          playlistLength,
+          playlistThumbnailUrl,
+          totalDuration: totalDurationSeconds,
+          videos
         }]
       });
-       
     } else {
       const existingPlaylist = userPlaylist.playlists.find(playlist => playlist.playlistId === playlistId);
       if (existingPlaylist) {
         return res.status(400).json({ error: 'Playlist already added' });
       }
-      userPlaylist.playlists.push({ 
-        playlistId, 
-        playlistUrl, 
-        channelTitle, 
-        playlistLength, 
-        playlistThumbnailUrl, 
-        totalDuration: totalDurationSeconds, // Store total duration only in seconds
-        videos 
+      userPlaylist.playlists.push({
+        playlistId,
+        playlistUrl,
+        channelTitle,
+        playlistLength,
+        playlistThumbnailUrl,
+        totalDuration: totalDurationSeconds,
+        videos
       });
     }
-
+    
     await userPlaylist.save();
     res.status(201).json({
       message: 'Playlist added successfully',
-      playlists: { 
-        playlistId, 
-        playlistUrl, 
-        channelTitle, 
-        playlistLength, 
-        playlistThumbnailUrl, 
-        totalDuration: totalDurationSeconds, // Return total duration in seconds
-        videos 
+      playlists: {
+        playlistId,
+        playlistUrl,
+        channelTitle,
+        playlistLength,
+        playlistThumbnailUrl,
+        totalDuration: totalDurationSeconds,
+        videos
       }
     });
-
+    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 exports.getPlaylistsByUser = async (req, res) => {
   try {

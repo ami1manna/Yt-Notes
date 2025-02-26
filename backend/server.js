@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const videoRoutes = require('./routes/videoRouters');
+const customTranscriptRoutes = require('./routes/transcriptRoutes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -32,7 +33,7 @@ app.use('/auth', authRoutes);
 app.use('/playlists', playlistRoutes);
 app.use('/video', notesRoutes);
 app.use('/video', videoRoutes);
-
+app.use('/transcript',customTranscriptRoutes);
 // Health check route
 app.get('/', (req, res) => {
   res.json({ status: 'healthy', message: "API is working on Vercel!" });
@@ -49,4 +50,4 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Default Route
 
 // // Export for Vercel
-// module.exports = app;
+module.exports = app;

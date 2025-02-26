@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const HorizontalProgress = ({ progress = 70, target = 100 }) => {
+const HorizontalProgress = ({ progress = 0, target = 100 }) => {
   const [animatedProgress, setAnimatedProgress] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
 

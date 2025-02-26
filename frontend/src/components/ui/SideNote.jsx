@@ -1,23 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, Pin, NotebookPen, Minus, FoldHorizontal } from "lucide-react";
+import { Maximize2, Pin, NotebookPen, Minus, FoldHorizontal, Plus, X } from "lucide-react";
 
 const SideNote = ({
   children,
   defaultWidth = 700,
   minWidth = 300,
-  maxWidth = 1000,
-  title = "Notes"
+  maxWidth = 2500,
+  titles = [],
+  defaultTab = 0
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [width, setWidth] = useState(defaultWidth);
-  const [position, setPosition] = useState({ x: window.innerWidth - defaultWidth });
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [isResizing, setIsResizing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const panelRef = useRef(null);
-  const resizableRef = useRef(null);
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(0);
+
+  // Convert children to array if single child
+  const tabElements = Array.isArray(children) ? children : [children];
+  const tabTitles = titles.length === tabElements.length 
+    ? titles 
+    : tabElements.map((_, i) => `Tab ${i + 1}`);
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,7 +34,7 @@ const SideNote = ({
         setWidth(window.innerWidth);
         setIsMaximized(true);
       } else {
-        setWidth(defaultWidth);
+        setWidth(Math.min(defaultWidth, window.innerWidth - 100));
         setIsMaximized(false);
       }
     };
@@ -61,37 +68,34 @@ const SideNote = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, isPinned]);
 
-  const handleResize = (e) => {
-    if (isMobile || isMaximized || !isResizing) return;
-    
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const newWidth = window.innerWidth - clientX;
-    
-    if (newWidth >= minWidth && newWidth <= maxWidth) {
-      setWidth(newWidth);
-      setPosition({ x: clientX });
-    }
-  };
-
-  const startResizing = (e) => {
+  const handleResizeStart = (e) => {
     if (isMobile || isMaximized) return;
-    
+
     e.preventDefault();
-    e.stopPropagation();
-    setIsResizing(true);
+    document.body.style.cursor = 'ew-resize';
+    
+    startXRef.current = e.clientX || e.touches?.[0]?.clientX;
+    startWidthRef.current = width;
 
-    window.addEventListener('mousemove', handleResize);
-    window.addEventListener('mouseup', stopResizing);
-    window.addEventListener('touchmove', handleResize);
-    window.addEventListener('touchend', stopResizing);
-  };
+    const handleMove = (moveEvent) => {
+      const currentX = moveEvent.clientX || moveEvent.touches?.[0]?.clientX;
+      const diff = startXRef.current - currentX;
+      const newWidth = Math.min(Math.max(startWidthRef.current + diff, minWidth), maxWidth);
+      setWidth(newWidth);
+    };
 
-  const stopResizing = () => {
-    setIsResizing(false);
-    window.removeEventListener('mousemove', handleResize);
-    window.removeEventListener('mouseup', stopResizing);
-    window.removeEventListener('touchmove', handleResize);
-    window.removeEventListener('touchend', stopResizing);
+    const handleEnd = () => {
+      document.body.style.cursor = '';
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchmove', handleMove);
+      document.removeEventListener('touchend', handleEnd);
+    };
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleMove);
+    document.addEventListener('touchend', handleEnd);
   };
 
   return (
@@ -100,15 +104,10 @@ const SideNote = ({
         {isOpen && (
           <motion.div
             ref={panelRef}
-            drag={!isMaximized && !isMobile && !isResizing}
-            dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-            dragElastic={0.1}
-            dragMomentum={false}
             initial={{ x: "100%" }}
             animate={{
-              x: "0%",
-              width: isMobile || isMaximized ? "100%" : width,
-              height: "100%"
+              x: 0,
+              width: isMobile || isMaximized ? "100%" : width
             }}
             exit={{ x: "100%" }}
             transition={{
@@ -120,19 +119,37 @@ const SideNote = ({
               position: 'fixed',
               top: 0,
               right: 0,
+              height: '100%',
               zIndex: 50
             }}
             className="bg-white dark:bg-gray-900 shadow-lg flex flex-col border 
-              border-gray-200 dark:border-gray-800 overflow-hidden"
+              border-gray-200 dark:border-gray-800"
           >
-            <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 select-none">
-              <div className="flex items-center cursor-grab group">
-                <FoldHorizontal className="mr-2" />
-                <span className="font-medium text-gray-700 dark:text-gray-200">
-                  {title}
-                </span>
+            <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3">
+              <div className="flex items-center gap-2">
+                <FoldHorizontal className="text-gray-500 dark:text-gray-400" />
+                {/* Tab Navigation */}
+                <div className="flex gap-1 items-center overflow-hidden  ">
+                  {tabTitles.map((title, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => setActiveTab(index)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`
+                        px-3 py-1.5 rounded-lg text-sm font-medium
+                        transition-all duration-200 min-w-max
+                        ${activeTab === index 
+                          ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' 
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}
+                      `}
+                    >
+                      {title}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
- 
+
               <div className="flex gap-1">
                 {!isMobile && (
                   <button
@@ -176,23 +193,29 @@ const SideNote = ({
               </div>
             </div>
 
-            <div className="flex-1 p-4 overflow-auto relative" ref={resizableRef}>
-              {children}
+            <div className="flex-1 overflow-auto relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-4"
+                >
+                  {tabElements[activeTab]}
+                </motion.div>
+              </AnimatePresence>
+              
               {!isMobile && !isMaximized && (
-                <>
-                  <div
-                    className="absolute top-0 left-0 w-1 h-full cursor-ew-resize 
-                      hover:bg-blue-500 transition-colors"
-                    onMouseDown={startResizing}
-                    onTouchStart={startResizing}
-                  />
-                  <div
-                    className="absolute top-0 right-0 w-1 h-full cursor-ew-resize 
-                      hover:bg-blue-500 transition-colors"
-                    onMouseDown={startResizing}
-                    onTouchStart={startResizing}
-                  />
-                </>
+                <div
+                  className="absolute top-0 left-0 w-1 h-full cursor-ew-resize group"
+                  onMouseDown={handleResizeStart}
+                  onTouchStart={handleResizeStart}
+                >
+                  <div className="absolute inset-y-0 left-0 w-1 bg-transparent 
+                    group-hover:bg-blue-500 transition-colors" />
+                </div>
               )}
             </div>
           </motion.div>
