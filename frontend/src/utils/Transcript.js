@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleAxiosError } from "./error";
+import { handleAxiosError } from "./Error.js";
 
 export async function addTranscript({ videoId }) {
     if (!videoId) return { error: "Enter a valid Video ID" };
