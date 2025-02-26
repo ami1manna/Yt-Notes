@@ -156,8 +156,6 @@ const CourseScreen = () => {
                   key={selectedVideo.videoId}
                   className="absolute top-0 left-0 w-full h-full rounded-xl shadow-xl"
                   src={`https://www.youtube.com/embed/${selectedVideo.videoId}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
                 />
               </div>
             </>
