@@ -4,7 +4,7 @@ import Tiles from "./Tiles";
 import CheckBox from "./CheckBox";
 import CircularProgress from "./CircularProgress";
 import { formatDuration, secondsToHHMM } from "../../utils/Coverter";
-import { Clock, ListChecks, ChevronLeft } from 'lucide-react';
+import { Clock, ListChecks, ChevronLeft, Menu, X } from 'lucide-react';
 
 const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setVideoStatus }) => {
   const { user } = useContext(AuthContext);
@@ -12,14 +12,21 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
   const navRef = useRef(null);
 
   // Handle hover interactions
-  const handleMouseEnter = () => setIsOpen(true);
-  const handleMouseLeave = () => setIsOpen(false);
-  
-  // Function to handle touch events for mobile
-  const handleTouchStart = () => {
-    if (!isOpen) {
+  const handleMouseEnter = () => {
+    if (window.innerWidth > 640) {
       setIsOpen(true);
     }
+  };
+  
+  const handleMouseLeave = () => {
+    if (window.innerWidth > 640) {
+      setIsOpen(false);
+    }
+  };
+  
+  // Toggle sidebar for mobile
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
   // Handle clicks outside the nav to close it on mobile
@@ -40,21 +47,22 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
     <div 
       ref={navRef}
       className={`fixed left-0 top-0 h-full z-40 transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-full sm:w-80' : 'w-8'}`}
+        ${isOpen ? 'w-full sm:w-80' : 'w-0'}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
     >
       <div className={`absolute inset-y-0 left-0 transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-full sm:w-80' : 'w-8'}`}>
+        ${isOpen ? 'w-full sm:w-80' : 'w-0'}`}>
         
-        {/* Hoverable tab indicator */}
-        <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-36 w-8 
-                      bg-gradient-to-r from-blue-500 to-blue-600 
-                      rounded-r-lg shadow-lg flex items-center justify-center
+        {/* Hoverable tab indicator with hamburger for mobile */}
+        <div className={`absolute left-0 top-0    
+                      
+                       shadow-lg flex items-center justify-center
                       cursor-pointer transition-opacity duration-300
-                      ${isOpen ? 'opacity-0' : 'opacity-100'}`}>
-          <ChevronLeft className="w-5 h-5 text-white rotate-180" />
+                      ${isOpen ? 'opacity-0' : 'opacity-100'}`}
+             onClick={toggleSidebar}>
+           
+          <Menu className="w-5 h-5 text-black dark:text-white " />
         </div>
 
         <div className="text-sm h-full flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 
@@ -63,19 +71,16 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
           <div className="sticky top-0 z-20 px-4 backdrop-blur-md bg-white/80 dark:bg-gray-800/80 
                        border-b border-gray-200 dark:border-gray-700">
             <div className="flex justify-between items-center py-3">
-              <div className={`flex items-center gap-2 transition-opacity duration-300 
-                              ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-                <ListChecks className="w-5 h-5 text-green-500" />
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                  Course Progress
-                </h2>
-              </div>
-              <CircularProgress 
-                target={playListData.playlistLength} 
-                progress={playListData.playlistProgress}
-                radius={20}
-                className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-              />
+             
+              
+              {/* Close button for mobile */}
+              <button 
+                onClick={toggleSidebar}
+                className={`sm:hidden transition-opacity duration-300 absolute left-0 top-0   ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <X className="w-5 h-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+              </button>
+               
             </div>
             
             <div className={`flex items-center gap-3 bg-green-500/10 p-3 my-2 rounded-xl
