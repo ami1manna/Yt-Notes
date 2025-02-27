@@ -7,6 +7,7 @@ import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
 import TranscriptList from "../components/widgets/TranscriptList";
+import Editor from "../components/Editor/Editor";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
@@ -209,7 +210,8 @@ const CourseScreen = () => {
           {/* Tab Content */}
           <div className="flex-1 overflow-auto p-4">
             {activeTab === 0 ? (
-              <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+              // <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
+              <Editor/>
             ) : (
               <TranscriptList videoId={selectedVideo?.videoId} />
             )}

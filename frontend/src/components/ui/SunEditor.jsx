@@ -33,6 +33,8 @@ const SunEditorComponent = ({playlistId,videoId}) => {
       ['preview', 'print'],
       ['save', 'template']
     ],
+
+    
     defaultTag: 'p',
     stickyToolbar: "40",
     rtl: false,
@@ -95,7 +97,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   return (
     <div className="w-full ">
      <div className="flex w-full justify-end items-center ">
-      <IconButton type="button" className='mb-2 px-3' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
+      <IconButton type="button" className='mb-2 px-2' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
      </div>
 
       

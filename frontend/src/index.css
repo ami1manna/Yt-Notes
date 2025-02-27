@@ -32,4 +32,19 @@ body {
   background: rgba(255, 0, 0, 0.5); /* Semi-transparent red */
 }
 
- 
+ /* src/SunEditorComponent.css */
+.editor-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.sun-editor {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .sun-editor {
+    height: 300px; /* Adjust height for mobile */
+  }
+}
