@@ -208,7 +208,7 @@ const CourseScreen = () => {
           </div>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-auto p-4">
+          <div className="flex-1 overflow-hidden  ">
             {activeTab === 0 ? (
               // <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
               <Editor/>
