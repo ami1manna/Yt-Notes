@@ -118,52 +118,22 @@ const CourseScreen = () => {
           className={`bg-gray-50 dark:bg-gray-950 overflow-y-auto p-4 flex flex-col relative`}
           style={{
             width: isMobile ? '100%' : `${videoPanelWidth}%`,
-            height: isMobile ? '30%' : '100%', // Fixed 30% height on mobile
+            height: isMobile ? '50%' : '100%', // Fixed 30% height on mobile
             minHeight: isMobile ? '200px' : 'auto' // Ensure minimum height
           }}
         >
           {selectedVideo ? (
-            <>
-              <div className="flex justify-between items-center mb-2 gap-2">
-                <IconButton
-                  className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  icon={ArrowBigLeftDash}
-                  iconPosition="left"
-                  onClick={handlePrevVideo}
-                  disabled={selectedVideoIndex === 0}
-                >
-                  <span className="hidden sm:inline">Prev</span>
-                </IconButton>
-
-                <span className="text-sm lg:text-lg font-semibold truncate">{selectedVideo.title}</span>
-
-                <IconButton
-                  className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${selectedVideoIndex === playListData.videos.length - 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                    }`}
-                  icon={ArrowBigRightDash}
-                  iconPosition="right"
-                  onClick={handleNextVideo}
-                  disabled={selectedVideoIndex === playListData.videos.length - 1}
-                >
-                  <span className="hidden sm:inline">Next</span>
-                </IconButton>
-              </div>
-
-              <div className="relative w-full flex-grow">
-                <iframe
-                  key={selectedVideo.videoId}
-                  className="absolute top-0 left-0 w-full h-full rounded-xl shadow-xl"
-                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?modestbranding=1&rel=0`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Embedded YouTube video"
-                />
-              </div>
-            </>
+            <div className="relative w-full flex-grow">
+              <iframe
+                key={selectedVideo.videoId}
+                className="absolute top-0 left-0 w-full h-full rounded-xl shadow-xl"
+                src={`https://www.youtube.com/embed/${selectedVideo.videoId}?modestbranding=1&rel=0`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Embedded YouTube video"
+              />
+            </div>
           ) : (
             <p className="text-gray-800 dark:text-white text-lg">Select a video to play</p>
           )}
@@ -183,11 +153,21 @@ const CourseScreen = () => {
           className={`bg-white dark:bg-gray-900 border-l dark:border-gray-800 flex flex-col`}
           style={{
             width: isMobile ? '100%' : `${100 - videoPanelWidth}%`,
-            height: isMobile ? '70%' : '100%' // Fixed 70% height on mobile
+            height: isMobile ? '60%' : '100%' // Fixed 70% height on mobile
           }}
         >
-          {/* Tab Navigation */}
-          <div className="flex items-center bg-gray-100 dark:bg-gray-800 p-3">
+          {/* Tab Navigation with Previous and Next buttons */}
+          <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3">
+            <IconButton
+              className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${selectedVideoIndex === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              icon={ArrowBigLeftDash}
+              iconPosition="left"
+              onClick={handlePrevVideo}
+              disabled={selectedVideoIndex === 0}
+            >
+              <span className="hidden sm:inline">Prev</span>
+            </IconButton>
+            
             <div className="flex gap-1 items-center">
               {["Notes", "Transcript"].map((title, index) => (
                 <button
@@ -205,13 +185,23 @@ const CourseScreen = () => {
                 </button>
               ))}
             </div>
+            
+            <IconButton
+              className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28 ${selectedVideoIndex === playListData.videos.length - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+              icon={ArrowBigRightDash}
+              iconPosition="right"
+              onClick={handleNextVideo}
+              disabled={selectedVideoIndex === playListData.videos.length - 1}
+            >
+              <span className="hidden sm:inline">Next</span>
+            </IconButton>
           </div>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-hidden  ">
+          <div className="flex-1 overflow-hidden">
             {activeTab === 0 ? (
               // <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
-              <Editor/>
+              <Editor />
             ) : (
               <TranscriptList videoId={selectedVideo?.videoId} />
             )}

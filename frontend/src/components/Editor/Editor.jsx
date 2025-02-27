@@ -5,7 +5,6 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import { responsiveButtonList, templates } from "./toolbarConfig.js";
 import { decodeLatex, extractLatex } from "./utils.js";
-import "./Editor.css";
 
 const Editor = () => {
   const editor = useRef();
@@ -44,7 +43,7 @@ const Editor = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="h-full bg-slate-500 flex flex-col p-4">
+    <div ref={containerRef} className="h-full  flex flex-col p-4">
       <div className="flex-1">
         <SunEditor
           height={`${editorHeight}px`} // Dynamically set height
