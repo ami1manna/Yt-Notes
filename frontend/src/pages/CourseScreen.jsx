@@ -8,6 +8,7 @@ import SunEditorComponent from "../components/ui/SunEditor";
 import { AuthContext } from "../context/AuthContext";
 import TranscriptList from "../components/widgets/TranscriptList";
 import Editor from "../components/Editor/Editor";
+import SummaryList from "../components/widgets/SummaryList";
 
 const CourseScreen = () => {
   const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
@@ -169,7 +170,7 @@ const CourseScreen = () => {
             </IconButton>
             
             <div className="flex gap-1 items-center">
-              {["Notes", "Transcript"].map((title, index) => (
+              {["Notes", "Transcript","Summary"].map((title, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveTab(index)}
@@ -200,11 +201,14 @@ const CourseScreen = () => {
           {/* Tab Content */}
           <div className="flex-1 overflow-hidden">
             {activeTab === 0 ? (
-              // <SunEditorComponent playlistId={playListData.playlistId} videoId={selectedVideo?.videoId} />
               <Editor />
-            ) : (
+            ) : activeTab === 1 ? (
               <TranscriptList videoId={selectedVideo?.videoId} />
+            ) : (
+              <SummaryList videoId={selectedVideo?.videoId} />
             )}
+            
+             
           </div>
         </div>
       </div>
