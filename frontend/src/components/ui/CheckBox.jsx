@@ -17,7 +17,8 @@ const CheckBox = ({ checked , onChange }) => {
           <input
             type="checkbox"
             className="absolute opacity-0 w-0 h-0"
-            checked={checked}
+             
+            defaultChecked={checked}
           />
 
           {/* Custom styled checkbox with animation */}
