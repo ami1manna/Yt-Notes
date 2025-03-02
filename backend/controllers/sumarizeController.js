@@ -357,7 +357,12 @@ async function generateTranscriptSummary(transcriptText) {
           "mainTopics": ["Topic 1", "Topic 2", ...]
         }
         
+        
         Return ONLY the JSON object, nothing else.
+        Also If there are formuls Wrap them in $$
+        #EXAMPLE
+         $\theta_0 + \theta_1 * x$ or $$\sum_{j=0}^{n} \theta_j x_j$$
+
         `;
         
         // Generate content using Gemini
@@ -423,7 +428,12 @@ async function generateEducationalNotes(transcriptText) {
           ]
         }
         
-        Return ONLY the JSON object, nothing else. If certain fields are not applicable, you can omit them from the response.
+        Return ONLY the JSON object, nothing else. If certain fields are not applicable, you can omit them from the response 
+        Also If there are formuls Wrap them in $$
+        #EXAMPLE
+         $\theta_0 + \theta_1 * x$ or $$\sum_{j=0}^{n} \theta_j x_j$$
+        
+        .
         `;
         
         // Generate content using Gemini
