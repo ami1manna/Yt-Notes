@@ -4,7 +4,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Initialize Google Generative AI with API key
 const geminiApiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI('AIzaSyA88srZwqJVOE_F0x0Sus0BX_7zVJhGR8w');
+const genAI = new GoogleGenerativeAI(geminiApiKey);
 
 // First, let's create a schema for our summaries and notes
 // You would typically put this in your models directory
