@@ -13,14 +13,14 @@ const IconButton = ({
   return (
     <button
       type={type}
-      className={`flex items-center justify-center gap-2   py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all ${className} `}
+      className={`text-sm md:text-md lg:text-lg  flex items-center justify-center gap-2 p-2 lg:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all ${className} `}
       {...props}
       disabled={isLoading}
     >
-      {iconPosition === "left" && Icon && <Icon className="w-15 h-15 "  />}
+      {iconPosition === "left" && Icon && <Icon className="w-5 h-4  lg:h-6 "  />}
       
       {isLoading ? <Loader /> : children}
-      {iconPosition === "right" && Icon && <Icon className="w-15 h-15" />}
+      {iconPosition === "right" && Icon && <Icon className="w-5 h-4  lg:h-6" />}
     </button>
   );
 };
