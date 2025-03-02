@@ -201,7 +201,7 @@ const CourseScreen = () => {
           {/* Tab Content */}
           <div className="flex-1 overflow-hidden">
             {activeTab === 0 ? (
-              <Editor />
+              <Editor videoId={selectedVideo?.videoId} playlistId={playListData.playlistId} />
             ) : activeTab === 1 ? (
               <TranscriptList videoId={selectedVideo?.videoId} />
             ) : (

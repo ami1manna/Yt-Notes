@@ -1,29 +1,109 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { responsiveButtonList, templates } from "./toolbarConfig.js";
 import { decodeLatex, extractLatex } from "./utils.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
+// third party
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Editor = () => {
+const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();
+  const { user } = useContext(AuthContext);
+  const [isLoading, setLoading] = useState(true);
   const containerRef = useRef(null); // Reference for parent container
-  const defaultSavedContent = `<p><span>$$f(x) = \\sum_{n=1}^{\\infty} \\frac{(-1)^n}{n^2} \\cos\\left(\\frac{\\pi x}{n}\\right) + \\int_{0}^{1} e^{-x^2} dx$$</span></p><p>adadd&nbsp;</p> <span>adadad</span>`;
-  const [content, setContent] = useState(decodeLatex(defaultSavedContent));
+
+  const [content, setContent] = useState('');
   const [editorHeight, setEditorHeight] = useState(300); // Default height
 
   const getSunEditorInstance = (sunEditor) => {
     editor.current = sunEditor;
   };
-
-  const handleChange = (content) => {
-    setContent(content);
+  const saveContent = async () => {
+    setContent((prevContent) => {
+      const latestContent = prevContent; // Now this gets the latest value
+      console.log(latestContent); // This will correctly log the latest content
+  
+      (async () => {
+        try {
+          setLoading(true);
+  
+          const response = await axios.put(
+            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`,
+            {
+              userEmail: user.email,
+              playlistId: playlistId,
+              videoId: videoId,
+              timestamp: 120,
+              text: latestContent,
+            }
+          );
+  
+          console.log(response);
+          toast.success("Notes Saved");
+  
+          // Update sessionStorage
+          const storageKey = `notes_${videoId}`;
+          sessionStorage.setItem(storageKey, latestContent);
+        } catch (error) {
+          toast.error("Failed to save notes: " + error);
+        } finally {
+          setLoading(false);
+        }
+      })();
+  
+      return prevContent; // Return the same value since we're not modifying state here
+    });
   };
-
-  const saveContent = () => {
-    console.log("Saved content:", extractLatex(content));
+  
+  
+   
+  const handleChange = (updatedContent) => {
+    setContent(() => updatedContent); // Ensures the latest value is set
   };
+  
+  // fetch content from server
+  useEffect(() => {
+    const fetchNotes = async () => {
+      setLoading(true);
+      const storageKey = `notes_${videoId}`;
+      const cachedNotes = sessionStorage.getItem(storageKey);
+
+      if (cachedNotes) {
+        setContent(cachedNotes);
+        console.log("Using cached notes");
+        setLoading(false);
+      } else {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`
+          );
+
+          const noteText = response.data[0] ? response.data[0].text : "";
+          setContent(decodeLatex(noteText));
+          console.log("Fetched notes from server");
+          // Store in sessionStorage
+          sessionStorage.setItem(storageKey, decodeLatex(noteText));
+
+        } catch (error) {
+          toast.error("Failed to fetch notes");
+
+        }
+        finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchNotes();
+  }, [videoId]);
+
+
+
 
   // Dynamically update height based on parent container
   useEffect(() => {
@@ -45,23 +125,32 @@ const Editor = () => {
   return (
     <div ref={containerRef} className="h-full  flex flex-col p-4">
       <div className="flex-1">
-        <SunEditor
-          height={`${editorHeight}px`} // Dynamically set height
-          getSunEditorInstance={getSunEditorInstance}
-          setContents={content}
-          autoFocus={false}
-          onChange={handleChange}
-          setOptions={{
-            stickyToolbar: true,
-            width: "100%",
-            popupDisplay: "full",
-            templates: templates,
-            katex: katex,
-            buttonList: responsiveButtonList,
-            responsiveToolbar: true,
-            callBackSave: saveContent, // Connect save button to function
-          }}
-        />
+        <ToastContainer />
+
+        {
+          isLoading && (<>Loading...</>)
+        }
+
+        {
+          !isLoading &&
+          <SunEditor
+            height={`${editorHeight}px`} // Dynamically set height
+            getSunEditorInstance={getSunEditorInstance}
+            setContents={content}
+            autoFocus={false}
+            onChange={handleChange}
+            setOptions={{
+              stickyToolbar: true,
+              width: "100%",
+              popupDisplay: "full",
+              templates: templates,
+              katex: katex,
+              buttonList: responsiveButtonList,
+              responsiveToolbar: true,
+              callBackSave: saveContent, // Connect save button to function
+            }}
+          />
+        }
       </div>
     </div>
   );
