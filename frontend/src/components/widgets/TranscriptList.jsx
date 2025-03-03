@@ -96,7 +96,7 @@ const TranscriptList = ({ videoId }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-2 h-full overflow-hidden overflow-y-auto">
+    <div className="max-w-4xl mx-auto p-2 h-[100vh] overflow-hidden overflow-y-auto">
       <ToastContainer />
       
       {/* Title, search bar and copy button */}
