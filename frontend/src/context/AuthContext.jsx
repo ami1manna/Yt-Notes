@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (username, email, password) => {
     try {
       setError(null);
-      console.log(`${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/login`);
+       
       const res = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/signup`, 
         { username, email, password }, 

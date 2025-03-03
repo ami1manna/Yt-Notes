@@ -82,7 +82,7 @@ const SummaryList = ({ videoId }) => {
     try {
       const result = await getEducationalNotes(videoId);
       setEducationalNotes(result);
-      console.log("Educational Notes:", result);
+       
     } catch (err) {
       setError("Failed to fetch educational notes.");
     }
