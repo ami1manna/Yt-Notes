@@ -358,15 +358,15 @@ const SummaryList = ({ videoId }) => {
 
   return (
     <MathJaxContext config={mathJaxConfig}>
-      <div className=" bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl shadow-lg h-full max-w-full sm:max-w-4xl mx-auto relative">
+      <div className=" bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl shadow-lg h-[100vh] max-w-full sm:max-w-4xl mx-auto relative">
         {/* Floating Action Button */}
         <button
           
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="absolute z-50 top-5 right-4 p-3 bg-indigo-600 dark:bg-indigo-700 text-white rounded-full shadow-lg hover:bg-indigo-700 dark:hover:bg-indigo-800 transition-colors"
+          className="absolute z-10 top-5 right-7 p-3 bg-indigo-600 dark:bg-indigo-700 text-white rounded-full shadow-lg hover:bg-indigo-700 dark:hover:bg-indigo-800 transition-colors"
           aria-label="Open menu"
         >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMenuOpen ? <X size={15} /> : <Menu size={15} />}
         </button>
         
         {/* Floating Menu */}
