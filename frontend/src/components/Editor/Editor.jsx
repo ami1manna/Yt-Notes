@@ -123,7 +123,7 @@ const Editor = ({ videoId, playlistId }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="h-full  flex flex-col p-4">
+    <div ref={containerRef} className=" h-[100vh] flex flex-col p-4">
       <div className="flex-1">
         <ToastContainer />
 

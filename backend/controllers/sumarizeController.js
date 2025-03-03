@@ -31,8 +31,6 @@ const summarySchema = new mongoose.Schema({
         default: Date.now
     }
 });
-
-// This should be placed in models/educationalNotesModel.js
 const educationalNotesSchema = new mongoose.Schema({
     videoId: {
         type: String,
@@ -50,13 +48,29 @@ const educationalNotesSchema = new mongoose.Schema({
                 code: String,
                 explanation: String
             }],
+            formulas: [{
+                formula: String,
+                explanation: String
+            }],
             examples: [String],
+            visualAids: [{
+                description: String,
+                imageUrl: String,
+                altText: String
+            }],
             subtopics: [{
                 title: String,
-                content: String
+                content: String,
+                keyPoints: [String],
+                visualAids: [{
+                    description: String,
+                    imageUrl: String,
+                    altText: String
+                }]
             }]
         }]
     },
+    additionalResources: [String],
     createdAt: {
         type: Date,
         default: Date.now
@@ -66,6 +80,7 @@ const educationalNotesSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+
 
 // Create models (normally in separate files)
 const VideoSummary = mongoose.model('VideoSummary', summarySchema);
@@ -392,60 +407,122 @@ async function generateEducationalNotes(transcriptText) {
     try {
         // Initialize Gemini model
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-        
-        // Create prompt for educational notes
+       
+        // Create enhanced prompt for educational notes
         const prompt = `
-        # TASK
-        Analyze the provided transcript thoroughly and create detailed educational notes, including examples, code snippets, syntax, or formulas discussed within the text, organized by relevant topics.
-        
-        ## TRANSCRIPT
+        # 📚 EDUCATIONAL NOTES EXTRACTION TASK
+
+        ## 🎯 OBJECTIVE
+        Analyze the provided transcript thoroughly and create comprehensive, well-structured educational notes that capture all key concepts, examples, and technical details discussed.
+
+        ## 📝 TRANSCRIPT
         ${transcriptText}
-        
-        ## OUTPUT FORMAT
-        Format your response as a JSON object with the following structure:
+
+        ## 🔍 ANALYSIS INSTRUCTIONS
+        1. Identify main topics and logical subtopics from the transcript
+        2. Extract key learning points, definitions, and important concepts
+        3. Include ONLY code snippets that were explicitly mentioned or discussed in the transcript
+        4. Capture any mathematical formulas, using proper notation
+        5. Note real-world examples that illustrate concepts
+        6. Use emoji indicators where appropriate to highlight important concepts (🔑), warnings (⚠️), tips (💡), etc.
+        7. If concepts would benefit from visual representation, suggest relevant image links
+
+        ## 📋 OUTPUT FORMAT
+        Return ONLY a JSON object with the following structure:
+
         {
-          "title": "Main title describing the content",
+          "title": "📌 [Descriptive title based on content]",
           "topics": [
             {
-              "title": "Topic title",
-              "summary": "Brief summary of this topic",
-              "keyPoints": ["Point 1", "Point 2", ...],
+              "title": "🔷 [Topic title]",
+              "summary": "Brief yet comprehensive summary of this topic",
+              "keyPoints": [
+                "🔑 [Key point 1]", 
+                "🔑 [Key point 2]",
+                ...
+              ],
               "codeSnippets": [
                 {
                   "language": "programming language",
-                  "code": "code here",
-                  "explanation": "explanation of code"
+                  "code": "code here exactly as presented in transcript",
+                  "explanation": "Clear explanation with practical context"
                 }
               ],
-              "examples": ["Example 1", "Example 2"],
+              "formulas": [
+                {
+                  "formula": "$$formula_here$$",
+                  "explanation": "What this formula represents and how it's used"
+                }
+              ],
+              "examples": [
+                "💡 [Practical example 1]",
+                "💡 [Practical example 2]"
+              ],
+              "visualAids": [
+                {
+                  "description": "Brief description of what this image shows",
+                  "imageUrl": "https://example.com/image.jpg",
+                  "altText": "Descriptive alt text for accessibility"
+                }
+              ],
               "subtopics": [
                 {
-                  "title": "Subtopic title",
-                  "content": "Subtopic content"
+                  "title": "🔹 [Subtopic title]",
+                  "content": "Detailed yet concise subtopic content",
+                  "keyPoints": ["[Point 1]", "[Point 2]"],
+                  "visualAids": [
+                    {
+                      "description": "Brief description of what this image shows",
+                      "imageUrl": "https://example.com/image.jpg",
+                      "altText": "Descriptive alt text for accessibility"
+                    }
+                  ]
                 }
               ]
             }
+          ],
+          "additionalResources": [
+            "📚 [Any mentioned books, articles, or resources]"
           ]
         }
-        
-        Return ONLY the JSON object, nothing else. If certain fields are not applicable, you can omit them from the response 
-        Also If there are formuls Wrap them in $$
-        #EXAMPLE
-         $\theta_0 + \theta_1 * x$ or $$\sum_{j=0}^{n} \theta_j x_j$$
-        
-        .
+
+        ## ⚠️ IMPORTANT GUIDELINES
+        - Include code snippets ONLY if they were actually discussed in the transcript
+        - Format mathematical formulas properly: inline as $formula$ or block as $$formula$$ (it can be in anywhere in the transcript)
+        - For visual aids:
+          - ONLY suggest image URLs if they would genuinely enhance understanding of complex concepts
+          - Provide image URLs in standard format for direct use in HTML <img src=""> tags
+          - cross check the url given by gemini
+          - Ensure suggested images would be publicly available (educational resources, diagrams)
+          - Include descriptive alt text for all images for accessibility
+          - This field is OPTIONAL - only include when visuals would significantly aid comprehension
+        - Omit any fields that aren't applicable rather than leaving them empty
+        - Use clear, educational language suitable for learning
+        - If definitions or terms are explained in the transcript, include them in the notes
+        - Ensure all content comes directly from the transcript - do not add external information
+        - Use emoji indicators to make notes more visually engaging and easier to navigate
+
+        Return ONLY the properly formatted JSON object, nothing else.
         `;
-        
+       
         // Generate content using Gemini
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
-        
-        // Parse JSON from response
-        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-            return JSON.parse(jsonMatch[0]);
-        } else {
-            throw new Error('Failed to parse JSON from Gemini response');
+       
+        // Parse JSON from response with improved error handling
+        try {
+            // Look for JSON object in the response
+            const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                return JSON.parse(jsonMatch[0]);
+            } else {
+                throw new Error('No JSON object found in Gemini response');
+            }
+        } catch (parseError) {
+            console.error('JSON parsing error:', parseError);
+            // Fallback: attempt to clean the response and retry parsing
+            const cleanedResponse = responseText.replace(/```json|```/g, '').trim();
+            return JSON.parse(cleanedResponse);
         }
     } catch (error) {
         console.error('Error generating educational notes with Gemini:', error);
