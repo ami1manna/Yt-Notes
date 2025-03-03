@@ -114,7 +114,7 @@ const AddPlaylist = () => {
           </p>
         </motion.div>
 
-        <div className="relative">
+        <div>
           <CustomInput
             inputType="url"
             iconComponent={
