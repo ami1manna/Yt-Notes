@@ -1,0 +1,43 @@
+ 
+        const prompt = `
+        # TASK
+        Analyze the provided transcript thoroughly and create detailed educational notes, including examples, code snippets, syntax, or formulas discussed within the text, organized by relevant topics.
+        
+        ## TRANSCRIPT
+        ${transcriptText}
+        
+        ## OUTPUT FORMAT
+        Format your response as a JSON object with the following structure:
+        {
+          "title": "Main title describing the content",
+          "topics": [
+            {
+              "title": "Topic title",
+              "summary": "Brief summary of this topic",
+              "keyPoints": ["Point 1", "Point 2", ...],
+              "codeSnippets": [
+                {
+                  "language": "programming language",
+                  "code": "code here",
+                  "explanation": "explanation of code"
+                }
+              ],
+              "examples": ["Example 1", "Example 2"],
+              "subtopics": [
+                {
+                  "title": "Subtopic title",
+                  "content": "Subtopic content"
+                }
+              ]
+            }
+          ]
+        }
+        
+        Return ONLY the JSON object, nothing else. If certain fields are not applicable, you can omit them from the response 
+        Also If there are formuls Wrap them in $$
+        #EXAMPLE
+         $\theta_0 + \theta_1 * x$ or $$\sum_{j=0}^{n} \theta_j x_j$$
+        
+        .
+        `;
+         
