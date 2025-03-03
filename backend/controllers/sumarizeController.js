@@ -425,7 +425,7 @@ async function generateEducationalNotes(transcriptText) {
         4. Capture any mathematical formulas, using proper notation
         5. Note real-world examples that illustrate concepts
         6. Use emoji indicators where appropriate to highlight important concepts (🔑), warnings (⚠️), tips (💡), etc.
-        7. If concepts would benefit from visual representation, suggest relevant image links
+        7. For visual concepts, use ONLY image URLs that are verified to work
 
         ## 📋 OUTPUT FORMAT
         Return ONLY a JSON object with the following structure:
@@ -461,7 +461,7 @@ async function generateEducationalNotes(transcriptText) {
               "visualAids": [
                 {
                   "description": "Brief description of what this image shows",
-                  "imageUrl": "https://example.com/image.jpg",
+                  "imageUrl": "ONLY include URLs from the following TRUSTED sources:",
                   "altText": "Descriptive alt text for accessibility"
                 }
               ],
@@ -473,7 +473,7 @@ async function generateEducationalNotes(transcriptText) {
                   "visualAids": [
                     {
                       "description": "Brief description of what this image shows",
-                      "imageUrl": "https://example.com/image.jpg",
+                      "imageUrl": "ONLY use URLs from trusted sources listed below",
                       "altText": "Descriptive alt text for accessibility"
                     }
                   ]
@@ -486,16 +486,28 @@ async function generateEducationalNotes(transcriptText) {
           ]
         }
 
-        ## ⚠️ IMPORTANT GUIDELINES
+        ### ⚠️ STRICT IMAGE URL GUIDELINES
+        - For all visualAids, ONLY use image URLs from these TRUSTED SOURCES:
+          - Wikimedia Commons: https://commons.wikimedia.org/wiki/
+          - Unsplash: https://unsplash.com/
+          - Pexels: https://www.pexels.com/
+          - ImageKit demo images: https://ik.imagekit.io/demo/
+          - Placeholder services: https://placeholder.com/, https://placekitten.com/
+          - Government and university websites (.gov, .edu domains)
+        
+        - DO NOT attempt to create or predict image URLs that you cannot verify
+        - AVOID ALL URLs that you cannot guarantee are accessible
+        - NEVER include image URLs that might result in 404 errors
+        - If you cannot find a VERIFIED, TRUSTED image URL for a concept, OMIT the visualAids field entirely
+        - Prefer NO image over a potentially broken image URL
+        - For diagrams/charts that don't have a trusted source, suggest using text descriptions instead
+        - MANDATORY: Test each URL mentally by considering if you know for certain it exists and is accessible
+        - NEVER include dynamically generated URLs or URLs with session IDs or timestamps
+        - NEVER include URLs that reference local files or private networks
+
+        ### ⚠️ IMPORTANT ADDITIONAL GUIDELINES
         - Include code snippets ONLY if they were actually discussed in the transcript
-        - Format mathematical formulas properly: inline as $formula$ or block as $$formula$$ (it can be in anywhere in the transcript)
-        - For visual aids:
-          - ONLY suggest image URLs if they would genuinely enhance understanding of complex concepts
-          - Provide image URLs in standard format for direct use in HTML <img src=""> tags
-          - cross check the url given by gemini
-          - Ensure suggested images would be publicly available (educational resources, diagrams)
-          - Include descriptive alt text for all images for accessibility
-          - This field is OPTIONAL - only include when visuals would significantly aid comprehension
+        - Format mathematical formulas properly: inline as $formula$ or block as $$formula$$
         - Omit any fields that aren't applicable rather than leaving them empty
         - Use clear, educational language suitable for learning
         - If definitions or terms are explained in the transcript, include them in the notes
@@ -503,7 +515,7 @@ async function generateEducationalNotes(transcriptText) {
         - Use emoji indicators to make notes more visually engaging and easier to navigate
 
         Return ONLY the properly formatted JSON object, nothing else.
-        `;
+`;
        
         // Generate content using Gemini
         const result = await model.generateContent(prompt);
