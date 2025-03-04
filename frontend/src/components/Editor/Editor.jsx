@@ -31,7 +31,7 @@ const Editor = ({ videoId, playlistId }) => {
       (async () => {
         try {
           setLoading(true);
-  
+          console.log(user.email, playlistId, videoId, latestContent);
           const response = await axios.put(
             `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`,
             {
