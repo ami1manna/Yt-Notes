@@ -26,7 +26,7 @@ const Editor = ({ videoId, playlistId }) => {
   const saveContent = async () => {
     setContent((prevContent) => {
       const latestContent = prevContent; // Now this gets the latest value
-      console.log(latestContent); // This will correctly log the latest content
+ 
   
       (async () => {
         try {
@@ -38,12 +38,11 @@ const Editor = ({ videoId, playlistId }) => {
               userEmail: user.email,
               playlistId: playlistId,
               videoId: videoId,
-              timestamp: 120,
               text: latestContent,
             }
           );
   
-          console.log(response);
+         
           toast.success("Notes Saved");
   
           // Update sessionStorage
@@ -75,7 +74,7 @@ const Editor = ({ videoId, playlistId }) => {
 
       if (cachedNotes) {
         setContent(cachedNotes);
-        console.log("Using cached notes");
+        
         setLoading(false);
       } else {
         try {
@@ -85,7 +84,7 @@ const Editor = ({ videoId, playlistId }) => {
 
           const noteText = response.data[0] ? response.data[0].text : "";
           setContent(decodeLatex(noteText));
-          console.log("Fetched notes from server");
+           
           // Store in sessionStorage
           sessionStorage.setItem(storageKey, decodeLatex(noteText));
 

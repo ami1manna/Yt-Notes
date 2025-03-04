@@ -58,9 +58,9 @@ const Login = () => {
         </form>
         <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm">
           Don't have an account?{" "}
-          <a href="/signup" className="text-orange-500 font-semibold">
+          <button onClick={() => navigate("/signup")} className="text-orange-500 font-semibold">
             Sign up
-          </a>
+          </button>
         </p>
       </div>
     </div>
