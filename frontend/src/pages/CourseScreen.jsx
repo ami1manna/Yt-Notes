@@ -166,7 +166,7 @@ const CourseScreen = () => {
               onClick={handlePrevVideo}
               disabled={selectedVideoIndex === 0}
             >
-              <span className="hidden sm:inline">Prev</span>
+            
             </IconButton>
             
             <div className="flex gap-1 items-center">
@@ -194,7 +194,7 @@ const CourseScreen = () => {
               onClick={handleNextVideo}
               disabled={selectedVideoIndex === playListData.videos.length - 1}
             >
-              <span className="hidden sm:inline">Next</span>
+               
             </IconButton>
           </div>
 
