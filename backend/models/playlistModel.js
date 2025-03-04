@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const noteSchema = new mongoose.Schema({
-  timestamp: {type:Number,unique:true}, // Time in seconds
-  text: String, // Note content
-});
+// const noteSchema = new mongoose.Schema({
+//   timestamp: {type:Number,unique:true}, // Time in seconds
+//   text: String, // Note content
+// });
 
 
 
