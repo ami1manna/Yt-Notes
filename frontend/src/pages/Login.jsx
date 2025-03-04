@@ -61,6 +61,7 @@ const Login = () => {
           <button onClick={() => navigate('/signup')}  className="text-orange-500 font-semibold">
             Sign up
           </button>
+          </button>
         </p>
       </div>
     </div>

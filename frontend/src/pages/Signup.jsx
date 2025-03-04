@@ -170,9 +170,9 @@ const Signup = () => {
         </form>
         <p className="mt-4 text-center text-gray-600 dark:text-gray-300 text-sm">
           Already have an account?{" "}
-          <a href="/login" className="text-orange-500 font-semibold">
+          <button onClick={() => navigate("/login")} className="text-orange-500 font-semibold">
             Login
-          </a>
+          </button>
         </p>
       </div>
     </div>

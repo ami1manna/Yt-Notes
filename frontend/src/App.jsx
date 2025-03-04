@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import AddPlaylist from './components/widgets/AddPlaylist';
 import Login from './pages/Login';
 import CourseScreen from './pages/CourseScreen';
+import DashBoard from './pages/DashBoard';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,7 +20,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/courseScreen/:playlistIndex" element={<CourseScreen />} />
-
+      <Route path='/dashboard' element={<DashBoard />} />
     </>
   )
 );
