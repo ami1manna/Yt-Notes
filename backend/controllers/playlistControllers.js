@@ -87,6 +87,7 @@ exports.addPlaylist = async (req, res) => {
         thumbnailUrl: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
         publishedAt: item.snippet.publishedAt,
         duration: durationSeconds,
+        notes: "", 
       };
     });
     

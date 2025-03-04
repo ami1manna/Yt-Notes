@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
 
-const noteSchema = new mongoose.Schema({
-  timestamp: {type:Number,unique:true}, // Time in seconds
-  text: String, // Note content
-});
-
-
-
 const transcriptSchema = new mongoose.Schema({
   start: String,
   end: String,
@@ -19,7 +12,7 @@ const videoSchema = new mongoose.Schema({
   thumbnailUrl: String,
   publishedAt: String,
   done: { type: Boolean, default: false },
-  notes: [{ timestamp: Number, text: String }],
+  notes: { type: String, default: " " },  // Fixed syntax
   duration: { type: Number, default: 0 },
   transcript: [transcriptSchema] 
 });
