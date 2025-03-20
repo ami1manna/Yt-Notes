@@ -103,7 +103,7 @@ const SideNav = ({ playListData, selectedVideoIndex, setSelectedVideoIndex, setV
                         transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
             {playListData.videos.map((video, index) => (
               <div
-                key={video.videoId}
+                key={index}
                 className={`
                   relative group
                   rounded-xl border 

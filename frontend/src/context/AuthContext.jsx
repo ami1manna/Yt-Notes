@@ -37,9 +37,12 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/${email}`);
     
       // Access the playlists array from the response
-      const playlists = response.data[0].playlists;
+      const userData = response.data[0];
+      if(!userData) return ;
+      
+      const playlists = userData.playlists;
   
-      if (!Array.isArray(playlists)) {
+      if (!Array.isArray(playlists) || !playlists) {
         console.warn("No playlists found or playlists is not an array:", playlists);
         return [];
       }

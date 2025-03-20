@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { extractPlaylistId, validatePlaylistUrl } from '../../utils/PlaylistUtils';
@@ -8,6 +8,7 @@ import { PlaylistContext } from '../../context/PlaylistsContext';
 import { AuthContext } from '../../context/AuthContext';
 import CourseList from './CourseList';
 import { PlusCircle, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AddPlaylist = () => {
   const { setPlaylistData } = useContext(PlaylistContext);
@@ -15,7 +16,7 @@ const AddPlaylist = () => {
   const [playlistUrl, setPlaylistUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
-
+ const navigate = useNavigate();
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -30,6 +31,12 @@ const AddPlaylist = () => {
 
   const handleAddPlaylist = async () => {
     try {
+      // redirect to login page if user is not defined
+      if(!user){
+        navigate("/login");
+        return ;
+      }
+      
       const trimmedUrl = playlistUrl.trim();
 
       if (!trimmedUrl) {
@@ -66,6 +73,7 @@ const AddPlaylist = () => {
         }
       );
 
+     
       if (response.data.playlists) {
         setPlaylistData(response.data.playlists);
         toast.success('Playlist added successfully! 🎉', {
