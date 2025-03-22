@@ -38,6 +38,7 @@ export const PlaylistProvider = ({ children }) => {
     // Toggle video status
     const setVideoStatus = useCallback(async (videoId, playlistId, userEmail) => {
         try {
+            console.log(userPlaylists);
             const result = await toggleVideo(videoId, playlistId, userEmail);
             if (!result) throw new Error("Invalid response from toggleVideo");
 

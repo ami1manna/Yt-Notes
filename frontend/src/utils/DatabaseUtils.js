@@ -2,6 +2,8 @@ import axios from "axios";
 // Toggle video status on the backend
 export const toggleVideo = async (videoId, playlistId, userEmail) => {
     try {
+        //fetch using cache 
+            
         const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/toggle`, {
             userEmail,
             videoId,

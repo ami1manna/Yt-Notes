@@ -10,6 +10,29 @@ function isoDurationToSeconds(duration) {
   const seconds = parseInt(match[3] || 0, 10);
   return hours * 3600 + minutes * 60 + seconds;
 }
+const playlistsArrayToMap = (playlists) => {
+  const playlistsMap = {};
+  playlists.forEach(playlist => {
+    playlistsMap[playlist.playlistId] = {
+      playlistUrl: playlist.playlistUrl,
+      channelTitle: playlist.channelTitle,
+      playlistLength: playlist.playlistLength,
+      playlistThumbnailUrl: playlist.playlistThumbnailUrl,
+      totalDuration: playlist.totalDuration,
+      videos: playlist.videos,
+      selectedVideoIndex: playlist.selectedVideoIndex || 0
+    };
+  });
+  return playlistsMap;
+};
+
+// Helper function to convert playlists map to array
+const playlistsMapToArray = (playlistsMap) => {
+  return Object.keys(playlistsMap).map(id => ({
+    playlistId: id,
+    ...playlistsMap[id]
+  }));
+};
 
 exports.addPlaylist = async (req, res) => {
   try {
@@ -99,48 +122,57 @@ exports.addPlaylist = async (req, res) => {
     
     // Check if user has playlists
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
+    let playlistsMap = {};
     
     if (!userPlaylist) {
-      userPlaylist = new UserPlaylist({
-        userEmail,
-        playlists: [{
-          playlistId,
-          playlistUrl,
-          channelTitle,
-          playlistLength,
-          playlistThumbnailUrl,
-          totalDuration: totalDurationSeconds,
-          videos
-        }]
-      });
-    } else {
-      const existingPlaylist = userPlaylist.playlists.find(playlist => playlist.playlistId === playlistId);
-      if (existingPlaylist) {
-        return res.status(400).json({ error: 'Playlist already added' });
-      }
-      userPlaylist.playlists.push({
-        playlistId,
+      // Create new playlist map with the new playlist
+      playlistsMap[playlistId] = {
         playlistUrl,
         channelTitle,
         playlistLength,
         playlistThumbnailUrl,
         totalDuration: totalDurationSeconds,
-        videos
+        videos,
+        selectedVideoIndex: 0
+      };
+      
+      // Convert map to array for storage
+      const playlistsArray = playlistsMapToArray(playlistsMap);
+      
+      // Create new user playlist document
+      userPlaylist = new UserPlaylist({
+        userEmail,
+        playlists: playlistsArray
       });
+    } else {
+      // Convert existing playlists array to map
+      playlistsMap = playlistsArrayToMap(userPlaylist.playlists);
+      
+      // Check if playlist already exists
+      if (playlistsMap[playlistId]) {
+        return res.status(400).json({ error: 'Playlist already added' });
+      }
+      
+      // Add new playlist to map
+      playlistsMap[playlistId] = {
+        playlistUrl,
+        channelTitle,
+        playlistLength,
+        playlistThumbnailUrl,
+        totalDuration: totalDurationSeconds,
+        videos,
+        selectedVideoIndex: 0
+      };
+      
+      // Convert map back to array for storage
+      userPlaylist.playlists = playlistsMapToArray(playlistsMap);
     }
     
     await userPlaylist.save();
+    
     res.status(201).json({
       message: 'Playlist added successfully',
-      playlists: {
-        playlistId,
-        playlistUrl,
-        channelTitle,
-        playlistLength,
-        playlistThumbnailUrl,
-        totalDuration: totalDurationSeconds,
-        videos
-      }
+      playlists: playlistsMap
     });
     
   } catch (error) {
@@ -151,8 +183,16 @@ exports.addPlaylist = async (req, res) => {
 exports.getPlaylistsByUser = async (req, res) => {
   try {
     const { userEmail } = req.params;
-    const playlists = await UserPlaylist.find({ userEmail });
-    res.json(playlists);
+    const userPlaylistDoc = await UserPlaylist.findOne({ userEmail });
+    
+    if (!userPlaylistDoc) {
+      return res.json({ playlists: {} });
+    }
+    
+    // Convert playlists array to map
+    const playlistsMap = playlistsArrayToMap(userPlaylistDoc.playlists);
+    
+    res.json({ playlists: playlistsMap });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -161,43 +201,73 @@ exports.getPlaylistsByUser = async (req, res) => {
 exports.deletePlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId } = req.body;
+    
     // Find the user's playlist
     const userPlaylist = await UserPlaylist.findOne({ userEmail });
+    
     if (!userPlaylist) {
       return res.status(404).json({ error: 'User not found' });
     }
-    // Find the index of the playlist to delete
-    const playlistIndex = userPlaylist.playlists.findIndex(playlist => playlist.playlistId === playlistId);
-    if (playlistIndex === -1) {
+    
+    // Convert playlists array to map
+    const playlistsMap = playlistsArrayToMap(userPlaylist.playlists);
+    
+    // Check if playlist exists
+    if (!playlistsMap[playlistId]) {
       return res.status(404).json({ error: 'Playlist not found' });
     }
-    userPlaylist.playlists.splice(playlistIndex, 1);
+    
+    // Delete playlist from map
+    delete playlistsMap[playlistId];
+    
+    // Convert map back to array for storage
+    userPlaylist.playlists = playlistsMapToArray(playlistsMap);
+    
     await userPlaylist.save();
-    res.status(200).json({ message: 'Playlist deleted successfully' });
+    
+    res.status(200).json({
+      message: 'Playlist deleted successfully',
+      playlists: playlistsMap
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-
-
 exports.selectedVideoIndex = async (req, res) => {
   try {
-      const { userEmail, playlistId, playlistIndex } = req.body;
-      const userPlaylist = await UserPlaylist.findOne({ userEmail });
-      if (!userPlaylist) {
-          return res.status(404).json({ error: 'User not found' });
-      }
-      const playlist = userPlaylist.playlists.find(pl => pl.playlistId === playlistId);
-      if (!playlist) {
-          return res.status(404).json({ error: 'Playlist not found' });
-      }
-
-      playlist.selectedVideoIndex = playlistIndex;
-      await userPlaylist.save();
-
-      res.status(200).json({ message: 'Selected video index updated successfully' });
+    const { userEmail, playlistId, playlistIndex } = req.body;
+    
+    // Find the user's playlist document
+    const userPlaylist = await UserPlaylist.findOne({ userEmail });
+    
+    if (!userPlaylist) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Convert playlists array to map
+    const playlistsMap = playlistsArrayToMap(userPlaylist.playlists);
+    
+    // Check if playlist exists
+    if (!playlistsMap[playlistId]) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    
+    // Update selected video index
+    playlistsMap[playlistId].selectedVideoIndex = playlistIndex;
+    
+    // Convert map back to array for storage
+    userPlaylist.playlists = playlistsMapToArray(playlistsMap);
+    
+    // Save the updated document
+    await userPlaylist.save();
+    
+    res.status(200).json({ 
+      message: 'Selected video index updated successfully',
+      playlists: playlistsMap
+    });
   } catch (error) {
-      res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
-}
+};
+

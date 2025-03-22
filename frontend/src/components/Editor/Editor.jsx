@@ -81,10 +81,11 @@ const Editor = ({ videoId, playlistId }) => {
           const response = await axios.get(
             `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`
           );
-
-          const noteText = response.data[0] ? response.data[0].text : "";
+          
+          const noteText = response.data ? response.data.notes : "";
           setContent(decodeLatex(noteText));
-          console.log("Fetched notes from server");
+          
+       
           // Store in sessionStorage
           sessionStorage.setItem(storageKey, decodeLatex(noteText));
 
