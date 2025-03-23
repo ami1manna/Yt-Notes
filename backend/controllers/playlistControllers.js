@@ -1,5 +1,6 @@
 const UserPlaylist = require('../models/playlistModel');
 const axios = require('axios');
+const { playlistsMapToArray, playlistsArrayToMap } = require('./utils');
 
  
 // Helper function to convert ISO 8601 duration (PT5M30S) to seconds
@@ -10,29 +11,10 @@ function isoDurationToSeconds(duration) {
   const seconds = parseInt(match[3] || 0, 10);
   return hours * 3600 + minutes * 60 + seconds;
 }
-const playlistsArrayToMap = (playlists) => {
-  const playlistsMap = {};
-  playlists.forEach(playlist => {
-    playlistsMap[playlist.playlistId] = {
-      playlistUrl: playlist.playlistUrl,
-      channelTitle: playlist.channelTitle,
-      playlistLength: playlist.playlistLength,
-      playlistThumbnailUrl: playlist.playlistThumbnailUrl,
-      totalDuration: playlist.totalDuration,
-      videos: playlist.videos,
-      selectedVideoIndex: playlist.selectedVideoIndex || 0
-    };
-  });
-  return playlistsMap;
-};
+
 
 // Helper function to convert playlists map to array
-const playlistsMapToArray = (playlistsMap) => {
-  return Object.keys(playlistsMap).map(id => ({
-    playlistId: id,
-    ...playlistsMap[id]
-  }));
-};
+
 
 exports.addPlaylist = async (req, res) => {
   try {
