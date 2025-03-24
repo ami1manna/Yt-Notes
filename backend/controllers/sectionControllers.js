@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const UserPlaylist = require('../models/playlistModel');
 const { playlistsMapToArray, playlistsArrayToMap } = require('./utils');
 const { genAIModel } = require('../genAi/AiModel');
@@ -70,8 +71,12 @@ exports.arrangeVideos = async (req, res) => {
       return res.status(500).json({ error: 'AI response did not contain valid sections', aiResponse: responseText });
     }
 
-    // Process each section and add required attributes
-    const processedSections = sectionsData.sections.map(section => {
+    // Process each section and store it as an object with `sectionId` as the key
+    const processedSections = {};
+    
+    sectionsData.sections.forEach(section => {
+      const sectionId = new mongoose.Types.ObjectId().toString(); // Generate unique section ID
+      
       const sectionVideos = section.videoIndices
         .filter(index => index >= 0 && index < videos.length)
         .map(index => videos[index]);
@@ -82,7 +87,7 @@ exports.arrangeVideos = async (req, res) => {
         ? Math.round((completedVideos / sectionVideos.length) * 100)
         : 0;
 
-      return {
+      processedSections[sectionId] = {
         name: section.name,
         sectionLength: sectionVideos.length,
         completedLength: completedVideos,
@@ -94,10 +99,10 @@ exports.arrangeVideos = async (req, res) => {
       };
     });
 
-    // Update playlist with sections and remove videos array
+    // Update playlist with sections stored as an object
     playlistsMap[playlistId] = {
       ...playlist,
-      sections: processedSections,
+      sections: processedSections, // **Sections stored as an object**
       videos: [], // **Deleting the videos array**
       playlistProgress: Math.round((videos.filter(v => v.done).length / videos.length) * 100),
     };
