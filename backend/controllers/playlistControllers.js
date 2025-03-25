@@ -16,16 +16,15 @@ function isoDurationToSeconds(duration) {
 // Helper function to convert playlists map to array
 
 
+
 exports.addPlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId, playlistUrl } = req.body;
     const API_KEY = process.env.YOUTUBE_API_KEY;
-    
-    // Function to fetch all playlist items using pagination
+
     async function getAllPlaylistItems(playlistId) {
       let allItems = [];
       let nextPageToken = '';
-      
       do {
         const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
           params: {
@@ -36,19 +35,15 @@ exports.addPlaylist = async (req, res) => {
             key: API_KEY,
           },
         });
-        
         allItems = [...allItems, ...response.data.items];
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);
-      
       return allItems;
     }
-    
-    // Function to fetch video details in batches
+
     async function getVideoDetails(videoIds) {
-      const batchSize = 50; // YouTube API limit
+      const batchSize = 50;
       let allVideoDetails = [];
-      
       for (let i = 0; i < videoIds.length; i += batchSize) {
         const batchIds = videoIds.slice(i, i + batchSize).join(',');
         const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
@@ -60,54 +55,44 @@ exports.addPlaylist = async (req, res) => {
         });
         allVideoDetails = [...allVideoDetails, ...response.data.items];
       }
-      
       return allVideoDetails;
     }
-    
-    // Fetch all playlist videos
+
     const videosData = await getAllPlaylistItems(playlistId);
-    
     if (!videosData.length) {
       return res.status(404).json({ error: 'Playlist is empty or invalid' });
     }
-    
-    // Extract video IDs
+
     const videoIds = videosData.map(item => item.snippet.resourceId.videoId);
-    
-    // Fetch video details including duration
     const videoDetails = await getVideoDetails(videoIds);
-    
+
     let totalDurationSeconds = 0;
-    
-    // Map videos with duration and calculate total duration
-    const videos = videosData.map(item => {
-      const videoDetail = videoDetails.find(v => v.id === item.snippet.resourceId.videoId);
+    let videos = {};
+    let videoOrder = [];
+
+    videosData.forEach(item => {
+      const videoId = item.snippet.resourceId.videoId;
+      const videoDetail = videoDetails.find(v => v.id === videoId);
       const durationSeconds = videoDetail ? isoDurationToSeconds(videoDetail.contentDetails.duration) : 0;
-      
       totalDurationSeconds += durationSeconds;
-      
-      return {
-        videoId: item.snippet.resourceId.videoId,
+      videos[videoId] = {
         title: item.snippet.title,
         thumbnailUrl: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
         publishedAt: item.snippet.publishedAt,
         duration: durationSeconds,
-        notes: "", 
+        notes: "",
       };
+      videoOrder.push(videoId);
     });
-    
-    // Common playlist data
+
     const channelTitle = videosData[0].snippet.channelTitle;
-    const playlistLength = videos.length;
-    const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high?.url || 
-                                videosData[0].snippet.thumbnails.default?.url;
-    
-    // Check if user has playlists
+    const playlistLength = videoOrder.length;
+    const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high?.url || videosData[0].snippet.thumbnails.default?.url;
+
     let userPlaylist = await UserPlaylist.findOne({ userEmail });
     let playlistsMap = {};
-    
+
     if (!userPlaylist) {
-      // Create new playlist map with the new playlist
       playlistsMap[playlistId] = {
         playlistUrl,
         channelTitle,
@@ -115,27 +100,21 @@ exports.addPlaylist = async (req, res) => {
         playlistThumbnailUrl,
         totalDuration: totalDurationSeconds,
         videos,
+        videoOrder,
         selectedVideoIndex: 0
       };
-      
-      // Convert map to array for storage
-      const playlistsArray = playlistsMapToArray(playlistsMap);
-      
-      // Create new user playlist document
       userPlaylist = new UserPlaylist({
         userEmail,
-        playlists: playlistsArray
+        playlists: [playlistsMap[playlistId]]
       });
     } else {
-      // Convert existing playlists array to map
-      playlistsMap = playlistsArrayToMap(userPlaylist.playlists);
-      
-      // Check if playlist already exists
+      playlistsMap = userPlaylist.playlists.reduce((acc, pl) => {
+        acc[pl.playlistId] = pl;
+        return acc;
+      }, {});
       if (playlistsMap[playlistId]) {
         return res.status(400).json({ error: 'Playlist already added' });
       }
-      
-      // Add new playlist to map
       playlistsMap[playlistId] = {
         playlistUrl,
         channelTitle,
@@ -143,24 +122,19 @@ exports.addPlaylist = async (req, res) => {
         playlistThumbnailUrl,
         totalDuration: totalDurationSeconds,
         videos,
+        videoOrder,
         selectedVideoIndex: 0
       };
-      
-      // Convert map back to array for storage
-      userPlaylist.playlists = playlistsMapToArray(playlistsMap);
+      userPlaylist.playlists = Object.values(playlistsMap);
     }
-    
+
     await userPlaylist.save();
-    
-    res.status(201).json({
-      message: 'Playlist added successfully',
-      playlists: playlistsMap
-    });
-    
+    res.status(201).json({ message: 'Playlist added successfully', playlists: playlistsMap });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 exports.getPlaylistsByUser = async (req, res) => {
   try {

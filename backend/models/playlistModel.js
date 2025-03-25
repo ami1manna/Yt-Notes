@@ -3,14 +3,12 @@ const mongoose = require('mongoose');
 
 
 const videoSchema = new mongoose.Schema({
-  videoId: String,
   title: String,
   thumbnailUrl: String,
   publishedAt: String,
   done: { type: Boolean, default: false },
-  notes: { type: String, default: " " },  // Fixed syntax
+  notes: { type: String, default: "" },
   duration: { type: Number, default: 0 },
-  
 });
 
 const sectionSchema = new mongoose.Schema({
@@ -24,6 +22,8 @@ const sectionSchema = new mongoose.Schema({
   thumbnailUrl: String // Thumbnail for section
 });
 
+
+
 const singlePlaylistSchema = new mongoose.Schema({
   playlistId: String,
   playlistUrl: String,
@@ -34,8 +34,8 @@ const singlePlaylistSchema = new mongoose.Schema({
   playlistThumbnailUrl: String,
   totalDuration: { type: Number, default: 0 },
   sections: { type: mongoose.Schema.Types.Mixed },
-  videos: [videoSchema]
-  
+  videos: { type: Map, of: videoSchema }, // Store videos as a Map with videoId as key
+  videoOrder: [String] // Maintain order of video IDs
 });
 
 const userPlaylistSchema = new mongoose.Schema({
