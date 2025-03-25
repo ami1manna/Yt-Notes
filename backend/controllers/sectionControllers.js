@@ -110,6 +110,9 @@ exports.arrangeVideos = async (req, res) => {
     // Convert map back to array for storage
     userPlaylist.playlists = playlistsMapToArray(playlistsMap);
 
+    // debug 
+    console.log("Covert " + playlistsMapToArray(playlistsMap));
+
     // Save updated document
     await userPlaylist.save();
 

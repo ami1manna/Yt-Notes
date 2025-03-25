@@ -2,7 +2,7 @@ const UserPlaylist = require('../models/playlistModel');
 
 exports.addNoteToVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId, text } = req.body;
+        const { userEmail, playlistId, sectionId, videoId, text } = req.body;
 
         // Find the user's playlist
         const userPlaylist = await UserPlaylist.findOne({ userEmail });
@@ -16,14 +16,20 @@ exports.addNoteToVideo = async (req, res) => {
             return res.status(404).json({ error: 'Playlist not found' });
         }
 
-        // Find the video
-        const video = playlist.videos.find(v => v.videoId === videoId);
-        if (!video) {
-            return res.status(404).json({ error: 'Video not found' });
+        // Find the section
+        const section = playlist.sections[sectionId];
+        if (!section) {
+            return res.status(404).json({ error: 'Section not found' });
         }
 
-        // Append the new note to the existing notes string
-        video.notes =  text; // Append new note with newline
+        // Find the video within the section
+        const video = section.videos.find(v => v.videoId === videoId);
+        if (!video) {
+            return res.status(404).json({ error: 'Video not found in the given section' });
+        }
+
+        // Update the notes for the video
+        video.notes = text; // Replace or update the note
 
         // Save the updated user playlist
         await userPlaylist.save();

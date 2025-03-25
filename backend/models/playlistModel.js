@@ -33,7 +33,7 @@ const singlePlaylistSchema = new mongoose.Schema({
   playlistProgress: { type: Number, default: 0 },
   playlistThumbnailUrl: String,
   totalDuration: { type: Number, default: 0 },
-  sections: [sectionSchema],
+  sections: { type: mongoose.Schema.Types.Mixed },
   videos: [videoSchema]
   
 });
