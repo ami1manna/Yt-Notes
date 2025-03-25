@@ -14,16 +14,15 @@ exports.arrangeVideos = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    // Convert array to map for easier manipulation
-    const playlistsMap = playlistsArrayToMap(userPlaylist.playlists);
+    // Find the specific playlist
+    const playlist = userPlaylist.playlists.get(playlistId);
     
-    // Check if playlist exists
-    if (!playlistsMap[playlistId]) {
+    if (!playlist) {
       return res.status(404).json({ error: 'Playlist not found' });
     }
     
-    const playlist = playlistsMap[playlistId];
-    const videos = playlist.videos;
+    // Convert videos Map to array for processing
+    const videos = playlist.videoOrder.map(videoId => playlist.videos.get(videoId));
     
     if (!videos || videos.length === 0) {
       return res.status(400).json({ error: 'Playlist has no videos to arrange' });
@@ -33,7 +32,7 @@ exports.arrangeVideos = async (req, res) => {
     const videoMapping = videos.map((video, index) => ({
       index,
       title: video.title,
-      id: video.videoId
+      id: playlist.videoOrder[index] // Use the actual video ID from videoOrder
     }));
 
     // Create prompt for AI to group videos into sections
@@ -71,8 +70,8 @@ exports.arrangeVideos = async (req, res) => {
       return res.status(500).json({ error: 'AI response did not contain valid sections', aiResponse: responseText });
     }
 
-    // Process each section and store it as an object with `sectionId` as the key
-    const processedSections = {};
+    // Process each section and store it as a Map
+    const processedSections = new Map();
     
     sectionsData.sections.forEach(section => {
       const sectionId = new mongoose.Types.ObjectId().toString(); // Generate unique section ID
@@ -81,44 +80,40 @@ exports.arrangeVideos = async (req, res) => {
         .filter(index => index >= 0 && index < videos.length)
         .map(index => videos[index]);
 
+      const sectionVideoIds = section.videoIndices
+        .filter(index => index >= 0 && index < playlist.videoOrder.length)
+        .map(index => playlist.videoOrder[index]);
+
       const sectionDuration = sectionVideos.reduce((sum, video) => sum + (video.duration || 0), 0);
       const completedVideos = sectionVideos.filter(video => video.done).length;
       const sectionProgress = sectionVideos.length > 0 
         ? Math.round((completedVideos / sectionVideos.length) * 100)
         : 0;
 
-      processedSections[sectionId] = {
+      processedSections.set(sectionId, {
         name: section.name,
         sectionLength: sectionVideos.length,
         completedLength: completedVideos,
         progressPercentage: sectionProgress,
         totalDuration: sectionDuration,
         videos: sectionVideos,
-        videoIds: sectionVideos.map(video => video.videoId),
+        videoIds: sectionVideoIds,
         thumbnailUrl: sectionVideos[0]?.thumbnailUrl || playlist.playlistThumbnailUrl
-      };
+      });
     });
 
-    // Update playlist with sections stored as an object
-    playlistsMap[playlistId] = {
-      ...playlist,
-      sections: processedSections, // **Sections stored as an object**
-      videos: [], // **Deleting the videos array**
-      playlistProgress: Math.round((videos.filter(v => v.done).length / videos.length) * 100),
-    };
-
-    // Convert map back to array for storage
-    userPlaylist.playlists = playlistsMapToArray(playlistsMap);
-
-    // debug 
-    console.log("Covert " + playlistsMapToArray(playlistsMap));
+    // Update playlist
+    playlist.sections = processedSections;
+    playlist.videos = new Map(); // Clear videos Map
+    playlist.videoOrder = []; // Clear video order
+    playlist.playlistProgress = Math.round((videos.filter(v => v.done).length / videos.length) * 100);
 
     // Save updated document
     await userPlaylist.save();
 
     return res.status(200).json({
       message: 'Playlist successfully organized into sections and videos removed',
-      playlist: playlistsMap[playlistId]
+      playlist: playlist
     });
 
   } catch (error) {

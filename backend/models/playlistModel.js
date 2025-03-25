@@ -29,18 +29,18 @@ const singlePlaylistSchema = new mongoose.Schema({
   playlistUrl: String,
   channelTitle: String,
   playlistLength: Number,
-  selectedVideoIndex: { type: Number, default: 0 },
+  selectedVideoId: { type: String, default: "" },
   playlistProgress: { type: Number, default: 0 },
   playlistThumbnailUrl: String,
   totalDuration: { type: Number, default: 0 },
-  sections: { type: mongoose.Schema.Types.Mixed },
+  sections: { type: Map , of : sectionSchema},
   videos: { type: Map, of: videoSchema }, // Store videos as a Map with videoId as key
   videoOrder: [String] // Maintain order of video IDs
 });
 
 const userPlaylistSchema = new mongoose.Schema({
   userEmail: { type: String, required: true, unique: true },
-  playlists: [singlePlaylistSchema]
+  playlists: {type: Map, of: singlePlaylistSchema}
 });
 
 module.exports = mongoose.model('UserPlaylist', userPlaylistSchema);
