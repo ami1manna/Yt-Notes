@@ -7,14 +7,14 @@ import { PlusCircle, Loader2 } from "lucide-react";
 import StaticModal from "@/components/Dialogs/StaticModal";
 import CustomInput from "@/components/ui/CustomInput";
 import CourseList from "./CourseList";
-import { handleAddPlaylist, handleSection } from "../../utils/PlaylistUtils";
+import { handleAddPlaylist, handlePlaylistSection } from "../../utils/PlaylistUtils";
 
 const AddPlaylist = () => {
   const { setPlaylistData } = useContext(PlaylistContext);
   const { user } = useContext(AuthContext);
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); 
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -33,14 +33,21 @@ const AddPlaylist = () => {
       inputRef,
       navigate
     );
-    if (success) setPlaylistUrl(""); // Reset input after successful addition
+
+    if (success) {
+      setIsOpen(true);  
+    }else{
+      setPlaylistUrl("");  
+    }
   };
 
-  const handleOnCancel = () => setIsOpen(false);
-  const handleOnConfirm = () => {
-    handleSection();
-    setIsOpen(false);
-  }
+  const handleSection =  async (doesAgree) => {
+    if (doesAgree) {
+      await handlePlaylistSection(playlistUrl, user, setLoading, setPlaylistData);
+      setPlaylistUrl(""); 
+    }
+    setIsOpen(false);  
+  };
 
   return (
     <motion.div
@@ -72,7 +79,13 @@ const AddPlaylist = () => {
 
       <AnimatePresence mode="wait">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 overflow-hidden">
-          <StaticModal isOpen={isOpen} onClose={handleOnCancel} header="Organize Your Playlist" subHeader="Would you like to automatically group your videos into sections for better navigation?" />
+          {/* Show modal after adding playlist */}
+          <StaticModal 
+            isOpen={isOpen} 
+            onAction={handleSection} 
+            header="Organize Your Playlist" 
+            subHeader="Would you like to automatically group your videos into sections for better navigation?" 
+          />
           <CourseList />
         </motion.div>
       </AnimatePresence>
@@ -81,3 +94,4 @@ const AddPlaylist = () => {
 };
 
 export default AddPlaylist;
+

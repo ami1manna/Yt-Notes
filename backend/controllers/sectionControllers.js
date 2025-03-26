@@ -111,7 +111,7 @@ exports.arrangeVideos = async (req, res) => {
     await userPlaylist.save();
 
     return res.status(200).json({
-      message: 'Playlist successfully organized into sections and videos removed',
+      message: 'Success Section Added',
       playlist: playlist
     });
 
