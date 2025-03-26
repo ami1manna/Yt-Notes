@@ -1,33 +1,33 @@
 const mongoose = require('mongoose');
 const UserPlaylist = require('../models/playlistModel');
-const { playlistsMapToArray, playlistsArrayToMap } = require('./utils');
 const { genAIModel } = require('../genAi/AiModel');
+const { handleDelete, checkEmpty, fetchVideoDetails, handleAddSectionVideo } = require('../utils/VideoUtils');
 
 exports.arrangeVideos = async (req, res) => {
   try {
     const { userEmail, playlistId } = req.body;
-    
+
     // Find user's playlist document
     const userPlaylist = await UserPlaylist.findOne({ userEmail });
-    
+
     if (!userPlaylist) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     // Find the specific playlist
     const playlist = userPlaylist.playlists.get(playlistId);
-    
+
     if (!playlist) {
       return res.status(404).json({ error: 'Playlist not found' });
     }
-    
+
     // Convert videos Map to array for processing
     const videos = playlist.videoOrder.map(videoId => playlist.videos.get(videoId));
-    
+
     if (!videos || videos.length === 0) {
       return res.status(400).json({ error: 'Playlist has no videos to arrange' });
     }
-    
+
     // Create mapping of videos with simplified data for AI processing
     const videoMapping = videos.map((video, index) => ({
       index,
@@ -48,11 +48,11 @@ exports.arrangeVideos = async (req, res) => {
       Videos:
       ${videoMapping.map(v => `[${v.index}] "${v.title}"`).join('\n')}
     `;
-    
+
     // Get response from AI (using model.generateContent or your preferred AI service)
     const result = await genAIModel.generateContent(prompt);
     const responseText = await result.response.text();
-    
+
     // Parse AI response
     let sectionsData;
     try {
@@ -65,17 +65,17 @@ exports.arrangeVideos = async (req, res) => {
         return res.status(500).json({ error: 'Invalid AI response', aiResponse: responseText });
       }
     }
-    
+
     if (!sectionsData?.sections?.length) {
       return res.status(500).json({ error: 'AI response did not contain valid sections', aiResponse: responseText });
     }
 
     // Process each section and store it as a Map
     const processedSections = new Map();
-    
+
     sectionsData.sections.forEach(section => {
       const sectionId = new mongoose.Types.ObjectId().toString(); // Generate unique section ID
-      
+
       const sectionVideos = section.videoIndices
         .filter(index => index >= 0 && index < videos.length)
         .map(index => videos[index]);
@@ -86,7 +86,7 @@ exports.arrangeVideos = async (req, res) => {
 
       const sectionDuration = sectionVideos.reduce((sum, video) => sum + (video.duration || 0), 0);
       const completedVideos = sectionVideos.filter(video => video.done).length;
-      const sectionProgress = sectionVideos.length > 0 
+      const sectionProgress = sectionVideos.length > 0
         ? Math.round((completedVideos / sectionVideos.length) * 100)
         : 0;
 
@@ -96,7 +96,6 @@ exports.arrangeVideos = async (req, res) => {
         completedLength: completedVideos,
         progressPercentage: sectionProgress,
         totalDuration: sectionDuration,
-        videos: sectionVideos,
         videoIds: sectionVideoIds,
         thumbnailUrl: sectionVideos[0]?.thumbnailUrl || playlist.playlistThumbnailUrl
       });
@@ -104,8 +103,8 @@ exports.arrangeVideos = async (req, res) => {
 
     // Update playlist
     playlist.sections = processedSections;
-    playlist.videos = new Map(); // Clear videos Map
-    playlist.videoOrder = []; // Clear video order
+    // playlist.videos = new Map(); // Clear videos Map
+    // playlist.videoOrder = []; // Clear video order
     playlist.playlistProgress = Math.round((videos.filter(v => v.done).length / videos.length) * 100);
 
     // Save updated document
@@ -121,3 +120,129 @@ exports.arrangeVideos = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+exports.deleteSectionVideo = async (req, res) => {
+  try {
+    const { userEmail, playlistId, sectionId, videoId } = req.body;
+
+    // Find user's playlist document 
+    const userPlaylist = await UserPlaylist.findOne({ userEmail });
+
+    if (!userPlaylist) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Find Playlist 
+    let playlist = userPlaylist.playlists.get(playlistId);
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+
+    // Find Section 
+    let section = playlist.sections.get(sectionId);
+
+    if (!section) {
+      return res.status(404).json({ error: 'Section not found' });
+    }
+
+    // Remove video from section's videoIds array
+    section.videoIds = section.videoIds.filter(id => id !== videoId);
+
+    // Remove video from playlist's videos map
+    playlist.videos.delete(videoId);
+
+    // Remove video from playlist's videoOrder array
+    playlist.videoOrder = playlist.videoOrder.filter(id => id !== videoId);
+
+    ({ playlist, section } = handleDelete(playlist, section));
+
+    // Update playlist
+    playlist.sections.set(sectionId, section);
+    userPlaylist.playlists.set(playlistId, playlist);
+
+    // Save the updated document
+    await userPlaylist.save();
+
+    res.status(200).json({
+      message: 'Video deleted successfully',
+      updatedSection: section
+    });
+  }
+  catch (error) {
+    console.error('Error deleting section video:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+};
+
+exports.addSectionVideo = async (req, res) => {
+  try {
+    const { userEmail, playlistId, sectionId, videoId } = req.body;
+
+    // Null Check
+    if (checkEmpty(userEmail, playlistId, sectionId, videoId)) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Find the user playlist
+    const userPlaylist = await UserPlaylist.findOne({ userEmail });
+    
+    if (!userPlaylist) {
+      return res.status(404).json({ error: "User playlist not found" });
+    }
+
+    // Check if playlist exists
+    const playlist = userPlaylist.playlists.get(playlistId);
+    if (!playlist) {
+      return res.status(404).json({ error: "Playlist not found" });
+    }
+
+    // Check if section exists
+    const section = playlist.sections.get(sectionId);
+    if (!section) {
+      return res.status(404).json({ error: "Section not found" });
+    }
+
+    // Check if video already exists in playlist
+    let video = playlist.videos.get(videoId);
+    
+    // If video does NOT exist, fetch from YouTube API and add
+    if (!video) {
+      try {
+        // Fetch video details from YouTube API
+        const videoDetails = await fetchVideoDetails(videoId);
+        
+        // Add video to playlist videos
+        playlist.videos.set(videoId, videoDetails);
+        
+        // Update video reference
+        video = videoDetails;
+      } catch (error) {
+        return res.status(404).json({ error: "Could not fetch video details" });
+      }
+    } else {
+      return res.status(400).json({ error: "Video already exists in playlist" });
+    }
+
+    // Use the utility function to handle video addition and updates
+    const { 
+      playlist: updatedPlaylist, 
+      section: updatedSection, 
+      playlistProgress 
+    } = handleAddSectionVideo(playlist, section, video, videoId);
+
+    // Save the updated playlist
+    await userPlaylist.save();
+
+    return res.status(200).json({ 
+      message: "Video added to section successfully",
+      video: video,
+      section: updatedSection,
+      playlistProgress: playlistProgress
+    });
+
+  } catch (error) {
+    console.error('Error adding section video:', error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+

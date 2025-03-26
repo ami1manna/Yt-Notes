@@ -9,6 +9,7 @@ const videoSchema = new mongoose.Schema({
   done: { type: Boolean, default: false },
   notes: { type: String, default: "" },
   duration: { type: Number, default: 0 },
+
 });
 
 const sectionSchema = new mongoose.Schema({
@@ -17,7 +18,6 @@ const sectionSchema = new mongoose.Schema({
   completedLength: Number, // Number of completed videos
   progressPercentage: Number, // Progress in percentage
   totalDuration: Number, // Total duration of all videos in section
-  videos: [videoSchema], // Videos under this section
   videoIds: [String], // Array of video IDs
   thumbnailUrl: String // Thumbnail for section
 });
@@ -25,22 +25,24 @@ const sectionSchema = new mongoose.Schema({
 
 
 const singlePlaylistSchema = new mongoose.Schema({
-  playlistId: String,
-  playlistUrl: String,
-  channelTitle: String,
-  playlistLength: Number,
+  playlistId: { type: String, required: true },
+  playlistUrl: { type: String, required: true },
+  channelTitle: { type: String, required: true },
+  playlistLength: { type: Number, required: true },
   selectedVideoId: { type: String, default: "" },
   playlistProgress: { type: Number, default: 0 },
   playlistThumbnailUrl: String,
   totalDuration: { type: Number, default: 0 },
-  sections: { type: Map , of : sectionSchema},
-  videos: { type: Map, of: videoSchema }, // Store videos as a Map with videoId as key
-  videoOrder: [String] // Maintain order of video IDs
+  sections: { type: Map, of: sectionSchema, default: {} },  
+  videos: { type: Map, of: videoSchema, default: {} }, 
+  videoOrder: { type: [String], default: [] } 
 });
+
 
 const userPlaylistSchema = new mongoose.Schema({
   userEmail: { type: String, required: true, unique: true },
   playlists: {type: Map, of: singlePlaylistSchema}
 });
 
+module.exports = mongoose.model('SectionModel', sectionSchema);
 module.exports = mongoose.model('UserPlaylist', userPlaylistSchema);

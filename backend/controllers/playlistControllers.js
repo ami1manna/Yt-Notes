@@ -1,18 +1,8 @@
 const UserPlaylist = require('../models/playlistModel');
 const axios = require('axios');
-const { playlistsMapToArray, playlistsArrayToMap } = require('./utils');
-
+const { handleDelete, parseDuration } = require('../utils/VideoUtils');
  
 // Helper function to convert ISO 8601 duration (PT5M30S) to seconds
-function isoDurationToSeconds(duration) {
-  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  const hours = parseInt(match[1] || 0, 10);
-  const minutes = parseInt(match[2] || 0, 10);
-  const seconds = parseInt(match[3] || 0, 10);
-  return hours * 3600 + minutes * 60 + seconds;
-}
-
-
 exports.addPlaylist = async (req, res) => {
   try {
     const { userEmail, playlistId, playlistUrl } = req.body;
@@ -39,20 +29,21 @@ exports.addPlaylist = async (req, res) => {
 
     async function getVideoDetails(videoIds) {
       const batchSize = 50;
-      let allVideoDetails = [];
+      const promises = [];
+    
       for (let i = 0; i < videoIds.length; i += batchSize) {
         const batchIds = videoIds.slice(i, i + batchSize).join(',');
-        const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
-          params: {
-            part: 'contentDetails',
-            id: batchIds,
-            key: API_KEY,
-          },
-        });
-        allVideoDetails = [...allVideoDetails, ...response.data.items];
+        promises.push(
+          axios.get('https://www.googleapis.com/youtube/v3/videos', {
+            params: { part: 'contentDetails', id: batchIds, key: API_KEY },
+          })
+        );
       }
-      return allVideoDetails;
+    
+      const responses = await Promise.all(promises);
+      return responses.flatMap(response => response.data.items);
     }
+    
 
     const videosData = await getAllPlaylistItems(playlistId);
     if (!videosData.length) {
@@ -69,7 +60,7 @@ exports.addPlaylist = async (req, res) => {
     videosData.forEach(item => {
       const videoId = item.snippet.resourceId.videoId;
       const videoDetail = videoDetails.find(v => v.id === videoId);
-      const durationSeconds = videoDetail ? isoDurationToSeconds(videoDetail.contentDetails.duration) : 0;
+      const durationSeconds = videoDetail ? parseDuration(videoDetail.contentDetails.duration) : 0;
       totalDurationSeconds += durationSeconds;
 
       const video = {
@@ -196,10 +187,9 @@ exports.deletePlaylist = async (req, res) => {
 };
 
 exports.selectedVideoId = async (req, res) => {
-  console.log('Received body:', req.body);
-
+ 
   try {
-    const { userEmail, playlistId, videoId } = req.body;
+    const { userEmail, playlistId, videoId  } = req.body;
     
     // Validate input
     if (!userEmail || !playlistId || !videoId) {
@@ -223,11 +213,17 @@ exports.selectedVideoId = async (req, res) => {
     }
 
     // Check if playlist exists
-    const playlist = userPlaylist.playlists.get(playlistId);
-    if (!playlist) {
-      console.error('Playlist not found', { playlistId });
+    if (!userPlaylist.playlists.has(playlistId)) {
       return res.status(404).json({ error: 'Playlist not found' });
     }
+
+    // Does Video Exist 
+    if (!userPlaylist.playlists.get(playlistId).videos.has(videoId)) {
+      return res.status(404).json({ error: 'Video not found' });
+    }
+    
+    const playlist = userPlaylist.playlists.get(playlistId);
+    
 
     // Update selected video
     playlist.selectedVideoId = videoId;
@@ -253,5 +249,74 @@ exports.selectedVideoId = async (req, res) => {
       message: error.message 
     });
   }
+};
+
+exports.deleteVideo = async (req, res) => { 
+  try {
+    const { userEmail, playlistId, videoId } = req.body;
+
+    // Find user's playlist document 
+    const userPlaylist = await UserPlaylist.findOne({ userEmail }); 
+ 
+    if (!userPlaylist) { 
+      return res.status(404).json({ error: 'User not found' }); 
+    } 
+ 
+    // Find Playlist 
+    let playlist = userPlaylist.playlists.get(playlistId); 
+    if (!playlist) { 
+      return res.status(404).json({ error: 'Playlist not found' }); 
+    } 
+
+    // Find the section containing the video
+    let affectedSection = null;
+    for (let [sectionId, section] of playlist.sections.entries()) {
+      if (section.videoIds.includes(videoId)) {
+        // Remove video from section's videoIds
+        section.videoIds = section.videoIds.filter(id => id !== videoId);
+        
+        // Use updateSection function to recalculate section metrics
+        const updatedData = handleDelete(playlist, section);
+        playlist = updatedData.playlist;
+        section = updatedData.section;
+
+        // Update the section in the playlist
+        playlist.sections.set(sectionId, section);
+        affectedSection = section;
+        break;
+      }
+    }
+
+    // Remove video from playlist's videos map
+    playlist.videos.delete(videoId);
+
+    // Remove video from playlist's videoOrder array
+    playlist.videoOrder = playlist.videoOrder.filter(id => id !== videoId);
+
+    // Recalculate playlist metrics
+    playlist.playlistProgress = playlist.videoOrder.length > 0
+      ? Math.round((playlist.videos.size / playlist.videoOrder.length) * 100)
+      : 0;
+    playlist.totalDuration = playlist.videoOrder.reduce((total, id) => {
+      const video = playlist.videos.get(id);
+      return total + (video?.duration || 0);
+    }, 0);
+
+    // Update the playlist in the user's document
+    userPlaylist.playlists.set(playlistId, playlist);
+
+    // Save the updated document
+    await userPlaylist.save();
+
+    res.status(200).json({ 
+      message: 'Video deleted successfully',
+      updatedPlaylist: playlist,
+      affectedSection: affectedSection
+    });
+  } 
+  catch (error) { 
+    console.error('Error deleting video:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message }); 
+  } 
 };
 
