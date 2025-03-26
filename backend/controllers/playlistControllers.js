@@ -130,7 +130,7 @@ exports.addPlaylist = async (req, res) => {
 
 exports.getPlaylistsByUser = async (req, res) => {
   try {
-    const { userEmail } = req.params;
+    const { userEmail } = req.body;
     const userPlaylistDoc = await UserPlaylist.findOne({ userEmail });
     
     if (!userPlaylistDoc) {

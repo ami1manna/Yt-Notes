@@ -4,7 +4,7 @@ const { addPlaylist, getPlaylistsByUser,deletePlaylist, selectedVideoId, deleteV
 
 const router = express.Router();
 router.post('/add', addPlaylist);
-router.get('/:userEmail', getPlaylistsByUser);
+router.get('/getPlaylist', getPlaylistsByUser);
 router.delete('/delete', deletePlaylist);
 router.put('/selectedVideoId',selectedVideoId);
 router.delete('/deleteVideo' , deleteVideo);
