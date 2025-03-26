@@ -6,6 +6,8 @@ import AddPlaylist from './components/widgets/AddPlaylist';
 import Login from './pages/Login';
 import CourseScreen from './pages/CourseScreen';
 import DashBoard from './pages/DashBoard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,7 +35,11 @@ const router = createBrowserRouter(
  * @constructor
  */
 function App() {
-  return <RouterProvider router={router} />;
+  return <>
+  <RouterProvider router={router} />;
+  <ToastContainer position="top-right" autoClose={3000} />
+  </>
+
 }
 
 export default App;

@@ -8,7 +8,6 @@ import { decodeLatex, extractLatex } from "./utils.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 // third party
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Editor = ({ videoId, playlistId }) => {
@@ -125,7 +124,7 @@ const Editor = ({ videoId, playlistId }) => {
   return (
     <div ref={containerRef} className=" h-[100vh] flex flex-col p-4">
       <div className="flex-1">
-        <ToastContainer />
+        
 
         {
           isLoading && (<>Loading...</>)

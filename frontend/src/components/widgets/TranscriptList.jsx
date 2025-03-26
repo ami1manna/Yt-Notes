@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TranscriptTile from "../ui/TranscriptTile";
 import { addTranscript, getTranscript } from "../../utils/Transcript";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { CloudDownload, Search, Copy, Check } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import IconButton from "../ui/IconButton";
@@ -97,7 +97,7 @@ const TranscriptList = ({ videoId }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-2 h-[100vh] overflow-hidden overflow-y-auto">
-      <ToastContainer />
+     
       
       {/* Title, search bar and copy button */}
       <div className="mb-6 sticky top-0 bg-white dark:bg-gray-800 p-4  border-gray-100 dark:border-gray-700">
