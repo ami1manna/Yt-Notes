@@ -2,8 +2,8 @@ const UserPlaylist = require('../models/playlistModel');
 
 exports.addNoteToVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, sectionId, videoId, text } = req.body;
-
+        const { userEmail, playlistId, videoId, text } = req.body;
+        console.log(userEmail, playlistId, videoId, text);
         // Find the user's playlist
         const userPlaylist = await UserPlaylist.findOne({ userEmail });
         if (!userPlaylist) {
@@ -11,25 +11,17 @@ exports.addNoteToVideo = async (req, res) => {
         }
 
         // Find the playlist
-        const playlist = userPlaylist.playlists.find(pl => pl.playlistId === playlistId);
+        const playlist = userPlaylist.playlists.get(playlistId);
+
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });
         }
 
-        // Find the section
-        const section = playlist.sections[sectionId];
-        if (!section) {
-            return res.status(404).json({ error: 'Section not found' });
-        }
-
-        // Find the video within the section
-        const video = section.videos.find(v => v.videoId === videoId);
-        if (!video) {
-            return res.status(404).json({ error: 'Video not found in the given section' });
-        }
+        // get VideoId
+        const video = playlist.videos.get(videoId);
 
         // Update the notes for the video
-        video.notes = text; // Replace or update the note
+        video.notes = text; 
 
         // Save the updated user playlist
         await userPlaylist.save();
@@ -42,29 +34,29 @@ exports.addNoteToVideo = async (req, res) => {
 
 exports.getNotesForVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId } = req.params;
+        const { userEmail, playlistId, videoId } = req.body;
 
-        // Find the user's playlist
+        // Find the user's playlist document
         const userPlaylist = await UserPlaylist.findOne({ userEmail });
         if (!userPlaylist) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Find the playlist
-        const playlist = userPlaylist.playlists.find(pl => pl.playlistId === playlistId);
+        // Get the playlist from the Map
+        const playlist = userPlaylist.playlists.get(playlistId);
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });
         }
 
-        // Find the video
-        const video = playlist.videos.find(v => v.videoId === videoId);
+        // Get the video from the Map
+        const video = playlist.videos.get(videoId);
         if (!video) {
             return res.status(404).json({ error: 'Video not found' });
         }
 
         res.status(200).json({ notes: video.notes });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -72,32 +64,32 @@ exports.deleteNoteFromVideo = async (req, res) => {
     try {
         const { userEmail, playlistId, videoId } = req.body;
 
-        // Find the user's playlist
+        // Find the user's playlist document
         const userPlaylist = await UserPlaylist.findOne({ userEmail });
         if (!userPlaylist) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Find the playlist
-        const playlist = userPlaylist.playlists.find(pl => pl.playlistId === playlistId);
+        // Get the playlist from the Map
+        const playlist = userPlaylist.playlists.get(playlistId);
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });
         }
 
-        // Find the video
-        const video = playlist.videos.find(v => v.videoId === videoId);
+        // Get the video from the Map
+        const video = playlist.videos.get(videoId);
         if (!video) {
             return res.status(404).json({ error: 'Video not found' });
         }
 
-        // Clear the notes (since it's a single string)
-        video.notes = " ";
+        // Clear the notes
+        video.notes = "";  
 
-        // Save the updated user playlist
+        // Save the updated document
         await userPlaylist.save();
 
         res.status(200).json({ message: 'All notes deleted successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };

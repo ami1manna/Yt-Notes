@@ -4,7 +4,7 @@ const { addNoteToVideo, getNotesForVideo, deleteNoteFromVideo } = require('../co
 const router = express.Router();
 
 router.put('/notes', addNoteToVideo); // Add a note
-router.get('/notes/:userEmail/:playlistId/:videoId', getNotesForVideo); // Get all notes for a video
+router.get('/notes', getNotesForVideo); // Get all notes for a video
 router.delete('/notes', deleteNoteFromVideo); // Delete a note
 
 module.exports = router;
