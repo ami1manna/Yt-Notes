@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true 
       });
       setUser(res.data.user);
-      console.log(res.data.user);
+      
   
       // ✅ Pass setPlaylistData when calling fetchUserPlaylists
       await fetchUserPlaylists(res.data.user.email, setPlaylistData);

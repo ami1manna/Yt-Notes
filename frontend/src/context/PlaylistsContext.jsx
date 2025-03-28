@@ -4,23 +4,22 @@ import { setPlaylistIndex, toggleVideo } from "../utils/VideoUtils";
 export const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
-    const [userPlaylists, setUserPlaylists] = useState(() => {
-        try {
-            const storedPlaylists = localStorage.getItem("userPlaylists");
-            return storedPlaylists ? JSON.parse(storedPlaylists) : [];
-        } catch (error) {
-            console.error("Error loading playlists from localStorage:", error);
-            return [];
-        }
-    });
+    const [userPlaylists, setUserPlaylists] = useState({});
+        // try {
+        //     const storedPlaylists = localStorage.getItem("userPlaylists");
+        //     return storedPlaylists ? JSON.parse(storedPlaylists) : [];
+        // } catch (error) {
+        //     console.error("Error loading playlists from localStorage:", error);
+        //     return [];
+        // }
 
-    useEffect(() => {
-        try {
-            localStorage.setItem("userPlaylists", JSON.stringify(userPlaylists));
-        } catch (error) {
-            console.error("Error saving playlists to localStorage:", error);
-        }
-    }, [userPlaylists]);
+    // useEffect(() => {
+    //     try {
+    //         localStorage.setItem("userPlaylists", JSON.stringify(userPlaylists));
+    //     } catch (error) {
+    //         console.error("Error saving playlists to localStorage:", error);
+    //     }
+    // }, [userPlaylists]);
 
     // Add playlist(s)
     const setPlaylistData = useCallback((data) => {

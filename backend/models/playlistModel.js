@@ -1,9 +1,9 @@
-const { books } = require('googleapis/build/src/apis/books');
 const mongoose = require('mongoose');
 
 
 
 const videoSchema = new mongoose.Schema({
+  videoId: String,
   title: String,
   thumbnailUrl: String,
   publishedAt: String,

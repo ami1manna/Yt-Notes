@@ -21,7 +21,7 @@ const router = createBrowserRouter(
       {/* Separate Routes for Login and Signup (No RootLayout) */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/courseScreen/:playlistIndex" element={<CourseScreen />} />
+      <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
       <Route path='/dashboard' element={<DashBoard />} />
     </>
   )
