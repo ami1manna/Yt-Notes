@@ -115,10 +115,12 @@ exports.addPlaylist = async (req, res) => {
 
     // Save the updated user playlist
     await userPlaylist.save();
+    
+  
 
     res.status(201).json({ 
       message: 'Playlist added successfully', 
-      playlist: newPlaylist 
+      playlist: userPlaylist.playlists.get(playlistId) 
     });
 
   } catch (error) {
@@ -320,3 +322,39 @@ exports.deleteVideo = async (req, res) => {
   } 
 };
 
+exports.displaySection = async (req, res) => { 
+  try{
+    const {userEmail , playlistId , displaySection} = req.body;
+
+     // Find user's playlist document 
+     const userPlaylist = await UserPlaylist.findOne({ userEmail }); 
+ 
+     if (!userPlaylist) { 
+       return res.status(404).json({ error: 'User not found' }); 
+     } 
+  
+     // Find Playlist 
+     let playlist = userPlaylist.playlists.get(playlistId); 
+     if (!playlist) { 
+       return res.status(404).json({ error: 'Playlist not found' }); 
+     }
+     
+     playlist.displaySection = displaySection;
+
+     // Update the playlist in the user's document
+     userPlaylist.playlists.set(playlistId, playlist);
+
+     // Save the updated document
+     await userPlaylist.save();
+
+     res.status(200).json({ 
+       message: 'Section displayed successfully',
+     });
+     
+  }
+  catch(error){
+     
+    res.status(500).json({ error: "Can't display section "});
+  }
+
+};

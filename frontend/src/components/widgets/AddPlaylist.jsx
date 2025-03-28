@@ -81,6 +81,7 @@ const AddPlaylist = () => {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 overflow-hidden">
           {/* Show modal after adding playlist */}
           <StaticModal 
+            isLoading={loading}
             isOpen={isOpen} 
             onAction={handleSection} 
             header="Organize Your Playlist" 

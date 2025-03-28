@@ -1,9 +1,8 @@
-
-// AuthProvider.js
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useContext } from "react";
-import { PlaylistContext } from "./PlaylistsContext"; // Assuming PlaylistProvider is in the same folder
+import { PlaylistContext } from "./PlaylistsContext";
+import { toast } from "react-toastify";
+import { fetchUserPlaylists } from "../utils/PlaylistUtils";
 
 export const AuthContext = createContext();
 
@@ -11,54 +10,36 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const{ setPlaylistData , resetPlaylist} = useContext(PlaylistContext); // Access the PlaylistContext
+  
+  // Use the PlaylistContext
+  const { setPlaylistData, resetPlaylist } = useContext(PlaylistContext);
 
   // Check if the user is logged in and fetch data
   useEffect(() => {
+    
     checkAuthStatus();
   }, []);
 
   const checkAuthStatus = async () => {
-     
     try {
       const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/me`, { 
         withCredentials: true 
       });
       setUser(res.data.user);
-      fetchUserPlaylists(res.data.user.email); // Fetch playlists after auth
+      console.log(res.data.user);
+  
+      // ✅ Pass setPlaylistData when calling fetchUserPlaylists
+      await fetchUserPlaylists(res.data.user.email, setPlaylistData);
     } catch (error) {
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
-  const fetchUserPlaylists = async (email) => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/${email}`);
-    
-      // Access the playlists array from the response
-      const userData = response.data[0];
-      if(!userData) return ;
-      
-      const playlists = userData.playlists;
   
-      if (!Array.isArray(playlists) || !playlists) {
-        console.warn("No playlists found or playlists is not an array:", playlists);
-        return [];
-      }
-  
-      // Update all playlists at once instead of one by one
-      setPlaylistData(playlists);
-  
-      return playlists;
-    } catch (error) {
-      console.error("Error fetching playlists:", error);
-      return [];
-    }
-  };
+   
 
   const login = async (email, password) => {
-   
     try {
       setError(null);
       const res = await axios.post(
@@ -67,7 +48,10 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       setUser(res.data.user);
-      fetchUserPlaylists(res.data.user.email); // Fetch playlists after login
+      
+      // ✅ Pass setPlaylistData here
+      await fetchUserPlaylists(res.data.user.email, setPlaylistData);
+      
       return res.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed";
@@ -75,11 +59,11 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+  
 
   const signup = async (username, email, password) => {
     try {
       setError(null);
-       
       const res = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/signup`, 
         { username, email, password }, 
@@ -96,22 +80,30 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // clear localstorage
+      // Clear localStorage
       localStorage.clear();
-      // clear provider
+      // Reset playlist
       resetPlaylist();
-      await axios.post(
-         
+      
+      const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/logout`, 
         {}, 
         { withCredentials: true }
       );
+      
       setUser(null);
+      toast.success(response.data.message, { position: "top-right", icon: "👋" });
+      console.log("Logout successful");
     } catch (error) {
-      console.error("Logout error:", error);
+      const errorMessage = error.response?.data?.error || "Logout failed";
+      toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
+      console.error(errorMessage);
       setUser(null);
     }
   };
+
+  // Custom hook for easy context access
+  const useAuth = () => useContext(AuthContext);
 
   return (
     <AuthContext.Provider 
@@ -122,7 +114,8 @@ export const AuthProvider = ({ children }) => {
         logout, 
         loading,
         error,
-        isAuthenticated: !!user 
+        isAuthenticated: !!user,
+        useAuth
       }}
     >
       {children}

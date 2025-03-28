@@ -1,6 +1,8 @@
 // for DATABASE OPERATION
 import axios from "axios";
+import { useContext } from "react";
 import { toast } from "react-toastify";
+ 
 
 
 export const extractPlaylistId = (url) => {
@@ -47,6 +49,38 @@ export const validatePlaylistUrl = (url) => {
 
 
 // DATABASE UTILS
+ // Remove useContext(PlaylistContext) from here
+export const fetchUserPlaylists = async (email, setPlaylistData) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/getPlaylist`,
+      { userEmail: email },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const userData = response.data;
+    const playlists = userData?.playlists ?? {};
+
+    if (Object.keys(playlists).length === 0) {
+      console.warn("No playlists found for user:", email);
+    }
+
+    // ✅ Store playlists in context by passing setPlaylistData
+    setPlaylistData(playlists);
+
+    return playlists;
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || "Error fetching playlists";
+    toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
+
+    // ✅ Reset playlist data on failure
+    setPlaylistData({});
+    return {};
+  }
+};
+
+  
+
 
 export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlaylistData, inputRef, navigate) => {
   try {
@@ -73,7 +107,9 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
 
 
     if (response.data.playlist) {
-      setPlaylistData(response.data.playlist);
+      // setPlaylistData(response.data.playlist);
+      await fetchUserPlaylists(user.email,setPlaylistData);
+       
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }
 
@@ -87,10 +123,11 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
   }
 };
  
-export const handlePlaylistSection = async (url, user, setLoading, setPlaylistData) => {
+export const handlePlaylistSection = async (url, user, setLoading, setPlaylistData , ) => {
    
 
   try {
+
     if (!user || !user.email) {
       toast.error("User is not logged in!", { position: "top-right", icon: "⚠️" });
       return false;
@@ -107,15 +144,22 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
 
     setLoading(true);
 
+    
     const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/section/arrange`, {
       userEmail: user.email,
       playlistId: playId,
     });
 
-   
+    const sectionFlag = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/displaySection`, {
+      userEmail: user.email,
+      playlistId: playId,
+      displaySection: true
+    });
+    
 
-    if (response.data.playlist) {
-      setPlaylistData(response.data.playlist);
+    if (response.data.playlist && sectionFlag.data.message) {
+      await fetchUserPlaylists(user.email , setPlaylistData);
+      // setPlaylistData(response.data.playlist);
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }
 

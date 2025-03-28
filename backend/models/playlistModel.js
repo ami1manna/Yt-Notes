@@ -1,3 +1,4 @@
+const { books } = require('googleapis/build/src/apis/books');
 const mongoose = require('mongoose');
 
 
@@ -25,6 +26,7 @@ const sectionSchema = new mongoose.Schema({
 
 
 const singlePlaylistSchema = new mongoose.Schema({
+  displaySection:{type:Boolean , default:false},
   playlistId: { type: String, required: true },
   playlistUrl: { type: String, required: true },
   channelTitle: { type: String, required: true },

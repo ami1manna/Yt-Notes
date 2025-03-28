@@ -28,7 +28,8 @@ exports.toggleVideo = async (req, res) => {
 
         // Update playlist progress
          playlist.playlistProgress = video.done ? playlist.playlistProgress + 1 : playlist.playlistProgress - 1;
-         
+        
+        let updatedSection = null;
         // Update sections containing the video
         for (let [sectionId, section] of playlist.sections.entries()) {
             if (section.videoIds.includes(videoId)) {
@@ -39,6 +40,10 @@ exports.toggleVideo = async (req, res) => {
                 section.progressPercentage = section.sectionLength > 0
                     ? Math.round((section.completedLength / section.sectionLength) * 100)
                     : 0;
+                
+                updatedSection = section;    
+                // break loop
+                break;
             }
         }
 
@@ -48,7 +53,8 @@ exports.toggleVideo = async (req, res) => {
         res.status(200).json({
             message: 'Video status toggled successfully',
             video,
-            playlistProgress: playlist.playlistProgress
+            playlistProgress: playlist.playlistProgress,
+            updatedSection: updatedSection
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

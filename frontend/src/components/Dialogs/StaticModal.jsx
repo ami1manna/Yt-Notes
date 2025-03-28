@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Loader2 } from "lucide-react"; // Import Loader2 icon from react-lucide
 
-const StaticModal = ({ isOpen, onAction, header, subHeader }) => {
+const StaticModal = ({ isOpen, onAction, header, subHeader, isLoading }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -27,16 +28,24 @@ const StaticModal = ({ isOpen, onAction, header, subHeader }) => {
             <button
               className="px-6 py-2 mb-1 mr-4 text-sm font-bold text-gray-600 dark:text-gray-300 uppercase transition-all duration-150 ease-linear bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow outline-none hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none"
               type="button"
-              onClick={() => onAction(false)} // ✅ Fix: Pass function reference
+              onClick={() => onAction(false)}
+              disabled={isLoading} // Disable button while loading
             >
               No
             </button>
             <button
-              className="px-6 py-2 mb-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-orange-500 rounded shadow outline-none hover:bg-orange-600 focus:outline-none"
+              className="px-6 py-2 mb-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-orange-500 rounded shadow outline-none hover:bg-orange-600 focus:outline-none flex items-center"
               type="button"
-              onClick={() => onAction(true)} // ✅ Fix: Pass function reference
+              onClick={() => onAction(true)}
+              disabled={isLoading} // Disable button while loading
             >
-              Yes
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Processing...
+                </>
+              ) : (
+                "Yes"
+              )}
             </button>
           </div>
         </div>
