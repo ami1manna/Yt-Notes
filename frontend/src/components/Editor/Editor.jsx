@@ -8,7 +8,7 @@ import { decodeLatex, extractLatex } from "./utils.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 // third party
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
+ 
 
 const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();

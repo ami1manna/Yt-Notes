@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect, useRef , useMemo} from "react";
 import { PlaylistContext } from "../context/PlaylistsContext";
 import { useParams } from "react-router-dom";
-import SideNav from "../components/ui/SideNav";
 import IconButton from "../components/ui/IconButton";
 import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import TranscriptList from "../components/widgets/TranscriptList";
 import Editor from "../components/Editor/Editor";
 import SummaryList from "../components/widgets/SummaryList";
+import CourseNav from "../components/CourseNav/CourseNav";
 
 const CourseScreen = () => {
     const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
@@ -147,7 +147,7 @@ const CourseScreen = () => {
     return (
         <div className="flex flex-col w-full h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
             {/* SideNav */}
-            <SideNav
+            <CourseNav
                 playListData={playListData}
                 selectedVideoId={selectedVideoId}
                 setSelectedVideoId={setSelectedVidId}

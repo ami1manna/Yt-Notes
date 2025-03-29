@@ -3,7 +3,7 @@ import TranscriptTile from "../ui/TranscriptTile";
 import { addTranscript, getTranscript } from "../../utils/Transcript";
 import { toast } from "react-toastify";
 import { CloudDownload, Search, Copy, Check } from "lucide-react";
-import "react-toastify/dist/ReactToastify.css";
+ 
 import IconButton from "../ui/IconButton";
 
 const TranscriptList = ({ videoId }) => {
