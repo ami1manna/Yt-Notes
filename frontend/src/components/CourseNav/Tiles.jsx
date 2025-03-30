@@ -37,33 +37,7 @@ const Tiles = ({ children, onClick, selected = false, duration, index }) => {
       onMouseEnter={() => isOverflowing && setIsTooltipVisible(true)}
       onMouseLeave={() => setIsTooltipVisible(false)}
     >
-      {/* Index number */}
-      {index && (
-        <div className={`
-          flex-shrink-0 w-6 h-6 mr-2
-          rounded-full flex items-center justify-center
-          text-xs font-medium
-          ${selected 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}
-        `}>
-          {index}
-        </div>
-      )}
-      
-      {/* Play button (shows on hover or when selected) */}
-      <div className={`
-        flex-shrink-0 mr-2
-        w-8 h-8 
-        rounded-full
-        flex items-center justify-center
-        ${selected 
-          ? 'bg-blue-500 text-white' 
-          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 opacity-0 group-hover:opacity-100'}
-        transition-opacity duration-200
-      `}>
-        <Play className="w-4 h-4" />
-      </div>
+     
 
       {/* Main Text */}
       <div className="flex-1 flex flex-col">

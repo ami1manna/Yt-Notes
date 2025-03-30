@@ -13,7 +13,7 @@ const CheckBox = ({ checked, onChange, size = "md" }) => {
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center justify-center">
       <label
         className="cursor-pointer p-2 transition-all duration-300 ease-in-out rounded-lg"
         onClick={handleChange}

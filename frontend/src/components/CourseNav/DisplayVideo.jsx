@@ -5,20 +5,24 @@ import { secondsToHHMM } from "../../utils/Coverter";
 
 const DisplayVideo = ({ videoData, selectedVideoId, setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
   return (
-    <div className="p-4 space-y-1">
+    <div className="p-3 space-y-1">
       {videoData.map((video, index) => (
         <div
           key={video.videoId}
-          className="mb-2 group"
+          className={`
+            mb-2 
+            rounded-md 
+            ${selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+          `}
         >
-          <div className="flex items-start gap-2 p-2">
+          <div className="flex items-center gap-2 p-2">
             <CheckBox
               onChange={() => setVideoStatus(video.videoId, playlistId, userEmail)}
               checked={video.done}
               size="sm"
             />
             
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <Tiles 
                 onClick={() => {
                   setSelectedVideoId(video.videoId);
@@ -35,21 +39,6 @@ const DisplayVideo = ({ videoData, selectedVideoId, setSelectedVideoId, setVideo
               </Tiles>
             </div>
           </div>
-          
-          {/* Progress indicator for videos in progress */}
-          {video.progress && video.progress < 100 && !video.done && (
-            <div className="ml-10 mt-1 mb-2">
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
-                <div 
-                  className="bg-green-500 h-1 rounded-full"
-                  style={{ width: `${video.progress}%` }}
-                />
-              </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                {Math.round(video.progress)}% watched
-              </div>
-            </div>
-          )}
         </div>
       ))}
     </div>

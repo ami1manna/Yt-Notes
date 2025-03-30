@@ -26,6 +26,7 @@ const sectionSchema = new mongoose.Schema({
 
 
 const singlePlaylistSchema = new mongoose.Schema({
+  playlistTitle: { type: String, required: true },
   displaySection:{type:Boolean , default:false},
   playlistId: { type: String, required: true },
   playlistUrl: { type: String, required: true },

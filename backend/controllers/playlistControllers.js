@@ -76,7 +76,7 @@ exports.addPlaylist = async (req, res) => {
       videos.set(videoId, video);
       videoOrder.push(videoId);
     });
-
+    const playlistTitle = videosData[0].snippet.title;
     const channelTitle = videosData[0].snippet.channelTitle;
     const playlistLength = videoOrder.length;
     const playlistThumbnailUrl = videosData[0].snippet.thumbnails.high?.url || videosData[0].snippet.thumbnails.default?.url;
@@ -98,6 +98,7 @@ exports.addPlaylist = async (req, res) => {
 
     // Create new playlist
     const newPlaylist = {
+      playlistTitle,
       playlistId,
       playlistUrl,
       channelTitle,
