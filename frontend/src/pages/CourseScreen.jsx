@@ -30,7 +30,7 @@ const CourseScreen = () => {
     
      
     useEffect(() => {
-        console.log(playListData);
+        
         if(playListData){
             setSelectedVideoId(playListData.selectedVideoId);
             setSelectedVideoData(playListData.videos[selectedVideoId]);
@@ -44,7 +44,7 @@ const CourseScreen = () => {
         if (!displaySection) {
               
             const videoData = playListData.videoOrder.map(videoId => playListData.videos[videoId]);
-            console.log(videoData);
+            
             setVideoData(videoData);
         } else {
             const sec = playListData.sections;
@@ -60,12 +60,7 @@ const CourseScreen = () => {
             }, {});
 
             setSectionData(newSectionData);
-
-            // Debugging output
-            console.log("Fetched Sections:");
-            Object.entries(newSectionData).forEach(([key, section]) => {
-                console.log(`Section: ${section.name}, Video IDs: ${section.videoIds.join(", ")}`);
-            });
+          
         }
     }, [displaySection, playListData]); // ✅ Runs only when necessary
 
@@ -88,6 +83,8 @@ const CourseScreen = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    
+    
     const handleResizeStart = (e) => {
         e.preventDefault();
         setIsResizing(true);
@@ -136,9 +133,9 @@ const CourseScreen = () => {
         setSelectedVideoData(playListData.videos[videoId]);
     };
 
-    const setVidStatus = async (videoId, playlistId, userEmail) => {
+    const setVidStatus = async (videoId, playlistId, userEmail , sectionId = null) => {
         playListData.videos[videoId].status = !playListData.videos[videoId].status;
-        setVideoStatus(videoId, playlistId, userEmail);
+        setVideoStatus(videoId, playlistId, userEmail , sectionId);
     }
     if (!playListData) {
         return <p className="text-gray-800 dark:text-white text-lg">Playlist not found.</p>;
@@ -249,11 +246,11 @@ const CourseScreen = () => {
                     {/* Tab Content */}
                     <div className="flex-1 overflow-hidden h-full">
                         {activeTab === 0 ? (
-                            <Editor videoId={selectedVideo?.videoId} playlistId={playListData.playlistId} />
-                        ) : activeTab === 1 ? (
                             <TranscriptList videoId={selectedVideo?.videoId} />
-                        ) : (
+                        ) : activeTab === 1 ? (
                             <SummaryList videoId={selectedVideo?.videoId} />
+                        ) : (
+                            <Editor videoId={selectedVideo?.videoId} playlistId={playListData.playlistId} />
                         )}
 
 

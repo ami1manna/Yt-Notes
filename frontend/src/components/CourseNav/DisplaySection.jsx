@@ -1,82 +1,125 @@
-import React from "react";
+import React, { useState } from "react";
 import CheckBox from "./CheckBox";
 import Tiles from "./Tiles";
 import { secondsToHHMM } from "../../utils/Coverter";
+import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 
 const DisplaySection = ({ sectionData, selectedVideoId, setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
-  return (
-    <div className="p-4 space-y-3">
-      {Object.entries(sectionData).map(([sectionId, section]) => (
-        <div key={sectionId} className="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-              {section.name}
-            </h3>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {section.completedLength}/{section.sectionLength} videos
-            </div>
-          </div>
+  const [collapsedSections, setCollapsedSections] = useState({});
 
-          {section.videos.map((video) => (
-            <div
-              key={video.videoId}
+  const toggleSection = (sectionId) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
+
+  return (
+    <div className="p-4">
+      {Object.entries(sectionData).map(([sectionId, section], sectionIndex) => {
+        const isCollapsed = collapsedSections[sectionId];
+        const allCompleted = section.completedLength === section.sectionLength;
+        
+        return (
+          <div key={sectionId} className="mb-6 last:mb-0">
+            {/* Section header */}
+            <div 
+              onClick={() => toggleSection(sectionId)}
               className={`
-                relative group
-                rounded-xl border 
-                transition-all duration-300 ease-in-out
-                hover:scale-[1.02] active:scale-[0.98]
-                mb-3
-                ${selectedVideoId === video.videoId
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 border-transparent shadow-lg shadow-blue-500/20"
-                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-                }
+                flex items-center justify-between 
+                p-3 mb-2 
+                bg-gray-50 dark:bg-gray-800/50
+                rounded-xl cursor-pointer
+                transition-colors duration-200
+                hover:bg-gray-100 dark:hover:bg-gray-800
+                ${allCompleted ? 'bg-green-50 dark:bg-green-900/20' : ''}
               `}
             >
-              {/* Video Duration Tag */}
-              <div className="absolute -top-1 -left-1 z-10
-                            transform -rotate-12 transition-transform duration-300
-                            group-hover:rotate-0 group-hover:-translate-y-1">
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 
-                              text-white text-xs font-bold px-3 py-1 
-                              rounded-br-xl rounded-tl-lg shadow-md
-                              transition-colors duration-300
-                              group-hover:from-green-400 group-hover:to-emerald-500">
-                  {secondsToHHMM(video.duration)}
+              <div className="flex items-center space-x-2">
+                <div className={`
+                  w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium
+                  ${allCompleted 
+                    ? 'bg-green-500 text-white' 
+                    : 'bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}
+                `}>
+                  {sectionIndex + 1}
                 </div>
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                  {section.name}
+                </h3>
+                
+                {section.locked && (
+                  <Lock className="w-4 h-4 text-gray-500" />
+                )}
               </div>
-
-              {/* Hover Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                            translate-x-[-200%] group-hover:translate-x-[200%] 
-                            transition-transform duration-1000 ease-in-out 
-                            rounded-xl overflow-hidden" />
-
-              {/* Video Item Content */}
-              <div className="relative flex items-center gap-3 p-1 lg:p-3">
-                <CheckBox
-                  onChange={() => setVideoStatus(video.videoId, playlistId, userEmail)}
-                  checked={video.done}
-                  className={selectedVideoId === video.videoId ? "text-white" : ""}
-                />
-                <div className="flex-1">
-                  <Tiles
-                    onClick={() => {
-                      setSelectedVideoId(video.videoId);
-                      // Close sidebar on mobile after selection
-                      if (window.innerWidth < 640) {
-                        setIsOpen(false);
-                      }
-                    }}
-                    selected={selectedVideoId === video.videoId}
-                  >
-                    {video.title}
-                  </Tiles>
+              
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {section.completedLength}/{section.sectionLength}
                 </div>
+                
+                {isCollapsed ? (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                )}
               </div>
             </div>
-          ))}
-        </div>
-      ))}
+
+            {/* Section content - collapsible */}
+            {!isCollapsed && (
+              <div className="pl-4 space-y-1 border-l-2 border-gray-200 dark:border-gray-700 ml-3">
+                {section.videos.map((video, videoIndex) => (
+                  <div
+                    key={video.videoId}
+                    className="mb-2 group"
+                  >
+                    <div className="flex items-start gap-2 p-2">
+                      <CheckBox
+                        onChange={() => setVideoStatus(video.videoId, playlistId, userEmail, sectionId)}
+                        checked={video.done}
+                        size="sm"
+                      />
+                      
+                      <div className="flex-1">
+                        <Tiles 
+                          onClick={() => {
+                            setSelectedVideoId(video.videoId);
+                            // Close sidebar on mobile after selection
+                            if (window.innerWidth < 640) {
+                              setIsOpen(false);
+                            }
+                          }} 
+                          selected={selectedVideoId === video.videoId}
+                          duration={secondsToHHMM(video.duration)}
+                          index={videoIndex + 1}
+                        >
+                          {video.title}
+                        </Tiles>
+                      </div>
+                    </div>
+                    
+                    {/* Progress indicator for videos in progress */}
+                    {video.progress && video.progress < 100 && !video.done && (
+                      <div className="ml-10 mt-1 mb-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
+                          <div 
+                            className="bg-green-500 h-1 rounded-full"
+                            style={{ width: `${video.progress}%` }}
+                          />
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          {Math.round(video.progress)}% watched
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

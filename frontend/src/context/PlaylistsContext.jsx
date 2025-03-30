@@ -1,26 +1,13 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { setPlaylistIndex, toggleVideo } from "../utils/VideoUtils";
+import { toast } from "react-toastify";
+import { use } from "react";
 
 export const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
     const [userPlaylists, setUserPlaylists] = useState({});
-        // try {
-        //     const storedPlaylists = localStorage.getItem("userPlaylists");
-        //     return storedPlaylists ? JSON.parse(storedPlaylists) : [];
-        // } catch (error) {
-        //     console.error("Error loading playlists from localStorage:", error);
-        //     return [];
-        // }
-
-    // useEffect(() => {
-    //     try {
-    //         localStorage.setItem("userPlaylists", JSON.stringify(userPlaylists));
-    //     } catch (error) {
-    //         console.error("Error saving playlists to localStorage:", error);
-    //     }
-    // }, [userPlaylists]);
-
+   
     // Add playlist(s)
     const setPlaylistData = useCallback((data) => {
         setUserPlaylists((prev) => {
@@ -39,64 +26,52 @@ export const PlaylistProvider = ({ children }) => {
       
     
 
-    // Toggle video status
-    const setVideoStatus = useCallback(async (videoId, playlistId, userEmail) => {
+    
+    const setVideoStatus = useCallback(async (videoId, playlistId, userEmail , sectionId) => {
         try {
-            // Find the specific playlist
-            const playlist = userPlaylists.find(p => p.playlistId === playlistId);
-            if (!playlist) {
-                throw new Error(`Playlist with ID ${playlistId} not found`);
+            
+            if (!userPlaylists[playlistId]) {
+                throw new Error(`Playlist ${playlistId} not found`);
             }
-    
-            // Call the toggle video function from your utility
-            const result = await toggleVideo(videoId, playlistId, userEmail);
-            if (!result) throw new Error("Invalid response from toggleVideo");
-    
-            // Update the playlist with new video and progress information
-            setUserPlaylists((prev) => 
-                prev.map((playlist) => {
-                    if (playlist.playlistId !== playlistId) return playlist;
-    
-                    // Create a copy of the existing sections
-                    const updatedSections = {...playlist.sections};
-    
-                    // If an updated section is returned, update it
-                    if (result.updatedSection) {
-                        const sectionKey = Object.keys(updatedSections).find(key => 
-                            updatedSections[key].videoIds.includes(videoId)
-                        );
-    
-                        if (sectionKey) {
-                            updatedSections[sectionKey] = {
-                                ...updatedSections[sectionKey],
-                                completedLength: result.updatedSection.completedLength,
-                                progressPercentage: result.updatedSection.progressPercentage
-                            };
-                        }
-                    }
-    
-                    return {
-                        ...playlist,
-                        // Update the specific video's done status
-                        videos: {
-                            ...playlist.videos,
-                            [videoId]: result.video
-                        },
-                        // Use the returned playlist progress directly
-                        playlistProgress: result.playlistProgress,
-                        // Update sections with the new progress information
-                        sections: updatedSections
-                    };
-                })
-            );
-    
+            
+            const result = await toggleVideo(videoId, playlistId, userEmail );
+            
+            setUserPlaylists((prevUserPlaylists) => {
+                const updatedPlaylists = { ...prevUserPlaylists };
+                const updatedVideos = { ...updatedPlaylists[playlistId].videos };
+                
+                
+                // Use the result from toggleVideo if available, otherwise toggle manually
+                updatedVideos[videoId] = result.video || {
+                    ...updatedVideos[videoId],
+                    done: !updatedVideos[videoId].done
+                };
+                
+                // update the section
+                let updatedSection = {};
+                if(sectionId){
+                    updatedSection = { ...updatedPlaylists[playlistId].sections };
+                    updatedSection[sectionId] = result.updatedSection;
+                }
+
+                updatedPlaylists[playlistId] = {
+                    ...updatedPlaylists[playlistId],
+                    videos: updatedVideos,
+                    playlistProgress: result.playlistProgress,
+                    sections: updatedSection
+                };
+                
+                return updatedPlaylists;
+            });
+            
             return result;
         } catch (error) {
+            toast.error(error.message, { position: "top-right", icon: "❌" });
             console.error("Error updating video status:", error);
-            throw error;
         }
-    }, [userPlaylists]);
-
+    }, [userPlaylists]); // Include userPlaylists in dependency array 
+    
+    
     
     // Set selected video index
     const setSelectedVideo = useCallback(async (email, playlistId, index) => {

@@ -103,8 +103,7 @@ exports.arrangeVideos = async (req, res) => {
 
     // Update playlist
     playlist.sections = processedSections;
-    // playlist.videos = new Map(); // Clear videos Map
-    // playlist.videoOrder = []; // Clear video order
+    playlist.displaySection = true;
     playlist.playlistProgress = Math.round((videos.filter(v => v.done).length / videos.length) * 100);
 
     // Save updated document
