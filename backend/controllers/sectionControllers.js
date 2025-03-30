@@ -36,18 +36,29 @@ exports.arrangeVideos = async (req, res) => {
     }));
 
     // Create prompt for AI to group videos into sections
-    const prompt = `
-      I have a YouTube playlist about ${playlist.channelTitle} with the following videos.
-      Please organize these videos into 3-5 logical thematic sections based on their titles.
-      
-      Return ONLY a JSON object with the format:
-      { "sections": [ { "name": "Section Name", "videoIndices": [0, 1, 2] } ] }
-      
-      Do not include any text before or after the JSON. The response should be valid JSON only.
-      
-      Videos:
-      ${videoMapping.map(v => `[${v.index}] "${v.title}"`).join('\n')}
-    `;
+    const prompt = `Given a YouTube playlist about ${playlist.channelTitle}, organize these videos into 3-5 logical thematic sections based on their content and titles.
+
+    INSTRUCTIONS:
+    1. Analyze the video titles to identify common themes, topics, or progression patterns
+    2. Create 3-5 clearly distinct sections that group related videos together
+    3. Give each section a brief, descriptive name that accurately reflects its content
+    4. Ensure all videos are assigned to exactly one section
+    5. Return your response as a valid, parseable JSON object with no additional text
+    
+    VIDEO LIST:
+    ${videoMapping.map(v => `[${v.index}] "${v.title}"`).join('\n')}
+    
+    REQUIRED RESPONSE FORMAT:
+    {
+      "sections": [
+        {
+          "name": "Section Name",
+          "videoIndices": [0, 1, 2]
+        }
+      ]
+    }
+    
+    Return ONLY the JSON object with no preamble, explanations, or concluding text. Ensure the JSON is valid and can be parsed directly.`;
 
     // Get response from AI (using model.generateContent or your preferred AI service)
     const result = await genAIModel.generateContent(prompt);
