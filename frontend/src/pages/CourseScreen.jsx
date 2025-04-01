@@ -212,7 +212,7 @@ const CourseScreen = () => {
                         </IconButton>
 
                         <div className="flex gap-1 items-center">
-                            {["Notes", "Transcript", "Summary"].map((title, index) => (
+                            {["Transcript", "Summary", "Notes"].map((title, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setActiveTab(index)}

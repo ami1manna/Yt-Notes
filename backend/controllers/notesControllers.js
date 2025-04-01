@@ -53,6 +53,7 @@ exports.getNotesForVideo = async (req, res) => {
         if (!video) {
             return res.status(404).json({ error: 'Video not found' });
         }
+        
 
         res.status(200).json({ notes: video.notes });
     } catch (error) {

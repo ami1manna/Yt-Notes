@@ -8,6 +8,8 @@ import { decodeLatex, extractLatex } from "./utils.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 // third party
 import axios from "axios";
+import { toast } from "react-toastify";
+ 
  
 
 const Editor = ({ videoId, playlistId }) => {
@@ -22,41 +24,71 @@ const Editor = ({ videoId, playlistId }) => {
   const getSunEditorInstance = (sunEditor) => {
     editor.current = sunEditor;
   };
-  const saveContent = async () => {
-    setContent((prevContent) => {
-      const latestContent = prevContent; // Now this gets the latest value
-      console.log(latestContent); // This will correctly log the latest content
+
+    // fetch content from server
+    useEffect(() => {
+      const fetchNotes = async () => {
+        setLoading(true);
+          
+          try {
+            const response = await axios.post(
+              `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/getNotes`,
+              {
+                videoId: videoId,
+                playlistId: playlistId,
+                userEmail: user.email
+              }
+            );
+            
+            const noteText = response.data ? response.data.notes : "";
+            setContent(decodeLatex(noteText));
+            
+         
+           
   
-      (async () => {
+          } catch (error) {
+            setContent("");
+            console.log(error);
+  
+          }
+          finally {
+            setLoading(false);
+          }
+        
+      };
+  
+      fetchNotes();
+    }, [videoId]);
+  
+  
+
+
+  const saveContent = async () => {
+    
         try {
           setLoading(true);
-          console.log(user.email, playlistId, videoId, latestContent);
+          
           const response = await axios.put(
-            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`,
+            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/saveNotes`,
             {
               userEmail: user.email,
               playlistId: playlistId,
               videoId: videoId,
-              text: latestContent,
+              text: content,
             }
           );
   
-          console.log(response);
-          toast.success("Notes Saved");
+          
+          toast.success(response.data.message);
   
-          // Update sessionStorage
-          const storageKey = `notes_${videoId}`;
-          sessionStorage.setItem(storageKey, latestContent);
+           
         } catch (error) {
           toast.error("Failed to save notes: " + error);
         } finally {
           setLoading(false);
         }
-      })();
-  
-      return prevContent; // Return the same value since we're not modifying state here
-    });
-  };
+      }
+
   
   
    
@@ -64,43 +96,6 @@ const Editor = ({ videoId, playlistId }) => {
     setContent(() => updatedContent); // Ensures the latest value is set
   };
   
-  // fetch content from server
-  useEffect(() => {
-    const fetchNotes = async () => {
-      setLoading(true);
-      const storageKey = `notes_${videoId}`;
-      const cachedNotes = sessionStorage.getItem(storageKey);
-
-      if (cachedNotes) {
-        setContent(cachedNotes);
-        console.log("Using cached notes");
-        setLoading(false);
-      } else {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`
-          );
-          
-          const noteText = response.data ? response.data.notes : "";
-          setContent(decodeLatex(noteText));
-          
-       
-          // Store in sessionStorage
-          sessionStorage.setItem(storageKey, decodeLatex(noteText));
-
-        } catch (error) {
-          toast.error("Failed to fetch notes");
-
-        }
-        finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchNotes();
-  }, [videoId]);
-
 
 
 
@@ -146,7 +141,7 @@ const Editor = ({ videoId, playlistId }) => {
               katex: katex,
               buttonList: responsiveButtonList,
               responsiveToolbar: true,
-              callBackSave: saveContent, // Connect save button to function
+              callBackSave: saveContent,  
             }}
           />
         }
