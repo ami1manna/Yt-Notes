@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play } from 'lucide-react';
 
 const Tiles = ({ children, onClick, selected = false, duration, index }) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);

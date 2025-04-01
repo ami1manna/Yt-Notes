@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CheckBox from "./CheckBox";
 import Tiles from "./Tiles";
 import { secondsToHHMM } from "../../utils/Coverter";
 import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
+import { PlaylistContext } from "../../context/PlaylistsContext";
+import { AuthContext } from "../../context/AuthContext";
 
-const DisplaySection = ({ sectionData, selectedVideoId, setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
+const DisplaySection = ({ sectionData, setVideoStatus, playlistId,  setIsOpen }) => {
   const [collapsedSections, setCollapsedSections] = useState({});
+  const {setSelectedVideoId , userPlaylists} = useContext(PlaylistContext);
+  const {user} = useContext(AuthContext);
 
   const toggleSection = (sectionId) => {
     setCollapsedSections(prev => ({
@@ -67,12 +71,12 @@ const DisplaySection = ({ sectionData, selectedVideoId, setSelectedVideoId, setV
                     key={video.videoId}
                     className={`
                       mb-2 group rounded-md
-                      ${selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+                      ${userPlaylists[playlistId].selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
                     `}
                   >
                     <div className="flex items-center gap-2 p-2">
                       <CheckBox
-                        onChange={() => setVideoStatus(video.videoId, playlistId, userEmail, sectionId)}
+                        onChange={() => setVideoStatus(video.videoId, playlistId, user.email, sectionId)}
                         checked={video.done}
                         size="sm"
                       />
@@ -80,13 +84,14 @@ const DisplaySection = ({ sectionData, selectedVideoId, setSelectedVideoId, setV
                       <div className="flex-1 min-w-0">
                         <Tiles 
                           onClick={() => {
-                            setSelectedVideoId(video.videoId);
+                             
+                            setSelectedVideoId(user.email , playlistId,video.videoId);
                             // Close sidebar on mobile after selection
                             if (window.innerWidth < 640) {
                               setIsOpen(false);
                             }
                           }} 
-                          selected={selectedVideoId === video.videoId}
+                          selected={userPlaylists[playlistId].selectedVideoId === video.videoId}
                           duration={secondsToHHMM(video.duration)}
                           index={videoIndex + 1}
                         >

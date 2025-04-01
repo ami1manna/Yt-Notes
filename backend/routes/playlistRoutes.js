@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/add', addPlaylist);
 router.post('/getPlaylist', getPlaylistsByUser);
 router.delete('/delete', deletePlaylist);
-router.put('/selectedVideoId',selectedVideoId);
+router.put('/setVideoId',selectedVideoId);
 router.delete('/deleteVideo' , deleteVideo);
 router.post('/displaySection' , displaySection);
 module.exports = router;

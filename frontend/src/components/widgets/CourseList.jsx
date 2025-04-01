@@ -9,7 +9,7 @@ const CourseList = () => {
 
   return (
     <>
-    {console.log(userPlaylists)}
+    
       {Object.keys(userPlaylists).length === 0 ? (
         <FallBackScreen />
       ) : (

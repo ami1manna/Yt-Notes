@@ -45,3 +45,5 @@ const CourseNavTitle = ({ playListData, isOpen, progress, total, percentComplete
 
 
 export default CourseNavTitle;
+
+// the title take lot of space make it compact and remove bookbaricon and 0 of 12 complete text in coursenav 

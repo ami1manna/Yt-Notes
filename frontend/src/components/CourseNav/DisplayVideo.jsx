@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import CheckBox from "./CheckBox";
 import Tiles from "./Tiles";
 import { secondsToHHMM } from "../../utils/Coverter";
+import { PlaylistContext } from "../../context/PlaylistsContext";
+import { AuthContext } from "../../context/AuthContext";
 
-const DisplayVideo = ({ videoData, selectedVideoId, setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
+const DisplayVideo = ({ videoData,  setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
+  const {user} = useContext(AuthContext);
+  const {userPlaylists} = useContext(PlaylistContext);
   return (
     <div className="p-3 space-y-1">
       {videoData.map((video, index) => (
@@ -12,12 +16,12 @@ const DisplayVideo = ({ videoData, selectedVideoId, setSelectedVideoId, setVideo
           className={`
             mb-2 
             rounded-md 
-            ${selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+            ${userPlaylists[playlistId].selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
           `}
         >
           <div className="flex items-center gap-2 p-2">
             <CheckBox
-              onChange={() => setVideoStatus(video.videoId, playlistId, userEmail)}
+              onChange={() => setVideoStatus(video.videoId, playlistId , user.email )}
               checked={video.done}
               size="sm"
             />
@@ -25,13 +29,13 @@ const DisplayVideo = ({ videoData, selectedVideoId, setSelectedVideoId, setVideo
             <div className="flex-1 min-w-0">
               <Tiles 
                 onClick={() => {
-                  setSelectedVideoId(video.videoId);
-                  // Close sidebar on mobile after selection
+                  setSelectedVideoId(user.email , playlistId,video.videoId);
+             
                   if (window.innerWidth < 640) {
                     setIsOpen(false);
                   }
                 }} 
-                selected={selectedVideoId === video.videoId}
+                selected={userPlaylists[playlistId].selectedVideoId === video.videoId}
                 duration={secondsToHHMM(video.duration)}
                 index={index + 1}
               >

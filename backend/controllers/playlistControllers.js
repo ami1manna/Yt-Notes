@@ -243,7 +243,6 @@ exports.selectedVideoId = async (req, res) => {
 
     res.status(200).json({
       message: 'Selected video updated successfully',
-      playlists: playlistsObject
     });
 
   } catch (error) {

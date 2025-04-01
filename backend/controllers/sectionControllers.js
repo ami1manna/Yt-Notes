@@ -44,7 +44,7 @@ exports.arrangeVideos = async (req, res) => {
     3. Give each section a brief, descriptive name that accurately reflects its content
     4. Ensure all videos are assigned to exactly one section
     5. Return your response as a valid, parseable JSON object with no additional text
-    
+    6. Make Sure That Each Video in Section Are Properly Ordered e.g episode 1, episode 2, episode 3, etc.
     VIDEO LIST:
     ${videoMapping.map(v => `[${v.index}] "${v.title}"`).join('\n')}
     

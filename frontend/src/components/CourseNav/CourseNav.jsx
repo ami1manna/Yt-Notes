@@ -5,7 +5,7 @@ import CourseNavTitle from "./CourseNavTitle";
 import DisplayVideo from "./DisplayVideo";
 import DisplaySection from "./DisplaySection";
 
-const CourseNav = ({ playListData, selectedVideoId, setSelectedVideoId, setVideoStatus, isSectioned, videoData, sectionData }) => {
+const CourseNav = ({ playListData, setVideoStatus, isSectioned, videoData, sectionData }) => {
     const { user } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
     const navRef = useRef(null);
@@ -140,8 +140,6 @@ const CourseNav = ({ playListData, selectedVideoId, setSelectedVideoId, setVideo
                         {!isSectioned ? (
                             <DisplayVideo 
                                 videoData={videoData}
-                                selectedVideoId={selectedVideoId}
-                                setSelectedVideoId={setSelectedVideoId}
                                 setVideoStatus={setVideoStatus}
                                 playlistId={playListData.playlistId}
                                 userEmail={user.email}
@@ -150,8 +148,6 @@ const CourseNav = ({ playListData, selectedVideoId, setSelectedVideoId, setVideo
                         ) : (
                             <DisplaySection
                                 sectionData={sectionData}
-                                selectedVideoId={selectedVideoId}
-                                setSelectedVideoId={setSelectedVideoId}
                                 setVideoStatus={setVideoStatus}
                                 playlistId={playListData.playlistId}
                                 userEmail={user.email}

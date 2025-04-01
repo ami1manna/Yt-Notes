@@ -1,13 +1,15 @@
-import { createContext, useState, useEffect, useCallback } from "react";
-import { setPlaylistIndex, toggleVideo } from "../utils/VideoUtils";
+import { createContext, useState, useEffect, useCallback, useContext } from "react";
+import {setPlaylistVideoId, toggleVideo } from "../utils/VideoUtils";
 import { toast } from "react-toastify";
-import { use } from "react";
+ 
+
 
 export const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
+  
+    
     const [userPlaylists, setUserPlaylists] = useState({});
-   
     // Add playlist(s)
     const setPlaylistData = useCallback((data) => {
         setUserPlaylists((prev) => {
@@ -67,49 +69,39 @@ export const PlaylistProvider = ({ children }) => {
             return result;
         } catch (error) {
             toast.error(error.message, { position: "top-right", icon: "❌" });
-            console.error("Error updating video status:", error);
         }
     }, [userPlaylists]); // Include userPlaylists in dependency array 
     
     
     
     // Set selected video index
-    const setSelectedVideo = useCallback(async (email, playlistId, index) => {
+    const setSelectedVideoId = useCallback(async (userEmail , playlistId, videoId) => {
+        
         try {
-            // Validate inputs
-            if (!email || !playlistId || index < 0) {
-                throw new Error("Invalid input for setSelectedVideo");
+            
+            if (!userPlaylists[playlistId]) {
+                throw new Error(`Playlist ${playlistId} not found`);
             }
-
             // Call the setPlaylistIndex function from your utility
-            await setPlaylistIndex(email, playlistId, index);
+            await setPlaylistVideoId(userEmail ,playlistId, videoId);
 
-            // Find the video ID at the specified index
-            const playlist = userPlaylists.find(p => p.playlistId === playlistId);
-            if (!playlist) {
-                throw new Error(`Playlist with ID ${playlistId} not found`);
-            }
+    
+            setUserPlaylists((pre)=>{
+                const updatedPlaylists = { ...pre };
+                updatedPlaylists[playlistId] = {
+                    ...updatedPlaylists[playlistId],
+                    selectedVideoId: videoId,
+                };
+                return updatedPlaylists;
 
-            // Ensure the index is within the video order array
-            const videoId = playlist.videoOrder[index];
+            });
+            
+           
 
-            // Update the playlist with the new selected video
-            setUserPlaylists((prev) => 
-                prev.map((playlist) => 
-                    playlist.playlistId === playlistId 
-                        ? { 
-                            ...playlist, 
-                            selectedVideoId: videoId,
-                            playlistProgress: index 
-                          } 
-                        : playlist
-                )
-            );
-
-            return videoId;
+           
         } catch (error) {
-            console.error("Error setting selected video:", error);
-            throw error;
+            toast.error(error.message, { position: "top-right", icon: "❌" });
+            console.log(error.message);
         }
     }, [userPlaylists]);
 
@@ -130,7 +122,7 @@ export const PlaylistProvider = ({ children }) => {
                 setPlaylistData, 
                 setUserPlaylists, 
                 setVideoStatus, 
-                setSelectedVideo, 
+                setSelectedVideoId, 
                 resetPlaylist
             }}
         >

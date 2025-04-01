@@ -8,13 +8,15 @@ import TranscriptList from "../components/widgets/TranscriptList";
 import Editor from "../components/Editor/Editor";
 import SummaryList from "../components/widgets/SummaryList";
 import CourseNav from "../components/CourseNav/CourseNav";
+import { setPlaylistVideoId } from "../utils/VideoUtils";
+import { use } from "react";
 
 const CourseScreen = () => {
-    const { userPlaylists, setVideoStatus, setSelectedVideo } = useContext(PlaylistContext);
-    const { user } = useContext(AuthContext);
+    const { userPlaylists, setVideoStatus } = useContext(PlaylistContext);
+ 
     const { playlistId } = useParams();
     const playListData = useMemo(() => userPlaylists?.[playlistId] || null, [userPlaylists, playlistId]);
-    const [selectedVideoId, setSelectedVideoId] = useState();
+   
     const [selectedVideo, setSelectedVideoData] = useState({});
 
     const [sectionData, setSectionData] = useState({});
@@ -32,11 +34,11 @@ const CourseScreen = () => {
     useEffect(() => {
         
         if(playListData){
-            setSelectedVideoId(playListData.selectedVideoId);
-            setSelectedVideoData(playListData.videos[selectedVideoId]);
+           
+            setSelectedVideoData(playListData.videos[playListData.selectedVideoId]);
             setDisplaySection(playListData.displaySection);
         }
-    })
+    } , )
 
     useEffect(() => {
         if (!playListData || !playListData.videos) return;
@@ -128,10 +130,7 @@ const CourseScreen = () => {
 
     };
 
-    const setSelectedVidId = (videoId) => {
-        setSelectedVideoId(videoId);
-        setSelectedVideoData(playListData.videos[videoId]);
-    };
+  
 
     const setVidStatus = async (videoId, playlistId, userEmail , sectionId = null) => {
         playListData.videos[videoId].status = !playListData.videos[videoId].status;
@@ -146,14 +145,12 @@ const CourseScreen = () => {
             {/* SideNav */}
             <CourseNav
                 playListData={playListData}
-                selectedVideoId={selectedVideoId}
-                setSelectedVideoId={setSelectedVidId}
                 setVideoStatus={setVidStatus}
                 isSectioned={playListData.displaySection}
                 videoData={videoData}
                 sectionData={sectionData}
             />
-
+ 
             {/* Main content area with resizable panels */}
             <div
                 ref={containerRef}
