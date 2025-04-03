@@ -8,11 +8,11 @@ router.post('/addTranscript' , addTranscript);
 router.get('/getTranscript',getTranscript);
  
 // Main endpoints
-router.get('/summarize', transcriptController.getSummarize);
+// router.get('/summarize', transcriptController.getSummarize);
 router.get('/educational-notes', transcriptController.getEducationalNotes);
 
 // Regeneration endpoints
-router.get('/regenerate-summary', transcriptController.regenerateSummary);
-router.get('/regenerate-notes', transcriptController.regenerateEducationalNotes);
+// router.get('/regenerate-summary', transcriptController.regenerateSummary);
+// router.get('/regenerate-notes', transcriptController.regenerateEducationalNotes);
 
 module.exports = router;

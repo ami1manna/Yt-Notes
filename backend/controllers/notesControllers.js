@@ -3,7 +3,7 @@ const UserPlaylist = require('../models/playlistModel');
 exports.addNoteToVideo = async (req, res) => {
     try {
         const { userEmail, playlistId, videoId, text } = req.body;
-        console.log(userEmail, playlistId, videoId, text);
+        
         // Find the user's playlist
         const userPlaylist = await UserPlaylist.findOne({ userEmail });
         if (!userPlaylist) {
@@ -25,10 +25,12 @@ exports.addNoteToVideo = async (req, res) => {
 
         // Save the updated user playlist
         await userPlaylist.save();
-
+        
+        
         res.status(201).json({ message: 'Note added successfully', notes: video.notes });
     } catch (error) {
         res.status(400).json({ error: error.message });
+        console.log(error);
     }
 };
 
