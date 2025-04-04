@@ -4,108 +4,87 @@ import "suneditor/dist/css/suneditor.min.css";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { responsiveButtonList, templates } from "./toolbarConfig.js";
-import { decodeLatex, extractLatex } from "./utils.js";
+import { decodeLatex } from "./utils.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 // third party
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();
   const { user } = useContext(AuthContext);
   const [isLoading, setLoading] = useState(true);
-  const containerRef = useRef(null); // Reference for parent container
-
+  const containerRef = useRef(null);
   const [content, setContent] = useState('');
-  const [editorHeight, setEditorHeight] = useState(300); // Default height
+  const [editorHeight, setEditorHeight] = useState(300);
 
   const getSunEditorInstance = (sunEditor) => {
     editor.current = sunEditor;
   };
-  const saveContent = async () => {
-    setContent((prevContent) => {
-      const latestContent = prevContent; // Now this gets the latest value
-      console.log(latestContent); // This will correctly log the latest content
-  
-      (async () => {
-        try {
-          setLoading(true);
-  
-          const response = await axios.put(
-            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`,
-            {
-              userEmail: user.email,
-              playlistId: playlistId,
-              videoId: videoId,
-              timestamp: 120,
-              text: latestContent,
-            }
-          );
-  
-          console.log(response);
-          toast.success("Notes Saved");
-  
-          // Update sessionStorage
-          const storageKey = `notes_${videoId}`;
-          sessionStorage.setItem(storageKey, latestContent);
-        } catch (error) {
-          toast.error("Failed to save notes: " + error);
-        } finally {
-          setLoading(false);
-        }
-      })();
-  
-      return prevContent; // Return the same value since we're not modifying state here
-    });
-  };
-  
-  
-   
-  const handleChange = (updatedContent) => {
-    setContent(() => updatedContent); // Ensures the latest value is set
-  };
-  
+
   // fetch content from server
   useEffect(() => {
     const fetchNotes = async () => {
       setLoading(true);
-      const storageKey = `notes_${videoId}`;
-      const cachedNotes = sessionStorage.getItem(storageKey);
-
-      if (cachedNotes) {
-        setContent(cachedNotes);
-        console.log("Using cached notes");
+        
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/getNotes`,
+          {
+            videoId,
+            playlistId,
+            userEmail: user?.email
+          }
+        );
+        
+        const noteText = response.data ? response.data.notes : "";
+      
+        setContent(decodeLatex(noteText));
+       
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+        setContent("");
+        toast.error("Failed to load notes");
+      } finally {
         setLoading(false);
-      } else {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`
-          );
-
-          const noteText = response.data[0] ? response.data[0].text : "";
-          setContent(decodeLatex(noteText));
-          console.log("Fetched notes from server");
-          // Store in sessionStorage
-          sessionStorage.setItem(storageKey, decodeLatex(noteText));
-
-        } catch (error) {
-          toast.error("Failed to fetch notes");
-
-        }
-        finally {
-          setLoading(false);
-        }
       }
     };
 
-    fetchNotes();
-  }, [videoId]);
-
-
-
-
-  // Dynamically update height based on parent container
+    if (videoId && playlistId && user?.email) {
+      fetchNotes();
+     
+    }
+  }, [videoId, playlistId, user?.email]);
+  
+  const handleChange = (updatedContent) => {
+   
+    setContent(updatedContent);
+  };
+  
+  // Pass the latest state when saving
+  const saveContent = async () => {
+    try {
+      setLoading(true);
+  
+      await axios.put(
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/saveNotes`,
+        {
+          userEmail: user?.email,
+          playlistId,
+          videoId,
+          text: editor.current?.getContents(),  // Get latest content from editor
+        }
+      );
+  
+      toast.success("Notes saved successfully");
+    } catch (error) {
+      console.error("Error saving notes:", error);
+      toast.error(`Failed to save notes: ${error.message || "Unknown error"}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+    // Dynamically update height based on parent container
   useEffect(() => {
     const updateHeight = () => {
       if (containerRef.current) {
@@ -123,20 +102,17 @@ const Editor = ({ videoId, playlistId }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className=" h-[100vh] flex flex-col p-4">
+    <div ref={containerRef} className="h-[100vh] flex flex-col p-4">
       <div className="flex-1">
-        <ToastContainer />
-
-        {
-          isLoading && (<>Loading...</>)
-        }
-
-        {
-          !isLoading &&
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-pulse text-gray-500">Loading editor...</div>
+          </div>
+        ) : (
           <SunEditor
-            height={`${editorHeight}px`} // Dynamically set height
+            height={`${editorHeight}px`}
             getSunEditorInstance={getSunEditorInstance}
-            setContents={content}
+            setContents={content || ''}
             autoFocus={false}
             onChange={handleChange}
             setOptions={{
@@ -147,10 +123,10 @@ const Editor = ({ videoId, playlistId }) => {
               katex: katex,
               buttonList: responsiveButtonList,
               responsiveToolbar: true,
-              callBackSave: saveContent, // Connect save button to function
+              callBackSave: saveContent,  
             }}
           />
-        }
+        )}
       </div>
     </div>
   );

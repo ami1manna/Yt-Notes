@@ -142,15 +142,22 @@ exports.login = async (req, res) => {
 
 // Logout
 exports.logout = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'None',
-    expires: new Date(0)
-  });
+  try {
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None'
+    });
 
-  res.json({
-    status: 'success',
-    message: 'Logged out successfully'
-  });
+    res.status(200).json({
+      status: 'success',
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message || 'Error logging out'
+    });
+  }
 };
+

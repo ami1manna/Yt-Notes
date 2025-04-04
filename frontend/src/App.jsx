@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import AddPlaylist from './components/widgets/AddPlaylist';
 import Login from './pages/Login';
 import CourseScreen from './pages/CourseScreen';
+import DashBoard from './pages/DashBoard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,8 +21,8 @@ const router = createBrowserRouter(
       {/* Separate Routes for Login and Signup (No RootLayout) */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/courseScreen/:playlistIndex" element={<CourseScreen />} />
-
+      <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
+      <Route path='/dashboard' element={<DashBoard />} />
     </>
   )
 );
@@ -32,7 +35,11 @@ const router = createBrowserRouter(
  * @constructor
  */
 function App() {
-  return <RouterProvider router={router} />;
+  return <>
+  <RouterProvider router={router} />
+  <ToastContainer position="top-right" autoClose={3000} />
+  </>
+
 }
 
 export default App;

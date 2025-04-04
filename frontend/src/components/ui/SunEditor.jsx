@@ -85,7 +85,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
         "timestamp": 120,
         "text":content
       });
-      console.log(response.data);
+      
     } catch (error) {
       console.error(error);
     }

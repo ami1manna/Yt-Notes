@@ -6,6 +6,7 @@ const playlistRoutes = require('./routes/playlistRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const videoRoutes = require('./routes/videoRouters');
 const customTranscriptRoutes = require('./routes/transcriptRoutes');
+const sectionRoutes = require('./routes/sectionRoutes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -34,6 +35,7 @@ app.use('/playlists', playlistRoutes);
 app.use('/video', notesRoutes);
 app.use('/video', videoRoutes);
 app.use('/transcript',customTranscriptRoutes);
+app.use('/section',sectionRoutes)
 // Health check route
 app.get('/', (req, res) => {
   res.json({ status: 'healthy', message: "API is working on Vercel!" });
