@@ -77,7 +77,14 @@ const SummaryList = ({ videoId }) => {
     }));
   };
 
- 
+  // Render formulas with MathJax
+  const renderFormula = (formula) => {
+    return (
+      <MathJax>
+        <div>{formula}</div>
+      </MathJax>
+    );
+  };
 
   if (loading) {
     return (
@@ -109,12 +116,12 @@ const SummaryList = ({ videoId }) => {
       <div className="flex-1 overflow-y-auto h-full bg-gray-50 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="bg-orange-500 shadow sticky top-0 z-10 dark:bg-gray-900">
-            <div className="px-2 py-2 lg:px-4 lg:py-4">
-              <h6 className="text-xl md:text-2xl font-bold text-white">{notes.title}</h6>
+          <div className="bg-orange-100  shadow   top-0 z-10 dark:bg-gray-900 ">
+            <div className="px-4 py-4">
+              <h6 className="text-xl md:text-2xl font-bold text-black dark:text-white">{notes.title}</h6>
               <div className="mt-1 flex items-center">
-                <Award className="h-4 w-4 text-white mr-1" />
-                <span className="text-xs font-medium text-white dark:text-gray-100">{notes.difficulty} Level</span>
+                <Award className="h-4 w-4 text-black dark:text-white mr-1" />
+                <span className="text-xs font-medium text-black dark:text-white">{notes.difficulty} Level</span>
               </div>
             </div>
           </div>
@@ -272,7 +279,7 @@ const SummaryList = ({ videoId }) => {
                               {topic.formulas.map((formula, idx) => (
                                 <div key={idx} className="mb-3 last:mb-0 p-3 bg-white dark:bg-gray-800 rounded-md shadow-sm">
                                   <div className="font-mono text-sm break-words text-gray-900 dark:text-white">
-                                     {formula.formula}
+                                    {renderFormula(formula.formula)}
                                   </div>
                                   {formula.explanation && (
                                     <p className="mt-1 text-xs text-gray-700 dark:text-gray-300">{formula.explanation}</p>
