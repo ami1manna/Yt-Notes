@@ -16,7 +16,7 @@ exports.addTranscript = async (req, res) => {
         
         if(existingTranscript)
         {
-            return res.status(200).json({ message: 'Transcript already exists', transcript: existingTranscript });
+            return res.status(200).json({ message: 'Transcript already exists',  existingTranscript });
         }
         // Fetch transcript from external API
         const options = {

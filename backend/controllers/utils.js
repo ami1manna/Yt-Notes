@@ -17,6 +17,8 @@ const formatTime = (seconds) => {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
+ 
+
 // Generate structured educational notes from a transcript
 const generateEducationalNotes = async (transcript) => {
   try {
@@ -29,7 +31,7 @@ const generateEducationalNotes = async (transcript) => {
       {
         "title": "Descriptive title of the content",
         "overview": "A concise 2-3 sentence summary of the main concepts covered",
-        "difficulty": "Beginner/Intermediate/Advanced",
+        "difficulty": "Beginner/Intermediate/Advanced/General",
         "prerequisites": ["List of required knowledge"],
         "topics": [
           {
@@ -82,6 +84,7 @@ const generateEducationalNotes = async (transcript) => {
     if (!jsonMatch) {
       throw new Error('Failed to extract valid JSON from AI response');
     }
+    
     
     return JSON.parse(jsonMatch[0]);
   } catch (error) {
