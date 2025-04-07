@@ -6,6 +6,7 @@ exports.protect = async (req, res, next) => {
   try {
     // Get token from cookie
     const token = req.cookies.jwt;
+     
     
     if (!token) {
       return res.status(401).json({ message: 'Not authenticated' });
