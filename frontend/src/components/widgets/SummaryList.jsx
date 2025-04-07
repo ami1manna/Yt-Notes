@@ -28,12 +28,12 @@ const SummaryList = ({ videoId }) => {
   };
 
   useEffect(() => {
-    console.log(videoId);
+     
     const fetchNotes = async () => {
       setLoading(true);
       try {
         const result = await getEducationalNotes(videoId);
-        console.log(result);
+       
         if (result.error) {
           setError(result.error);
         } else {
