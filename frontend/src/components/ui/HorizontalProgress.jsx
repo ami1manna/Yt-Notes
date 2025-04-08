@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const HorizontalProgress = ({ progress = 70, target = 100 }) => {
+const HorizontalProgress = ({ progress = 0, target = 100 }) => {
   const [animatedProgress, setAnimatedProgress] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
 
@@ -19,7 +19,7 @@ const HorizontalProgress = ({ progress = 70, target = 100 }) => {
   const statusText = isCompleted ? "Completed" : "In Progress";
  
   return (
-    <div className="relative py-4  max-w-sm mx-auto">
+    <div className="py-4    mx-auto">
       <div className="flex mb-2 items-center justify-between">
         <div>
           <span className={`text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full ${isCompleted?"text-green-600 bg-green-200":"text-teal-600 bg-teal-200"}`}>

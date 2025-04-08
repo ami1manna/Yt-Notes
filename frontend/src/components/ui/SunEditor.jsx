@@ -9,7 +9,7 @@ import IconButton from "./IconButton";
 import {Save} from "lucide-react";
 
 import axios from 'axios';
-import { PlaylistContext } from "../../context/PlaylistsContext";
+ 
 
 const SunEditorComponent = ({playlistId,videoId}) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -33,9 +33,13 @@ const SunEditorComponent = ({playlistId,videoId}) => {
       ['preview', 'print'],
       ['save', 'template']
     ],
+
+    
     defaultTag: 'p',
-    minHeight: '300px',
+    stickyToolbar: "40",
+    rtl: false,
     showPathLabel: false,
+    
     attributesWhitelist: {
       all: 'style',
       table: 'cellpadding|width|cellspacing|height|style',
@@ -51,7 +55,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
      
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/video/notes/${user.email}/${playlistId}/${videoId}`);
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes/${user.email}/${playlistId}/${videoId}`);
         if(response.data[0]) 
           setContent(response.data[0].text);
         else
@@ -74,14 +78,14 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   const saveContent = async () => {
     try {
        setIsLoading(true);
-      const response = await axios.put('http://localhost:5000/video/notes', {
+      const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/notes`, {
         "userEmail": user.email,
         "playlistId": playlistId,
         "videoId": videoId,
         "timestamp": 120,
         "text":content
       });
-      console.log(response.data);
+      
     } catch (error) {
       console.error(error);
     }
@@ -91,9 +95,9 @@ const SunEditorComponent = ({playlistId,videoId}) => {
   };
 
   return (
-    <div className="editor-container w-full ">
+    <div className="w-full ">
      <div className="flex w-full justify-end items-center ">
-      <IconButton type="button" className='  w-28 h-full p-3 lg:p-4 mb-2 lg:my-3 ' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
+      <IconButton type="button" className='mb-2 px-2' icon={Save} onClick={saveContent} isLoading={isLoading}>Save</IconButton>
      </div>
 
       
@@ -148,7 +152,7 @@ const SunEditorComponent = ({playlistId,videoId}) => {
           font-size: 14px;
           ${isDarkMode ? 'background-color: #1a1a1a; color: #ffffff;' : ''}
         `}
-        height="400px"
+        height="500"
         setContents={content}
         hideToolbar={false}
         disable={false}
