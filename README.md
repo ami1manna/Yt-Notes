@@ -1,8 +1,10 @@
 
-
-https://github.com/user-attachments/assets/4609db55-2cb3-43b6-a201-9d9fb4a07ec4
-
+ 
 Here's a detailed GitHub README file for your project:  
+
+
+https://github.com/user-attachments/assets/27fb7ab4-db23-438d-9ef6-6fe2fa2d4cd8
+
 
 ---
 
@@ -24,13 +26,12 @@ A powerful web application that streamlines note-taking and progress tracking fo
 
 ---
 
-## 🖼️ **Project Screenshots**  
-| Playlist Dashboard  | Video Player with Notes & Summary |
-|---------------------|--------------------------------|
-|  ![image](https://github.com/user-attachments/assets/287455df-b8ce-426b-911b-4494157efb13) |![image](https://github.com/user-attachments/assets/c51cfbc4-b368-44d7-ba5b-7189d25a01ac) |
+## 🖼️ **Project Screenshots**
 
+| Playlist Dashboard | Video Player with Notes & Summary |
+|--------------------|-----------------------------------|
+|  ![Video Player with Notes & Summary](https://github.com/user-attachments/assets/34dea50e-bc75-41ac-b23b-1c09edc65fb4) | ![Playlist Dashboard](https://github.com/user-attachments/assets/2bec436d-cafa-468d-a186-3245c7cb8ba7) |
 
----
 
 ## 🛠️ **Tech Stack**  
 ### **Frontend** 🌐  
