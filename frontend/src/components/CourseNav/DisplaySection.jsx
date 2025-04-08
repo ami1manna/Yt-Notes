@@ -68,7 +68,7 @@ const DisplaySection = ({ sectionData, setVideoStatus, playlistId,  setIsOpen })
               <div className="pl-4 space-y-1 border-l-2 border-gray-200 dark:border-gray-700 ml-2">
                 {section.videos.map((video, videoIndex) => (
                   <div
-                    key={video.videoId}
+                    key={videoIndex}
                     className={`
                       mb-2 group rounded-md
                       ${userPlaylists[playlistId].selectedVideoId === video.videoId ? 'bg-blue-50 dark:bg-blue-900/20' : ''}

@@ -12,7 +12,7 @@ const DisplayVideo = ({ videoData,  setSelectedVideoId, setVideoStatus, playlist
     <div className="p-3 space-y-1">
       {videoData.map((video, index) => (
         <div
-          key={video.videoId}
+          key={index}
           className={`
             mb-2 
             rounded-md 

@@ -7,7 +7,7 @@ import { responsiveButtonList, templates } from "./toolbarConfig.js";
 import { decodeLatex } from "./utils.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 // third party
-import axios from "axios";
+import axios from 'axios';
 import { toast } from "react-toastify";
 
 const Editor = ({ videoId, playlistId }) => {

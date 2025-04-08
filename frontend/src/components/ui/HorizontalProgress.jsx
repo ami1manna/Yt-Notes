@@ -5,37 +5,61 @@ const HorizontalProgress = ({ progress = 0, target = 100 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setAnimatedProgress(progress), 200); // Delay for smooth transition
-     
-    if (progress === target) {
+    const timeout = setTimeout(() => setAnimatedProgress(progress), 200);
+    
+    if (progress >= target) {
       setIsCompleted(true);
     } else {
       setIsCompleted(false);
     }
+    
     return () => clearTimeout(timeout);
-  }, [progress]);
+  }, [progress, target]);
 
-  const percentage = Math.min(100, Math.max(0, (animatedProgress / target) * 100)); 
+  const percentage = Math.min(100, Math.max(0, (animatedProgress / target) * 100));
   const statusText = isCompleted ? "Completed" : "In Progress";
- 
+
   return (
-    <div className="py-4    mx-auto">
-      <div className="flex mb-2 items-center justify-between">
+    <div className="py-6 w-full max-w-md mx-auto">
+      {/* Top row with status and percentage */}
+      <div className="flex mb-4 items-center justify-between">
         <div>
-          <span className={`text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full ${isCompleted?"text-green-600 bg-green-200":"text-teal-600 bg-teal-200"}`}>
+          <span
+            className={`text-sm tracking-wide font-medium py-1 px-3 rounded-md ${
+              isCompleted 
+                ? "text-green-800 bg-green-100" 
+                : "text-blue-800 bg-blue-100"
+            }`}
+          >
             {statusText}
           </span>
         </div>
         <div className="text-right">
-          <span className={`text-xs font-semibold inline-block ${isCompleted?"text-green-600":"text-teal-600"}`}>
+          <span className="text-base font-bold inline-block text-gray-800">
             {Math.round(percentage)}%
           </span>
         </div>
       </div>
-      <div className="flex rounded-full h-2 bg-gray-200">
+      
+      {/* Progress and target values */}
+      <div className="flex mb-2 items-center justify-between text-sm text-gray-600">
+        <span className="font-medium">Progress: {animatedProgress}</span>
+        <span className="font-medium">Target: {target}</span>
+      </div>
+      
+      {/* Progress bar */}
+      <div className="flex rounded-md h-3 bg-gray-100 shadow-inner overflow-hidden">
         <div
           style={{ width: `${percentage}%` }}
-          className={`rounded-full  ${isCompleted?"bg-green-600":"bg-teal-600"} transition-all duration-700 ease-out`}
+          className={`${
+            isCompleted 
+              ? "bg-green-500" 
+              : percentage < 30 
+                ? "bg-blue-400" 
+                : percentage < 70 
+                  ? "bg-blue-500" 
+                  : "bg-blue-600"
+          } transition-all duration-700 ease-out`}
         ></div>
       </div>
     </div>

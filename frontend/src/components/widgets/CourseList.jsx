@@ -6,27 +6,34 @@ import { NavLink } from "react-router-dom";
 
 const CourseList = () => {
   const { userPlaylists } = useContext(PlaylistContext);
+  const hasPlaylists = Object.keys(userPlaylists).length > 0;
 
   return (
-    <>
-    
-      {Object.keys(userPlaylists).length === 0 ? (
+    <div className="w-full">
+      {!hasPlaylists ? (
         <FallBackScreen />
       ) : (
-        <div className="h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 w-full auto-rows-auto">
-          {Object.entries(userPlaylists).map(([playlistId, playlist]) => (
-            <NavLink to={`/courseScreen/${playlistId}`} key={playlistId}>
-              <VideoCard
-                title={playlist.channelTitle || playlist.title || "Untitled Playlist"}
-                thumbnailUrl={playlist.playlistThumbnailUrl || ""}
-                progress={playlist.playlistProgress || 0}
-                target={playlist.playlistLength || 0}
-              />
-            </NavLink>
-          ))}
-        </div>
+        <>
+          <h2 className="text-xl font-semibold mb-4">Your Courses</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 gap-y-6">
+            {Object.entries(userPlaylists).map(([playlistId, playlist]) => (
+              <NavLink 
+                to={`/courseScreen/${playlistId}`} 
+                key={playlistId}
+                className="block h-full transition-transform duration-200 hover:no-underline"
+              >
+                <VideoCard
+                  title={playlist.playlistTitle || "Untitled Playlist"}
+                  thumbnailUrl={playlist.playlistThumbnailUrl || "https://via.placeholder.com/320x180?text=No+Thumbnail"}
+                  progress={playlist.playlistProgress || 0}
+                  target={playlist.playlistLength || 1}
+                />
+              </NavLink>
+            ))}
+          </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

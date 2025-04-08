@@ -1,12 +1,8 @@
-// for DATABASE OPERATION
-import axios from "axios";
-import { useContext } from "react";
+import axios from 'axios'; 
 import { toast } from "react-toastify";
- 
-
 
 export const extractPlaylistId = (url) => {
-   
+
 
   try {
     if (!url || typeof url !== "string") {
@@ -35,7 +31,7 @@ export const extractPlaylistId = (url) => {
 
     return { error: "Invalid YouTube playlist URL." };
   } catch (error) {
-     
+
     return { error: "Failed to extract playlist ID." };
   }
 };
@@ -49,13 +45,16 @@ export const validatePlaylistUrl = (url) => {
 
 
 // DATABASE UTILS
- // Remove useContext(PlaylistContext) from here
+// Remove useContext(PlaylistContext) from here
 export const fetchUserPlaylists = async (email, setPlaylistData) => {
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/getPlaylist`,
       { userEmail: email },
-      { headers: { "Content-Type": "application/json" } }
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+      }
     );
 
     const userData = response.data;
@@ -79,7 +78,7 @@ export const fetchUserPlaylists = async (email, setPlaylistData) => {
   }
 };
 
-  
+
 
 
 export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlaylistData, inputRef, navigate) => {
@@ -108,8 +107,8 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
 
     if (response.data.playlist) {
       // setPlaylistData(response.data.playlist);
-      await fetchUserPlaylists(user.email,setPlaylistData);
-       
+      await fetchUserPlaylists(user.email, setPlaylistData);
+
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }
 
@@ -122,9 +121,9 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
     setLoading(false);
   }
 };
- 
-export const handlePlaylistSection = async (url, user, setLoading, setPlaylistData , ) => {
-   
+
+export const handlePlaylistSection = async (url, user, setLoading, setPlaylistData,) => {
+
 
   try {
 
@@ -135,7 +134,7 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
 
     // Fetch playlist ID
     const playId = extractPlaylistId(url);
-     
+
 
     if (playId.error) {
       toast.error(playId.error, { position: "top-right", icon: "❌" });
@@ -144,7 +143,7 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
 
     setLoading(true);
 
-    
+
     const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/section/arrange`, {
       userEmail: user.email,
       playlistId: playId,
@@ -155,10 +154,10 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
       playlistId: playId,
       displaySection: true
     });
-    
+
 
     if (response.data.playlist && sectionFlag.data.message) {
-      await fetchUserPlaylists(user.email , setPlaylistData);
+      await fetchUserPlaylists(user.email, setPlaylistData);
       // setPlaylistData(response.data.playlist);
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }
@@ -166,7 +165,7 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
     return true;
   } catch (error) {
     const errorMessage = error.response?.data?.error || "Failed to arrange sections";
- 
+
     toast.error(errorMessage, { position: "top-right", icon: "❌" });
     return false;
   } finally {

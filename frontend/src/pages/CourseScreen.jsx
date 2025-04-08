@@ -200,8 +200,8 @@ const CourseScreen = () => {
                     }}
                 >
                     {/* Tab Navigation with Previous and Next buttons */}
-                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3">
-                        <IconButton
+                    <div className="flex items-center justify-around bg-gray-100 dark:bg-gray-800 p-3">
+                        {/* <IconButton
                             className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28  `}
                             icon={ArrowBigLeftDash}
                             iconPosition="left"
@@ -209,7 +209,7 @@ const CourseScreen = () => {
 
                         >
                             <span className="hidden sm:inline">Prev</span>
-                        </IconButton>
+                        </IconButton> */}
 
                         <div className="flex gap-1 items-center">
                             {["Transcript", "Summary", "Notes"].map((title, index) => (
@@ -229,7 +229,7 @@ const CourseScreen = () => {
                             ))}
                         </div>
 
-                        <IconButton
+                        {/* <IconButton
                             className={`bg-blue-500 hover:bg-blue-600 w-20 lg:w-28  `}
                             icon={ArrowBigRightDash}
                             iconPosition="right"
@@ -237,7 +237,7 @@ const CourseScreen = () => {
 
                         >
                             <span className="hidden sm:inline">Next</span>
-                        </IconButton>
+                        </IconButton> */}
                     </div>
 
                     {/* Tab Content */}

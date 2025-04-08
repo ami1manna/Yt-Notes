@@ -1,9 +1,10 @@
 const express = require('express');
 const { addTranscript, getTranscript } = require('../controllers/transcriptController');
 const transcriptController = require('../controllers/sumarizeController');
+const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-
+router.use(protect);
 router.post('/addTranscript' , addTranscript);
 router.get('/getTranscript',getTranscript);
  

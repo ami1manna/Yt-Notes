@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 
 const educationalNotesSchema = new mongoose.Schema({
-  videoId: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  videoId: {
+    type: String,
+    required: true,
+    unique: true
   },
-  title: { 
-    type: String, 
-    required: true 
-  },
-  overview: { 
+  title: {
     type: String,
     required: true
   },
-  difficulty: { 
-    type: String, 
-    enum: ["Beginner", "Intermediate", "Advanced"],
+  overview: {
+    type: String,
+    required: true
+  },
+  difficulty: {
+    type: String,
+
     default: "Intermediate"
   },
   prerequisites: [String],
@@ -54,17 +54,17 @@ const educationalNotesSchema = new mongoose.Schema({
     link: String,
     description: String      // Added for better context
   }],
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
-  updatedAt: { 
-    type: Date, 
-    default: Date.now 
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 }, { timestamps: true });
 
- 
+
 // educationalNotesSchema.index({ videoId: 1 });
 
 module.exports = mongoose.model('EducationalNotes', educationalNotesSchema);

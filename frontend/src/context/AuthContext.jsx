@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { fetchUserPlaylists } from "../utils/PlaylistUtils";
 
 export const AuthContext = createContext();
+ // Custom hook for easy context access
+ const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -12,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   
   // Use the PlaylistContext
-  const { setPlaylistData, resetPlaylist } = useContext(PlaylistContext);
+  const { setPlaylistData, resetPlaylist , userPlaylists } = useContext(PlaylistContext);
 
   // Check if the user is logged in and fetch data
   useEffect(() => {
@@ -26,10 +28,10 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true 
       });
       setUser(res.data.user);
-      
-  
-      // ✅ Pass setPlaylistData when calling fetchUserPlaylists
+   
       await fetchUserPlaylists(res.data.user.email, setPlaylistData);
+     
+
     } catch (error) {
       setUser(null);
     } finally {
@@ -49,6 +51,8 @@ export const AuthProvider = ({ children }) => {
       );
       setUser(res.data.user);
       
+       
+
       // ✅ Pass setPlaylistData here
       await fetchUserPlaylists(res.data.user.email, setPlaylistData);
       
@@ -93,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       
       setUser(null);
       toast.success(response.data.message, { position: "top-right", icon: "👋" });
-      console.log("Logout successful");
+       
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Logout failed";
       toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
@@ -102,8 +106,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Custom hook for easy context access
-  const useAuth = () => useContext(AuthContext);
+ 
 
   return (
     <AuthContext.Provider 
