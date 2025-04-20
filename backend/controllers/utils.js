@@ -27,6 +27,9 @@ const generateEducationalNotes = async (transcript) => {
       Generate comprehensive, well-structured educational notes from this transcript:
       ${formatTranscript(transcript)}
       
+       ### ⚠️ IMPORTANT ADDITIONAL GUIDELINES
+       - Format mathematical formulas properly: inline as $formula$ or block as $$formula$$
+
       Return a JSON object with the following structure:
       {
         "title": "Descriptive title of the content",
@@ -50,7 +53,7 @@ const generateEducationalNotes = async (transcript) => {
             ],
             "formulas": [
               {
-                "formula": "Mathematical formula",
+                "formula": "$$formula_here$$",
                 "explanation": "What the formula means and how to use it",
                 "timestamp": timestampInSeconds
               }
