@@ -79,7 +79,42 @@ export const fetchUserPlaylists = async (email, setPlaylistData) => {
 };
 
 
+// Add this function to your utils file (where fetchUserPlaylists and other functions are)
 
+export const deletePlaylist = async (userEmail, playlistId, setPlaylistData) => {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/delete`,
+      {
+        data: { 
+          userEmail: userEmail, 
+          playlistId: playlistId 
+        },
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+      }
+    );
+
+    if (response.data) {
+      // Option 1: Use the returned playlists from the response directly
+      if (response.data.playlists) {
+        setPlaylistData(response.data.playlists);
+      } else {
+        // Option 2: Fetch fresh playlists data
+        await fetchUserPlaylists(userEmail, setPlaylistData);
+      }
+      
+      toast.success("Course deleted successfully", { position: "top-right" });
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    const errorMessage = error.response?.data?.error || "Error deleting course";
+    toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
+    return false;
+  }
+};
 
 export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlaylistData, inputRef, navigate) => {
   try {

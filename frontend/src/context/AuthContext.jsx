@@ -6,7 +6,7 @@ import { fetchUserPlaylists } from "../utils/PlaylistUtils";
 
 export const AuthContext = createContext();
  // Custom hook for easy context access
- const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
