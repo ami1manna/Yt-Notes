@@ -25,6 +25,7 @@ const AddPlaylist = () => {
   };
 
   const addPlaylistHandler = async () => {
+    console.log(loading);
     const success = await handleAddPlaylist(
       playlistUrl,
       user,
@@ -33,7 +34,7 @@ const AddPlaylist = () => {
       inputRef,
       navigate
     );
-
+    console.log(loading);
     if (success) {
       setIsOpen(true);  
     }else{
@@ -58,8 +59,8 @@ const AddPlaylist = () => {
     >
       <div className="lg:p-7 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl mb-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Add New Playlist</h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">Enter a YouTube playlist URL to add it to your collection</p>
+         
+          <h3 className="text-gray-600 dark:text-gray-300 mb-6">Enter a YouTube playlist URL to add it to your collection</h3>
         </motion.div>
 
         <CustomInput
@@ -74,6 +75,7 @@ const AddPlaylist = () => {
           ref={inputRef}
           disabled={loading}
           className="transition-all duration-300 focus:ring-2 focus:ring-teal-500"
+          loading={loading}
         />
       </div>
 

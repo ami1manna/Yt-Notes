@@ -95,7 +95,7 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
       return false;
     }
 
-
+    
     setLoading(true);
 
     const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/add`, {
