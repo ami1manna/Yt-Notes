@@ -5,9 +5,10 @@ import { secondsToHHMM } from "../../utils/Coverter";
 import { PlaylistContext } from "../../context/PlaylistsContext";
 import { AuthContext } from "../../context/AuthContext";
 
-const DisplayVideo = ({ videoData,  setSelectedVideoId, setVideoStatus, playlistId, userEmail, setIsOpen }) => {
+const DisplayVideo = ({ videoData,  setVideoStatus, playlistId,  setIsOpen }) => {
   const {user} = useContext(AuthContext);
-  const {userPlaylists} = useContext(PlaylistContext);
+   
+  const {setSelectedVideoId , userPlaylists} = useContext(PlaylistContext);
   return (
     <div className="p-3 space-y-1">
       {videoData.map((video, index) => (

@@ -142,7 +142,7 @@ const CourseNav = ({ playListData, setVideoStatus, isSectioned, videoData, secti
                                 videoData={videoData}
                                 setVideoStatus={setVideoStatus}
                                 playlistId={playListData.playlistId}
-                                userEmail={user.email}
+                              
                                 setIsOpen={setIsOpen}
                             />
                         ) : (
@@ -150,7 +150,6 @@ const CourseNav = ({ playListData, setVideoStatus, isSectioned, videoData, secti
                                 sectionData={sectionData}
                                 setVideoStatus={setVideoStatus}
                                 playlistId={playListData.playlistId}
-                                userEmail={user.email}
                                 setIsOpen={setIsOpen}
                             />
                         )}
