@@ -9,6 +9,7 @@ const customTranscriptRoutes = require('./routes/transcriptRoutes');
 const sectionRoutes = require('./routes/sectionRoutes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const connectDB = require('./config/database');
 require('dotenv').config();
 
 const app = express();
@@ -26,9 +27,7 @@ app.use(cors({
 
 
 // Database connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+connectDB();
 
 // Routes
 app.use('/auth', authRoutes);
