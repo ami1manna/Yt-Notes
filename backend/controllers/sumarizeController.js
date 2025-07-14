@@ -1,6 +1,6 @@
-const NotesModel = require('../models/NotesModel');
+const NotesModel = require('../models/notes/NotesModel');
 const { generateEducationalNotes } = require('./utils');
-const TranscriptList = require('../models/transcriptModel');
+const TranscriptList = require('../models/notes/transcriptModel');
 
 exports.getEducationalNotes = async (req, res) => {
   const { videoId } = req.query;

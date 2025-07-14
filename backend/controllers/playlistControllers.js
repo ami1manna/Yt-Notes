@@ -1,4 +1,4 @@
-const UserPlaylist = require('../models/playlistModel');
+const UserPlaylist = require('../models/playlists/userPlaylistModel');
 const axios = require('axios');
 const { handleDelete, parseDuration } = require('../utils/VideoUtils');
  

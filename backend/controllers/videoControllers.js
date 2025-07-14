@@ -1,4 +1,4 @@
-const UserPlaylist = require('../models/playlistModel');
+const UserPlaylist = require('../models/playlists/userPlaylistModel');
 
 exports.toggleVideo = async (req, res) => {
     try {

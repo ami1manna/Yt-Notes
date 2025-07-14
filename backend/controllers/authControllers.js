@@ -1,4 +1,4 @@
-const User = require('../models/userModel');
+const User = require('../models/users/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); // Added missing import
 const { generateToken, cookieOptions, clearCookieOptions } = require('../utils/cookiesOption');

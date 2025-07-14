@@ -1,6 +1,6 @@
-const UserPlaylist = require('../models/playlistModel');
+const UserPlaylist = require('../models/playlists/userPlaylistModel');
 const axios = require('axios');
-const TranscriptList = require('../models/transcriptModel');
+const TranscriptList = require('../models/notes/transcriptModel');
 
 exports.addTranscript = async (req, res) => {
     const {videoId} = req.body;

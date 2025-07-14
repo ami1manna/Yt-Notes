@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const UserPlaylist = require('../models/playlistModel');
+const UserPlaylist = require('../models/playlists/userPlaylistModel');
 const { genAIModel } = require('../genAi/AiModel');
 const { handleDelete, checkEmpty, fetchVideoDetails, handleAddSectionVideo } = require('../utils/VideoUtils');
 
