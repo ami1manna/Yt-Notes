@@ -1,8 +1,8 @@
-import React, { useContext, useState, useRef } from "react";
+import  { useContext, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { PlaylistContext } from "@/context/PlaylistsContext";
-import { AuthContext } from "@/context/AuthContext";
+import { PlaylistSummariesContext } from "../../context/PlaylistSummariesContext";
+import { AuthContext } from "../../context/auth/AuthContextBase";
 import { PlusCircle, Loader2 } from "lucide-react";
 import StaticModal from "@/components/Dialogs/StaticModal";
 import CustomInput from "@/components/ui/CustomInput";
@@ -10,7 +10,7 @@ import CourseList from "./CourseList";
 import { handleAddPlaylist, handlePlaylistSection } from "../../utils/PlaylistUtils";
 
 const AddPlaylist = () => {
-  const { setPlaylistData } = useContext(PlaylistContext);
+  const { setPlaylistSummaries } = useContext(PlaylistSummariesContext);
   const { user } = useContext(AuthContext);
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,12 +25,13 @@ const AddPlaylist = () => {
   };
 
   const addPlaylistHandler = async () => {
-    console.log(loading);
+    // console.log(loading);
+    // console.log(user.userId);
     const success = await handleAddPlaylist(
       playlistUrl,
       user,
       setLoading,
-      setPlaylistData,
+      setPlaylistSummaries,
       inputRef,
       navigate
     );
@@ -44,7 +45,7 @@ const AddPlaylist = () => {
 
   const handleSection =  async (doesAgree) => {
     if (doesAgree) {
-      await handlePlaylistSection(playlistUrl, user, setLoading, setPlaylistData);
+      await handlePlaylistSection(playlistUrl, user, setLoading, setPlaylistSummaries);
       setPlaylistUrl(""); 
     }
     setIsOpen(false);  

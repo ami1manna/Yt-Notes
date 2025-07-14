@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlainButton from './PlainButton';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../context/auth/AuthContextBase';
 
 export default function Profile() {
   const { user, logout } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export default function Profile() {
 
   return (
     <div>
-      {/* <h1>Welcome {user.username}!</h1> */}
+      {/* <h1>Welcome {user.username}! </h1> */}
       <PlainButton onClick={logout}>Logout</PlainButton>
     </div>
   );

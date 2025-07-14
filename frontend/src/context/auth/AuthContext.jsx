@@ -1,24 +1,20 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { PlaylistContext } from "./PlaylistsContext";
+import { PlaylistSummariesContext } from "../PlaylistSummariesContext";
 import { toast } from "react-toastify";
-import { fetchUserPlaylists } from "../utils/PlaylistUtils";
-
-export const AuthContext = createContext();
- // Custom hook for easy context access
-export const useAuth = () => useContext(AuthContext);
+import { fetchUserPlaylists } from "../../utils/PlaylistUtils";
+import PropTypes from 'prop-types';
+import { AuthContext, useAuth } from "./AuthContextBase";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   
-  // Use the PlaylistContext
-  const { setPlaylistData, resetPlaylist , userPlaylists } = useContext(PlaylistContext);
+  // Use the PlaylistSummariesContext
+  const { setPlaylistSummaries, resetPlaylistSummaries } = useContext(PlaylistSummariesContext);
 
-  // Check if the user is logged in and fetch data
+  // We do NOT use localStorage for user info, since session is restored via /auth/me and JWT cookies
   useEffect(() => {
-    
     checkAuthStatus();
   }, []);
 
@@ -27,47 +23,48 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/me`, { 
         withCredentials: true 
       });
-      setUser(res.data.user);
-   
-      await fetchUserPlaylists(res.data.user.email, setPlaylistData);
-     
-
-    } catch (error) {
+      // Store userId as user.userId
+      const userObj = {
+        userId: res.data.user.id,
+        username: res.data.user.username,
+        email: res.data.user.email
+      };
+      setUser(userObj);
+      // Fetch playlist summaries using userId
+      await fetchUserPlaylists(userObj.userId, setPlaylistSummaries);
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
-  
-   
 
   const login = async (email, password) => {
     try {
-      setError(null);
       const res = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/login`, 
         { email, password }, 
         { withCredentials: true }
       );
-      setUser(res.data.user);
-      
-       
-
-      // ✅ Pass setPlaylistData here
-      await fetchUserPlaylists(res.data.user.email, setPlaylistData);
-      
+      // Store userId as user.userId
+      const userObj = {
+        userId: res.data.user.id,
+        username: res.data.user.username,
+        email: res.data.user.email
+      };
+      setUser(userObj);
+      // Fetch playlist summaries using userId
+      await fetchUserPlaylists(userObj.userId, setPlaylistSummaries);
       return res.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed";
-      setError(errorMessage);
+      toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
       throw error;
     }
   };
-  
 
   const signup = async (username, email, password) => {
     try {
-      setError(null);
       const res = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/signup`, 
         { username, email, password }, 
@@ -77,27 +74,22 @@ export const AuthProvider = ({ children }) => {
       return res.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Signup failed";
-      setError(errorMessage);
+      toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      // Clear localStorage
-      localStorage.clear();
-      // Reset playlist
-      resetPlaylist();
-      
+      // Reset playlist summaries
+      resetPlaylistSummaries();
       const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BASE_URL}/auth/logout`, 
         {}, 
         { withCredentials: true }
       );
-      
       setUser(null);
       toast.success(response.data.message, { position: "top-right", icon: "👋" });
-       
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Logout failed";
       toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
@@ -106,22 +98,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
- 
-
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        login, 
-        signup, 
-        logout, 
-        loading,
-        error,
-        isAuthenticated: !!user,
-        useAuth
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

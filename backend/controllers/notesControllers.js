@@ -1,33 +1,25 @@
-const UserPlaylist = require('../models/playlists/userPlaylistModel');
+const UserProgress = require('../models/playlists/userProgressModel');
+const User = require('../models/users/userModel');
 
 exports.addNoteToVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId, text } = req.body;
-        
-        // Find the user's playlist
-        const userPlaylist = await UserPlaylist.findOne({ userEmail });
-        if (!userPlaylist) {
-            return res.status(404).json({ error: 'User not found' });
+        const { userId, playlistId, videoId, text } = req.body;
+        // Find the user's progress document for this playlist
+        const userProgress = await UserProgress.findOne({ userId, playlistId });
+        if (!userProgress) {
+            return res.status(404).json({ error: 'User progress not found' });
         }
-
-        // Find the playlist
-        const playlist = userPlaylist.playlists.get(playlistId);
-
-        if (!playlist) {
-            return res.status(404).json({ error: 'Playlist not found' });
+        // Find the video status
+        const videoStatus = userProgress.videoStatus.get(videoId);
+        if (!videoStatus) {
+            return res.status(404).json({ error: 'Video not found in progress' });
         }
-
-        // get VideoId
-        const video = playlist.videos.get(videoId);
-
         // Update the notes for the video
-        video.notes = text; 
-
-        // Save the updated user playlist
-        await userPlaylist.save();
-        
-        
-        res.status(201).json({ message: 'Note added successfully', notes: video.notes });
+        videoStatus.notes = text;
+        userProgress.videoStatus.set(videoId, videoStatus);
+        // Save the updated user progress
+        await userProgress.save();
+        res.status(201).json({ message: 'Note added successfully', notes: videoStatus.notes });
     } catch (error) {
         res.status(400).json({ error: error.message });
         console.log(error);
@@ -36,28 +28,18 @@ exports.addNoteToVideo = async (req, res) => {
 
 exports.getNotesForVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId } = req.body;
-
-        // Find the user's playlist document
-        const userPlaylist = await UserPlaylist.findOne({ userEmail });
-        if (!userPlaylist) {
-            return res.status(404).json({ error: 'User not found' });
+        const { userId, playlistId, videoId } = req.body;
+        // Find the user's progress document for this playlist
+        const userProgress = await UserProgress.findOne({ userId, playlistId });
+        if (!userProgress) {
+            return res.status(404).json({ error: 'User progress not found' });
         }
-
-        // Get the playlist from the Map
-        const playlist = userPlaylist.playlists.get(playlistId);
-        if (!playlist) {
-            return res.status(404).json({ error: 'Playlist not found' });
+        // Find the video status
+        const videoStatus = userProgress.videoStatus.get(videoId);
+        if (!videoStatus) {
+            return res.status(404).json({ error: 'Video not found in progress' });
         }
-
-        // Get the video from the Map
-        const video = playlist.videos.get(videoId);
-        if (!video) {
-            return res.status(404).json({ error: 'Video not found' });
-        }
-        
-
-        res.status(200).json({ notes: video.notes });
+        res.status(200).json({ notes: videoStatus.notes });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -65,32 +47,22 @@ exports.getNotesForVideo = async (req, res) => {
 
 exports.deleteNoteFromVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId } = req.body;
-
-        // Find the user's playlist document
-        const userPlaylist = await UserPlaylist.findOne({ userEmail });
-        if (!userPlaylist) {
-            return res.status(404).json({ error: 'User not found' });
+        const { userId, playlistId, videoId } = req.body;
+        // Find the user's progress document for this playlist
+        const userProgress = await UserProgress.findOne({ userId, playlistId });
+        if (!userProgress) {
+            return res.status(404).json({ error: 'User progress not found' });
         }
-
-        // Get the playlist from the Map
-        const playlist = userPlaylist.playlists.get(playlistId);
-        if (!playlist) {
-            return res.status(404).json({ error: 'Playlist not found' });
+        // Find the video status
+        const videoStatus = userProgress.videoStatus.get(videoId);
+        if (!videoStatus) {
+            return res.status(404).json({ error: 'Video not found in progress' });
         }
-
-        // Get the video from the Map
-        const video = playlist.videos.get(videoId);
-        if (!video) {
-            return res.status(404).json({ error: 'Video not found' });
-        }
-
         // Clear the notes
-        video.notes = "";  
-
+        videoStatus.notes = "";
+        userProgress.videoStatus.set(videoId, videoStatus);
         // Save the updated document
-        await userPlaylist.save();
-
+        await userProgress.save();
         res.status(200).json({ message: 'All notes deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });

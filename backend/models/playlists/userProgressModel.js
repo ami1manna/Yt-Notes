@@ -19,7 +19,9 @@ const userProgressSchema = new mongoose.Schema({
     type: Map,
     of: sectionProgressSchema,
     default: {}
-  }
+  },
+  displaySection:{type:Boolean , default:false}
+
 }, { timestamps: true });
 
 userProgressSchema.index({ userId: 1, playlistId: 1 }, { unique: true });

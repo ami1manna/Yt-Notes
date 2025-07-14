@@ -32,7 +32,7 @@ connectDB();
 // Routes
 app.use('/auth', authRoutes);
 app.use('/playlists', playlistRoutes);
-app.use('/video', notesRoutes);
+app.use('/notes', notesRoutes);
 app.use('/video', videoRoutes);
 app.use('/transcript',customTranscriptRoutes);
 app.use('/section',sectionRoutes)

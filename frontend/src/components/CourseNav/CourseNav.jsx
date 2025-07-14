@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/auth/AuthContextBase";
 import { Menu, X, Bookmark, ArrowLeft } from 'lucide-react';
 import CourseNavTitle from "./CourseNavTitle";
 import DisplayVideo from "./DisplayVideo";
@@ -56,16 +56,32 @@ const CourseNav = ({ playListData, setVideoStatus, isSectioned, videoData, secti
         };
     }, [isOpen]);
 
-    // Track progress
-    const progress = isSectioned 
-        ? Object.values(sectionData).reduce((acc, section) => acc + section.completedLength, 0)
-        : videoData.filter(video => video.done).length;
-    
-    const total = isSectioned 
-        ? Object.values(sectionData).reduce((acc, section) => acc + section.sectionLength, 0) 
+    // Calculate progress and total
+    const progress = isSectioned
+        ? Object.values(sectionData).reduce((acc, section) => {
+            // Use completedLength if present, else count done videos
+            if (typeof section.completedLength === 'number') {
+                return acc + section.completedLength;
+            } else if (Array.isArray(section.videos)) {
+                return acc + section.videos.filter(v => v.done).length;
+            } else {
+                return acc;
+            }
+        }, 0)
+        : videoData.filter(video => video && typeof video.done !== 'undefined' && video.done).length;
+    const total = isSectioned
+        ? Object.values(sectionData).reduce((acc, section) => {
+            // Use sectionLength if present, else videos.length
+            if (typeof section.sectionLength === 'number') {
+                return acc + section.sectionLength;
+            } else if (Array.isArray(section.videos)) {
+                return acc + section.videos.length;
+            } else {
+                return acc;
+            }
+        }, 0)
         : videoData.length;
-    
-    const percentComplete = Math.round((progress / total) * 100);
+    const percentComplete = total > 0 ? Math.round((progress / total) * 100) : 0;
 
     return (
         <>

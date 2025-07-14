@@ -3,11 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
-import { PlaylistProvider } from './context/PlaylistsContext.jsx'
-import { AuthProvider } from './context/AuthContext.jsx'
+import { PlaylistsProvider } from './context/PlaylistsContext.jsx'
+import { AuthProvider } from './context/auth/AuthContext.jsx'
 import axios from 'axios';
 import { TranscriptProvider } from './context/TranscriptContext.jsx'
 import { EducationalNotesProvider } from './context/EducationalNotesContext.jsx'
+import { PlaylistSummariesProvider } from './context/PlaylistSummariesContext.jsx';
 
 axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -19,13 +20,15 @@ createRoot(document.getElementById('root')).render(
 
     <TranscriptProvider>
       <EducationalNotesProvider>
-        <PlaylistProvider>
-          <AuthProvider>
-            <ThemeProvider>
-              <App />
-            </ThemeProvider>
-          </AuthProvider>
-        </PlaylistProvider>
+        <PlaylistSummariesProvider>
+          <PlaylistsProvider>
+            <AuthProvider>
+              <ThemeProvider>
+                <App />
+              </ThemeProvider>
+            </AuthProvider>
+          </PlaylistsProvider>
+        </PlaylistSummariesProvider>
       </EducationalNotesProvider>
     </TranscriptProvider>
   </StrictMode>,

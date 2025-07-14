@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const videoSchema = require('./videoModel');
 const sectionSchema = require('./sectionModel');
-
+ 
 const basePlaylistSchema = new mongoose.Schema({
   playlistId: { type: String, required: true, unique: true },
   playlistTitle: { type: String, required: true },

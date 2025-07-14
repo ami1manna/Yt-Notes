@@ -1,60 +1,41 @@
-const UserPlaylist = require('../models/playlists/userPlaylistModel');
+const UserProgress = require('../models/playlists/userProgressModel');
+const User = require('../models/users/userModel');
 
 exports.toggleVideo = async (req, res) => {
     try {
-        const { userEmail, playlistId, videoId } = req.body;
+        const { userId, playlistId, videoId } = req.body;
 
-        // Find the user's playlist document
-        const userPlaylist = await UserPlaylist.findOne({ userEmail });
+        // NOTE: In production, always verify req.body.userId matches the authenticated user.
 
-        if (!userPlaylist) {
-            return res.status(404).json({ error: 'User not found' });
+        // Find the user's progress document for this playlist
+        const userProgress = await UserProgress.findOne({ userId, playlistId });
+
+        if (!userProgress) {
+            return res.status(404).json({ error: 'User progress not found' });
         }
 
-        // Find the playlist
-        const playlist = userPlaylist.playlists.get(playlistId);
-        if (!playlist) {
-            return res.status(404).json({ error: 'Playlist not found' });
-        }
-
-        // Find the video
-        const video = playlist.videos.get(videoId);
-        if (!video) {
-            return res.status(404).json({ error: 'Video not found' });
+        // Find the video status
+        const videoStatus = userProgress.videoStatus.get(videoId);
+        if (!videoStatus) {
+            return res.status(404).json({ error: 'Video not found in progress' });
         }
 
         // Toggle video done state
-        video.done = !video.done;
+        videoStatus.done = !videoStatus.done;
+        userProgress.videoStatus.set(videoId, videoStatus);
 
-        // Update playlist progress
-         playlist.playlistProgress = video.done ? playlist.playlistProgress + 1 : playlist.playlistProgress - 1;
-        
-        let updatedSection = null;
-        // Update sections containing the video
-        for (let [sectionId, section] of playlist.sections.entries()) {
-            if (section.videoIds.includes(videoId)) {
-                // Update completed length based on new `video.done` state
-                section.completedLength += video.done ? 1 : -1;
-
-                // Recalculate section progress percentage
-                section.progressPercentage = section.sectionLength > 0
-                    ? Math.round((section.completedLength / section.sectionLength) * 100)
-                    : 0;
-                
-                updatedSection = section;    
-                // break loop
-                break;
-            }
-        }
+        // Update playlist progress (recalculate percentage)
+        const totalVideos = userProgress.videoStatus.size;
+        const completedVideos = Array.from(userProgress.videoStatus.values()).filter(v => v.done).length;
+        userProgress.playlistProgress = totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0;
 
         // Save the updated document
-        await userPlaylist.save();
+        await userProgress.save();
 
         res.status(200).json({
             message: 'Video status toggled successfully',
-            video,
-            playlistProgress: playlist.playlistProgress,
-            updatedSection: updatedSection
+            videoStatus,
+            playlistProgress: userProgress.playlistProgress
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

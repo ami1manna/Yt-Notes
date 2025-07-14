@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/auth/AuthContextBase";
 import { useNavigate } from "react-router-dom";
 import TextButton from "../components/ui/TextButton";
 

@@ -1,4 +1,4 @@
-const UserPlaylist = require('../models/playlists/userPlaylistModel');
+const UserProgress = require('../models/playlists/userProgressModel');
 const axios = require('axios');
 const TranscriptList = require('../models/notes/transcriptModel');
 
