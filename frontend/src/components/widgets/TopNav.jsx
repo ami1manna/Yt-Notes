@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { NotebookPenIcon, Menu, X, Home, LayoutDashboard } from "lucide-react";
+import { NotebookPenIcon, Menu, X, Home, LayoutDashboard, Users } from "lucide-react";
 import ThemeToggle from "../ui/ThemeToggle";
 import Profile from "../ui/Profile";
 
@@ -47,11 +47,12 @@ const TopNav = () => {
   const navLinks = [
     { to: "/", label: "Home", icon: Home },
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/groups", label: "Groups", icon: Users },
   ];
 
   return (
     <nav
-      className={`fixed w-full top-0 z-500 transition-all duration-300 ${
+      className={`fixed w-full top-0 z-[999] transition-all duration-300 ${
         isScrolled
           ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg"
           : "bg-white dark:bg-gray-900"

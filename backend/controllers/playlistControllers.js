@@ -1,78 +1,21 @@
 const UserProgress = require('../models/playlists/userProgressModel');
 const axios = require('axios');
-const { handleDelete, parseDuration } = require('../utils/VideoUtils');
+const { handleDelete, parseDuration, fetchPlaylistFromYouTube } = require('../utils/VideoUtils');
 const BasePlaylist = require('../models/playlists/base/basePlaylistModel');
  
 // Helper function to convert ISO 8601 duration (PT5M30S) to seconds
 exports.addPlaylist = async (req, res) => {
   try {
     const { userId, playlistId } = req.body;
-    const API_KEY = process.env.YOUTUBE_API_KEY;
-
     // 1. Check if the base playlist exists
     let basePlaylist = await BasePlaylist.findOne({ playlistId });
     if (!basePlaylist) {
-      // Fetch playlist data from YouTube API
-      async function getAllPlaylistItems(playlistId) {
-        let allItems = [];
-        let nextPageToken = '';
-        do {
-          const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
-            params: {
-              part: 'snippet',
-              maxResults: 50,
-              playlistId,
-              pageToken: nextPageToken,
-              key: API_KEY,
-            },
-          });
-          allItems = [...allItems, ...response.data.items];
-          nextPageToken = response.data.nextPageToken;
-        } while (nextPageToken);
-        return allItems;
-      }
-      async function getVideoDetails(videoIds) {
-        const batchSize = 50;
-        const promises = [];
-        for (let i = 0; i < videoIds.length; i += batchSize) {
-          const batchIds = videoIds.slice(i, i + batchSize).join(',');
-          promises.push(
-            axios.get('https://www.googleapis.com/youtube/v3/videos', {
-              params: { part: 'contentDetails', id: batchIds, key: API_KEY },
-            })
-          );
-        }
-        const responses = await Promise.all(promises);
-        return responses.flatMap(response => response.data.items);
-      }
-      const videosData = await getAllPlaylistItems(playlistId);
-      if (!videosData.length) {
-        return res.status(404).json({ error: 'Playlist is empty or invalid' });
-      }
-      const videoIds = videosData.map(item => item.snippet.resourceId.videoId);
-      const videoDetails = await getVideoDetails(videoIds);
-      // Build videos array for base playlist
-      const videos = videosData.map(item => {
-        const videoId = item.snippet.resourceId.videoId;
-        const videoDetail = videoDetails.find(v => v.id === videoId);
-        return {
-          videoId,
-          title: item.snippet.title,
-          thumbnailUrl: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
-          duration: videoDetail ? parseDuration(videoDetail.contentDetails.duration) : 0
-        };
-      });
-      const videoOrder = videoIds;
-      // For now, sections is empty (can be arranged later)
+      // Fetch playlist data from YouTube using utility
+      const API_KEY = process.env.YOUTUBE_API_KEY;
+      const playlistData = await fetchPlaylistFromYouTube(playlistId, API_KEY);
       basePlaylist = await BasePlaylist.create({
         playlistId,
-        playlistTitle: videosData[0].snippet.title,
-        playlistUrl: `https://www.youtube.com/playlist?list=${playlistId}`,
-        channelTitle: videosData[0].snippet.channelTitle,
-        playlistThumbnailUrl: videosData[0].snippet.thumbnails.high?.url || videosData[0].snippet.thumbnails.default?.url,
-        totalDuration: videos.reduce((sum, v) => sum + (v.duration || 0), 0),
-        videos,
-        videoOrder,
+        ...playlistData,
         sections: []
       });
     }

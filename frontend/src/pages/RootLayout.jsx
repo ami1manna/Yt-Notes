@@ -9,7 +9,7 @@ const RootLayout = () => {
           
         <div className='w-screen h-screen flex flex-col'>
             <TopNav />
-            <div className='flex flex-1 w-full px-5'>
+            <div className='flex flex-1 w-full px-5 pt-16'>
             <Outlet  />
             </div>
         </div>

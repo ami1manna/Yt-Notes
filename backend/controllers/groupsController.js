@@ -1,7 +1,11 @@
 
-const GroupInviteModel = require('../../models/groups/GroupInviteModel');
-const GroupModel = require('../../models/groups/GroupModel');
-const User = require('../../models/users/userModel');
+const GroupInviteModel = require('../models/groups/GroupInviteModel');
+const GroupModel = require('../models/groups/GroupModel');
+const User = require('../models/users/userModel');
+
+const { genAIModel } = require('../../genAi/AiModel');
+const axios = require('axios');
+const {fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
 
 
 // Create a new group
@@ -154,6 +158,86 @@ exports.getMyInvites = async (req, res) => {
   try {
     const invites = await GroupInviteModel.find({ invitedUserId: req.user._id, status: 'pending' }).populate('groupId');
     res.json({ success: true, invites });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Share a playlist with a group (any member)
+exports.sharePlaylistWithGroup = async (req, res) => {
+  try {
+    const groupId = req.params.groupId;
+    const { playlistId, arrangeSections } = req.body;
+    const userId = req.user._id;
+    if (!playlistId) {
+      return res.status(400).json({ success: false, message: 'playlistId is required' });
+    }
+    const group = await GroupModel.findById(groupId);
+    if (!group) return res.status(404).json({ success: false, message: 'Group not found' });
+    // Check if user is a member
+    const isMember = group.members.some(m => m.userId.equals(userId));
+    if (!isMember) return res.status(403).json({ success: false, message: 'Only group members can share playlists' });
+    // Prevent duplicate
+    if (group.sharedPlaylists.some(sp => sp.playlistId === playlistId)) {
+      return res.status(400).json({ success: false, message: 'Playlist already shared with this group' });
+    }
+    // 1. Check if playlist exists in BasePlaylist
+    let basePlaylist = await basePlaylistModel.findOne({ playlistId });
+    if (!basePlaylist) {
+      // Fetch playlist data from YouTube using utility
+      const API_KEY = process.env.YOUTUBE_API_KEY;
+      const playlistData = await fetchPlaylistFromYouTube(playlistId, API_KEY);
+      basePlaylist = await BasePlaylist.create({
+        playlistId,
+        ...playlistData,
+        sections: []
+      });
+    }
+    // 2. Optionally arrange into sections
+    if (arrangeSections) {
+      // Use the same logic as sectionControllers.arrangeVideos
+      const videos = basePlaylist.videoOrder.map(videoId => basePlaylist.videos.find(v => v.videoId === videoId));
+      const videoMapping = videos.map((video, index) => ({
+        index,
+        title: video.title,
+        id: basePlaylist.videoOrder[index]
+      }));
+      const prompt = `Given a YouTube playlist about ${basePlaylist.channelTitle}, organize these videos into 3-5 logical thematic sections based on their content and titles.\n\nINSTRUCTIONS:\n1. Analyze the video titles to identify common themes, topics, or progression patterns\n2. Create  clearly distinct sections that group related videos together\n3. Give each section a brief, descriptive name that accurately reflects its content\n4. Ensure all videos are assigned to exactly one section\n5. Return your response as a valid, parseable JSON object with no additional text\n6. Make Sure That Each Video in Section Are Properly Ordered e.g episode 1, episode 2, episode 3, etc.\nVIDEO LIST:\n${videoMapping.map(v => `[${v.index}] \"${v.title}\"`).join('\n')}\n\nREQUIRED RESPONSE FORMAT:\n{\n  \"sections\": [\n    {\n      \"name\": \"Section Name\",\n      \"videoIndices\": [0, 1, 2]\n    }\n  ]\n}\n\nReturn ONLY the JSON object with no preamble, explanations, or concluding text. Ensure the JSON is valid and can be parsed directly.`;
+      const result = await genAIModel.generateContent(prompt);
+      const responseText = await result.response.text();
+      let sectionsData;
+      try {
+        sectionsData = JSON.parse(responseText.trim());
+      } catch (error) {
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          sectionsData = JSON.parse(jsonMatch[0]);
+        } else {
+          return res.status(500).json({ success: false, message: 'Invalid AI response', aiResponse: responseText });
+        }
+      }
+      if (!sectionsData?.sections?.length) {
+        return res.status(500).json({ success: false, message: 'AI response did not contain valid sections', aiResponse: responseText });
+      }
+      // Build new sections array for BasePlaylist
+      const newSections = sectionsData.sections.map(section => {
+        const sectionVideoIds = section.videoIndices
+          .filter(index => index >= 0 && index < basePlaylist.videoOrder.length)
+          .map(index => basePlaylist.videoOrder[index]);
+        return {
+          sectionId: new require('mongoose').Types.ObjectId().toString(),
+          name: section.name,
+          videoIds: sectionVideoIds,
+          thumbnailUrl: videos[section.videoIndices[0]]?.thumbnailUrl || basePlaylist.playlistThumbnailUrl
+        };
+      });
+      basePlaylist.sections = newSections;
+      await basePlaylist.save();
+    }
+    // 3. Add to sharedPlaylists
+    group.sharedPlaylists.push({ playlistId, sharedBy: userId });
+    await group.save();
+    res.json({ success: true, group });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

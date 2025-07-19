@@ -7,8 +7,9 @@ const {
   deleteGroup,
   inviteToGroup,
   respondToInvite,
-  getMyInvites
-} = require('../controllers/groups/groupsController');
+  getMyInvites,
+  sharePlaylistWithGroup
+} = require('../controllers/groupsController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -29,5 +30,7 @@ router.post('/:groupId/invite', protect, inviteToGroup);
 router.post('/invites/:inviteId/respond', protect, respondToInvite);
 // Get current user's invites
 router.get('/invites/mine', protect, getMyInvites);
+// Share a playlist with a group (any member)
+router.post('/:groupId/share-playlist', protect, sharePlaylistWithGroup);
 
 module.exports = router; 

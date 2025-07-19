@@ -9,6 +9,7 @@ import axios from 'axios';
 import { TranscriptProvider } from './context/TranscriptContext.jsx'
 import { EducationalNotesProvider } from './context/EducationalNotesContext.jsx'
 import { PlaylistSummariesProvider } from './context/PlaylistSummariesContext.jsx';
+import { GroupProvider } from './context/GroupContext';
 
 axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -24,7 +25,9 @@ createRoot(document.getElementById('root')).render(
           <PlaylistsProvider>
             <AuthProvider>
               <ThemeProvider>
-                <App />
+                <GroupProvider>
+                  <App />
+                </GroupProvider>
               </ThemeProvider>
             </AuthProvider>
           </PlaylistsProvider>

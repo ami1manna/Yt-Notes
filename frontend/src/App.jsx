@@ -6,6 +6,9 @@ import AddPlaylist from './components/widgets/AddPlaylist';
 import Login from './pages/Login';
 import CourseScreen from './pages/CourseScreen';
 import DashBoard from './pages/DashBoard';
+import GroupList from './pages/GroupList';
+import GroupDetails from './pages/GroupDetails';
+import GroupCreate from './pages/GroupCreate';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +18,9 @@ const router = createBrowserRouter(
       {/* Routes inside RootLayout */}
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
-        <Route path="addPlaylist" element={<AddPlaylist />} />
+        <Route path='/groups' element={<GroupList />} />
+        <Route path='/groups/create' element={<GroupCreate />} />
+        <Route path='/groups/:groupId' element={<GroupDetails />} />
       </Route>
 
       {/* Separate Routes for Login and Signup (No RootLayout) */}
@@ -23,6 +28,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
       <Route path='/dashboard' element={<DashBoard />} />
+     
     </>
   )
 );
