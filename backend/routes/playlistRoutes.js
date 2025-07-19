@@ -1,6 +1,6 @@
 // playlistRoutes.js
 const express = require('express');
-const { addPlaylist, getPlaylistsByUser,deletePlaylist, selectedVideoId, deleteVideo, displaySection, getUserPlaylistSummaries, fetchPlaylistById } = require('../controllers/playlistControllers');
+const { addPlaylist, getPlaylistsByUser,deletePlaylist, selectedVideoId, deleteVideo, displaySection, getUserPlaylistSummaries, fetchPlaylistById } = require('../controllers/playlist/PlaylistController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();

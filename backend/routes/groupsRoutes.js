@@ -9,7 +9,7 @@ const {
   respondToInvite,
   getMyInvites,
   sharePlaylistWithGroup
-} = require('../controllers/groupsController');
+} = require('../controllers/group/GroupController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -32,5 +32,7 @@ router.post('/invites/:inviteId/respond', protect, respondToInvite);
 router.get('/invites/mine', protect, getMyInvites);
 // Share a playlist with a group (any member)
 router.post('/:groupId/share-playlist', protect, sharePlaylistWithGroup);
+// Fetch all shared playlists for a group
+router.get('/:groupId/shared-playlists', protect, require('../controllers/group/GroupController').getSharedPlaylistsForGroup);
 
 module.exports = router; 

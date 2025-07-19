@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchGroupById, fetchPlaylistSummary } from '../utils/GroupUtils';
+import { fetchGroupById, fetchPlaylistSummary, fetchSharedPlaylistsForGroup } from '../utils/GroupUtils';
 import { useGroupContext } from '../context/GroupContext';
 import { AuthContext } from '../context/auth/AuthContextBase';
 import { fetchUserPlaylistSummaries } from '../utils/PlaylistUtils';
@@ -20,8 +20,9 @@ const GroupDetails = () => {
   const [editError, setEditError] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
-  const [playlistSummaries, setPlaylistSummaries] = useState([]);
-  const [playlistSummariesLoading, setPlaylistSummariesLoading] = useState(false);
+  const [sharedPlaylists, setSharedPlaylists] = useState([]);
+  const [sharedPlaylistsLoading, setSharedPlaylistsLoading] = useState(false);
+  const [sharedPlaylistsError, setSharedPlaylistsError] = useState(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [userPlaylistsLoading, setUserPlaylistsLoading] = useState(false);
@@ -53,29 +54,16 @@ const GroupDetails = () => {
   }, [groupId]);
 
   useEffect(() => {
-    const fetchSummaries = async () => {
-      if (!group || !group.sharedPlaylists || group.sharedPlaylists.length === 0) {
-        setPlaylistSummaries([]);
-        return;
-      }
-      setPlaylistSummariesLoading(true);
-      const results = await Promise.all(
-        group.sharedPlaylists.map(async (sp) => {
-          const { playlist, error } = await fetchPlaylistSummary(sp.playlistId);
-          return {
-            playlistId: sp.playlistId,
-            sharedBy: sp.sharedBy,
-            sharedAt: sp.sharedAt,
-            playlist,
-            error,
-          };
-        })
-      );
-      setPlaylistSummaries(results);
-      setPlaylistSummariesLoading(false);
+    const fetchShared = async () => {
+      setSharedPlaylistsLoading(true);
+      setSharedPlaylistsError(null);
+      const { sharedPlaylists, error } = await fetchSharedPlaylistsForGroup(groupId);
+      setSharedPlaylists(sharedPlaylists || []);
+      setSharedPlaylistsError(error);
+      setSharedPlaylistsLoading(false);
     };
-    fetchSummaries();
-  }, [group]);
+    fetchShared();
+  }, [groupId, group]);
 
   const isAdmin = group && user && group.members && group.members.some(m => m.userId === user.userId && m.role === 'admin');
 
@@ -260,9 +248,11 @@ const GroupDetails = () => {
           if (success) {
             setShareSuccess(true);
             setSharePlaylistId('');
-            // Refresh group data
+            // Refresh group data and shared playlists
             const { group } = await fetchGroupById(groupId);
             setGroup(group);
+            const { sharedPlaylists } = await fetchSharedPlaylistsForGroup(groupId);
+            setSharedPlaylists(sharedPlaylists || []);
           } else {
             setShareError(error || 'Failed to share playlist.');
           }
@@ -270,25 +260,18 @@ const GroupDetails = () => {
       />
       {shareError && <div className="text-red-500 mb-2">{shareError}</div>}
       {shareSuccess && <div className="text-green-600 mb-2">Playlist shared!</div>}
-      {playlistSummariesLoading ? (
+      {sharedPlaylistsLoading ? (
         <div className="text-gray-400">Loading shared playlists...</div>
-      ) : playlistSummaries.length === 0 ? (
+      ) : sharedPlaylists.length === 0 ? (
         <div className="text-gray-400">No shared playlists.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          {playlistSummaries.map((sp, idx) => (
+          {sharedPlaylists.map((sp, idx) => (
             <div key={sp.playlistId || idx} className="bg-white dark:bg-gray-800 rounded shadow p-4 flex items-center gap-4">
-              {sp.playlist ? (
-                <>
-                  <img src={sp.playlist.playlistThumbnailUrl} alt={sp.playlist.playlistTitle} className="w-20 h-12 object-cover rounded" />
-                  <div>
-                    <div className="font-semibold">{sp.playlist.playlistTitle}</div>
-                    <div className="text-xs text-gray-500">Shared by: {String(sp.sharedBy).slice(0, 6)}... on {new Date(sp.sharedAt).toLocaleDateString()}</div>
-                  </div>
-                </>
-              ) : (
-                <div className="text-red-400 text-xs">{sp.error || 'Playlist not found.'}</div>
-              )}
+              <div>
+                <div className="font-semibold">Playlist ID: {sp.playlistId}</div>
+                <div className="text-xs text-gray-500">Shared by: {String(sp.sharedBy).slice(0, 6)}...</div>
+              </div>
             </div>
           ))}
         </div>

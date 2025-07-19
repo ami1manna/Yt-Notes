@@ -1,6 +1,6 @@
 const express = require('express');
-const { addTranscript, getTranscript } = require('../controllers/transcriptController');
-const transcriptController = require('../controllers/sumarizeController');
+const { addTranscript, getTranscript } = require('../controllers/notes/TranscriptController');
+const transcriptController = require('../controllers/notes/SumarizeController');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 

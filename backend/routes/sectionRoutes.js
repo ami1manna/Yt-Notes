@@ -1,5 +1,5 @@
 const express = require('express');
-const {arrangeVideos  } = require('../controllers/sectionControllers');
+const {arrangeVideos  } = require('../controllers/playlist/SectionController');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 

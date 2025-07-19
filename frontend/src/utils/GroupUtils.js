@@ -90,4 +90,17 @@ export async function sharePlaylistWithGroup(groupId, playlistId) {
   } catch (err) {
     return { success: false, group: null, error: err.response?.data?.message || 'Failed to share playlist.' };
   }
+}
+
+export async function fetchSharedPlaylistsForGroup(groupId) {
+  try {
+    const res = await axios.get(`/groups/${groupId}/shared-playlists`);
+    if (res.data && res.data.success) {
+      return { sharedPlaylists: res.data.sharedPlaylists, error: null };
+    } else {
+      return { sharedPlaylists: [], error: res.data?.message || 'Failed to fetch shared playlists.' };
+    }
+  } catch (err) {
+    return { sharedPlaylists: [], error: err.response?.data?.message || 'Failed to fetch shared playlists.' };
+  }
 } 

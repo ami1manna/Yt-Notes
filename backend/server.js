@@ -1,3 +1,4 @@
+require('module-alias/register');
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
