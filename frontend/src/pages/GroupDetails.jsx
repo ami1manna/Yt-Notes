@@ -10,7 +10,7 @@ const GroupDetails = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const { updateGroup, deleteGroup, sharePlaylistWithGroup } = useGroupContext();
+  const { updateGroup, deleteGroup, sharePlaylistWithGroup, inviteToGroup } = useGroupContext();
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,6 +33,10 @@ const GroupDetails = () => {
   const [shareLoading, setShareLoading] = useState(false);
   const [shareError, setShareError] = useState(null);
   const [shareSuccess, setShareSuccess] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteError, setInviteError] = useState(null);
+  const [inviteSuccess, setInviteSuccess] = useState(false);
 
   useEffect(() => {
     const loadGroup = async () => {
@@ -188,6 +192,45 @@ const GroupDetails = () => {
           {editError && <div className="text-red-500 mt-2">{editError}</div>}
         </form>
       )}
+
+      {isAdmin && (
+        <form
+          className="flex flex-col sm:flex-row gap-2 mb-6"
+          onSubmit={async e => {
+            e.preventDefault();
+            setInviteLoading(true);
+            setInviteError(null);
+            setInviteSuccess(false);
+            const { success, error } = await inviteToGroup(groupId, inviteEmail);
+            setInviteLoading(false);
+            if (success) {
+              setInviteSuccess(true);
+              setInviteEmail('');
+            } else {
+              setInviteError(error || 'Failed to send invite.');
+            }
+          }}
+        >
+          <input
+            type="email"
+            className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            placeholder="Enter email to invite"
+            value={inviteEmail}
+            onChange={e => setInviteEmail(e.target.value)}
+            required
+            disabled={inviteLoading}
+          />
+          <button
+            type="submit"
+            className="py-2 px-4 bg-teal-600 text-white rounded hover:bg-teal-700 transition disabled:opacity-60"
+            disabled={inviteLoading}
+          >
+            {inviteLoading ? 'Inviting...' : 'Invite User'}
+          </button>
+        </form>
+      )}
+      {inviteError && <div className="text-red-500 mb-2">{inviteError}</div>}
+      {inviteSuccess && <div className="text-green-600 mb-2">Invite sent!</div>}
 
       <h2 className="text-lg font-semibold mt-6 mb-2">Members</h2>
       <ul className="mb-6">

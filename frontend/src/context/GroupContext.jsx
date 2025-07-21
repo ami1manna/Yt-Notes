@@ -5,7 +5,10 @@ import {
   createGroup as createGroupApi,
   updateGroup as updateGroupApi,
   deleteGroup as deleteGroupApi,
-  sharePlaylistWithGroup as sharePlaylistWithGroupApi
+  sharePlaylistWithGroup as sharePlaylistWithGroupApi,
+  inviteToGroup as inviteToGroupApi,
+  respondToInvite as respondToInviteApi,
+  fetchMyInvites as fetchMyInvitesApi
 } from '../utils/GroupUtils';
 
 const GroupContext = createContext();
@@ -63,6 +66,21 @@ export function GroupProvider({ children }) {
     return await sharePlaylistWithGroupApi(groupId, playlistId);
   }, []);
 
+  // Add inviteToGroup function
+  const inviteToGroup = useCallback(async (groupId, email) => {
+    return await inviteToGroupApi(groupId, email);
+  }, []);
+
+  // Add respondToInvite function
+  const respondToInvite = useCallback(async (inviteId, action) => {
+    return await respondToInviteApi(inviteId, action);
+  }, []);
+
+  // Add fetchMyInvites function
+  const fetchMyInvites = useCallback(async () => {
+    return await fetchMyInvitesApi();
+  }, []);
+
   return (
     <GroupContext.Provider
       value={{
@@ -75,6 +93,9 @@ export function GroupProvider({ children }) {
         updateGroup,
         deleteGroup,
         sharePlaylistWithGroup,
+        inviteToGroup,
+        respondToInvite,
+        fetchMyInvites,
       }}
     >
       {children}

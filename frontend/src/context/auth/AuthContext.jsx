@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }) => {
         username: res.data.user.username,
         email: res.data.user.email
       };
+
+      console.log(userObj.username);
       setUser(userObj);
       // Fetch playlist summaries using userId
       await fetchUserPlaylists(userObj.userId, setPlaylistSummaries);

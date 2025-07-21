@@ -3,6 +3,11 @@ import { NavLink } from "react-router-dom";
 import { NotebookPenIcon, Menu, X, Home, LayoutDashboard, Users } from "lucide-react";
 import ThemeToggle from "../ui/ThemeToggle";
 import Profile from "../ui/Profile";
+import { useGroupContext } from '../../context/GroupContext';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth/AuthContextBase';
+import { Bell } from "lucide-react";
+import GroupInvitesBell from './GroupInvitesBell';
 
 const TopNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +15,37 @@ const TopNav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const { user } = useContext(AuthContext);
+  const { fetchMyInvites, respondToInvite } = useGroupContext();
+  const [invites, setInvites] = useState([]);
+  const [invitesOpen, setInvitesOpen] = useState(false);
+  const [invitesLoading, setInvitesLoading] = useState(false);
+  const [inviteActionLoading, setInviteActionLoading] = useState(null);
+  const [inviteError, setInviteError] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setInvitesLoading(true);
+      fetchMyInvites().then(({ invites }) => {
+        setInvites(invites || []);
+        setInvitesLoading(false);
+      });
+    } else {
+      setInvites([]);
+    }
+  }, [user, fetchMyInvites]);
+
+  const handleInviteResponse = async (inviteId, action) => {
+    setInviteActionLoading(inviteId + action);
+    setInviteError(null);
+    const { success, error } = await respondToInvite(inviteId, action);
+    setInviteActionLoading(null);
+    if (success) {
+      setInvites((prev) => prev.filter((i) => i._id !== inviteId));
+    } else {
+      setInviteError(error || 'Failed to respond to invite.');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,6 +125,8 @@ const TopNav = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
+            {/* Invites Bell */}
+            <GroupInvitesBell />
             <div className="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">
               <ThemeToggle />
               <Profile />
@@ -133,6 +171,7 @@ const TopNav = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
+            <GroupInvitesBell />
             <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700 w-full justify-center">
               <ThemeToggle />
               <Profile />
