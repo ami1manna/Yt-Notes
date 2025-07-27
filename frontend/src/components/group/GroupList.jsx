@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGroupContext } from '../context/GroupContext';
+import { useGroupContext } from '../../context/GroupContext';
 
 const GroupList = () => {
   const navigate = useNavigate();

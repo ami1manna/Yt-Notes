@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGroupContext } from '../context/GroupContext';
+import { useGroupContext } from '../../context/GroupContext';
 
 const GroupCreate = () => {
   const navigate = useNavigate();

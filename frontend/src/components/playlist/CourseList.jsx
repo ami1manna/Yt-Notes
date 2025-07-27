@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { PlaylistSummariesContext } from "../../context/PlaylistSummariesContext";
-import VideoCard from "../ui/VideoCard";
+import VideoCard from "@/components/common/VideoCard";
 import FallBackScreen from "./FallBackScreen";
 import { NavLink } from "react-router-dom";
 import { deletePlaylist, fetchUserPlaylistSummaries } from "../../utils/PlaylistUtils";

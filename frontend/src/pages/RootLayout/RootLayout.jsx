@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import TopNav from '../components/widgets/TopNav'
- 
+import TopNav from '@/components/layout/TopNav'
+
  
 
 const RootLayout = () => {

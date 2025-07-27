@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 import { Menu, X, Bookmark, ArrowLeft } from 'lucide-react';
 import CourseNavTitle from "./CourseNavTitle";
 import DisplayVideo from "./DisplayVideo";
 import DisplaySection from "./DisplaySection";
 
 const CourseNav = ({ playListData, setVideoStatus, isSectioned, videoData, sectionData }) => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const navRef = useRef(null);
 

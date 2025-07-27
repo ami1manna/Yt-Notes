@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchGroupById, fetchPlaylistSummary, fetchSharedPlaylistsForGroup } from '../utils/GroupUtils';
-import { useGroupContext } from '../context/GroupContext';
-import { AuthContext } from '../context/auth/AuthContextBase';
-import { fetchUserPlaylistSummaries } from '../utils/PlaylistUtils';
-import StaticModal from '../components/Dialogs/StaticModal';
+import { fetchGroupById, fetchPlaylistSummary, fetchSharedPlaylistsForGroup } from '../../utils/GroupUtils';
+import { useGroupContext } from '../../context/GroupContext';
+import { useAuth } from "@/context/auth/AuthContextBase";
+import { fetchUserPlaylistSummaries } from '../../utils/PlaylistUtils';
+import StaticModal from '../../components/dialogs/StaticModal';
 
 const GroupDetails = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { updateGroup, deleteGroup, sharePlaylistWithGroup, inviteToGroup } = useGroupContext();
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);

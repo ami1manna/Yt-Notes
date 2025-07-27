@@ -1,19 +1,18 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { PlaylistsContext } from "../context/PlaylistsContext";
+import { PlaylistsContext } from "../../context/PlaylistsContext";
 import { useParams } from "react-router-dom";
-import IconButton from "../components/ui/IconButton";
 import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
-import { AuthContext } from "../context/auth/AuthContextBase";
-import TranscriptList from "../components/widgets/TranscriptList";
-import Editor from "../components/Editor/Editor";
-import SummaryList from "../components/widgets/SummaryList";
-import CourseNav from "../components/CourseNav/CourseNav";
+import { useAuth } from "@/context/auth/AuthContextBase";
+import TranscriptList from "../../components/notes/TranscriptList";
+import Editor from "../../components/editor/Editor";
+import SummaryList from "../../components/notes/SummaryList";
+import CourseNav from "../../components/course/CourseNav";
 import axios from "axios";
-import { setVideoStatus as setVideoStatusUtil } from "../utils/VideoUtils";
+import { setVideoStatus as setVideoStatusUtil } from "../../utils/VideoUtils";
 
 const CourseScreen = () => {
     const { playlistData, setFullPlaylistData } = useContext(PlaylistsContext);
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
     const { playlistId } = useParams();
     const [selectedVideo, setSelectedVideoData] = useState({});
     const [sectionData, setSectionData] = useState({});

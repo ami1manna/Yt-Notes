@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { AuthContext } from "../../context/auth/AuthContextBase";
-import Tiles from "./Tiles";
-import CheckBox from "./CheckBox";
-import CircularProgress from "./CircularProgress";
+import { useAuth } from "@/context/auth/AuthContextBase";
+import Tiles from "../course/Tiles";
+import CheckBox from "../course/CheckBox";
+import CircularProgress from "../course/CircularProgress";
 import { formatDuration, secondsToHHMM } from "../../utils/Coverter";
 import { Clock, ListChecks, ChevronLeft, Menu, X } from 'lucide-react';
 
 const SideNav = ({ playListData, selectedVideoId, setSelectedVideoId, setVideoStatus, isSectioned, videoData, sectionData }) => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const navRef = useRef(null);
 

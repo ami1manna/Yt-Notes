@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -13,7 +13,7 @@ const Signup = () => {
     email: "",
     password: ""
   });
-  const { signup } = useContext(AuthContext);
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const validateForm = () => {

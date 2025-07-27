@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
-import CheckBox from "./CheckBox";
-import Tiles from "./Tiles";
+import CheckBox from "../course/CheckBox";
+import Tiles from "../course/Tiles";
 import { secondsToHHMM } from "../../utils/Coverter";
 import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 import { PlaylistsContext } from "../../context/PlaylistsContext";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 import { setPlaylistVideoId } from "../../utils/VideoUtils";
 
 const DisplaySection = ({ sectionData, setVideoStatus, playlistId, setIsOpen }) => {
   const [collapsedSections, setCollapsedSections] = useState({});
   const { playlistData, setFullPlaylistData } = useContext(PlaylistsContext);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const toggleSection = (sectionId) => {
     setCollapsedSections(prev => ({

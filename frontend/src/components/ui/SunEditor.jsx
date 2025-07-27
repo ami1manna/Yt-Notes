@@ -3,18 +3,19 @@ import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 
 import { ThemeContext } from "../../context/ThemeContext";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 
-import IconButton from "./IconButton";
+
 import {Save} from "lucide-react";
 
 import axios from 'axios';
+import IconButton from "../common/IconButton";
  
 
 const SunEditorComponent = ({playlistId,videoId}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [content, setContent] = useState('');
-  const {user} = useContext(AuthContext);
+  const {user} = useAuth();
   const { theme } = useContext(ThemeContext);
    
   const isDarkMode = theme === 'dark';

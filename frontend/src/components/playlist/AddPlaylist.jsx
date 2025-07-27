@@ -2,16 +2,17 @@ import  { useContext, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { PlaylistSummariesContext } from "../../context/PlaylistSummariesContext";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 import { PlusCircle, Loader2 } from "lucide-react";
 import StaticModal from "@/components/Dialogs/StaticModal";
-import CustomInput from "@/components/ui/CustomInput";
-import CourseList from "./CourseList";
+
+import CourseList from "@/components/playlist/CourseList";
 import { handleAddPlaylist, handlePlaylistSection } from "../../utils/PlaylistUtils";
+import CustomInput from "@/components/common/CustomInput";
 
 const AddPlaylist = () => {
   const { setPlaylistSummaries } = useContext(PlaylistSummariesContext);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false); 
@@ -56,7 +57,7 @@ const AddPlaylist = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="mt-28 w-full h-full flex flex-col"
+      className="mt-4 w-full h-full flex flex-col"
     >
       <div className="lg:p-7 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl mb-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>

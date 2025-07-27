@@ -1,14 +1,14 @@
 import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } from 'react-router-dom';
-import RootLayout from './pages/RootLayout';
-import Signup from './pages/Signup';
-import Home from './pages/Home';
-import AddPlaylist from './components/widgets/AddPlaylist';
-import Login from './pages/Login';
-import CourseScreen from './pages/CourseScreen';
-import DashBoard from './pages/DashBoard';
-import GroupList from './pages/GroupList';
-import GroupDetails from './pages/GroupDetails';
-import GroupCreate from './pages/GroupCreate';
+import RootLayout from './pages/RootLayout/RootLayout';
+import Signup from './pages/Signup/Signup';
+import Home from './pages/Home/Home';
+ 
+import Login from './pages/Login/Login';
+import CourseScreen from './pages/CourseScreen/CourseScreen';
+import DashBoard from './pages/Dashboard/DashBoard';
+import GroupList from './components/group/GroupList';
+import GroupDetails from './pages/Groups/GroupDetails';
+import GroupCreate from './pages/Groups/GroupCreate';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

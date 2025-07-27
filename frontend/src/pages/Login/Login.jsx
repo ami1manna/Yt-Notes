@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/auth/AuthContextBase";
 import { useNavigate } from "react-router-dom";
-import TextButton from "../components/ui/TextButton";
+import TextButton from '@/components/common/TextButton';
+import { useAuth } from "../../context/auth/AuthContextBase";
+ 
 
 const Login = () => {
-  const { login, error, loading } = useContext(AuthContext);
+  const { login, error, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();

@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import CheckBox from "./CheckBox";
-import Tiles from "./Tiles";
+import CheckBox from "../course/CheckBox";
+import Tiles from "../course/Tiles";
 import { secondsToHHMM } from "../../utils/Coverter";
 import { setPlaylistVideoId } from "../../utils/VideoUtils";
 import { PlaylistsContext } from "../../context/PlaylistsContext";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 
 const DisplayVideo = ({ videoData, setVideoStatus, playlistId, setIsOpen }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { playlistData, setFullPlaylistData } = useContext(PlaylistsContext);
   return (
     <div className="p-3 space-y-1">

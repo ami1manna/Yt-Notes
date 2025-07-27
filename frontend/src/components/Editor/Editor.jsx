@@ -5,14 +5,14 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import { responsiveButtonList, templates } from "./toolbarConfig.js";
 import { decodeLatex } from "./utils.js";
-import { AuthContext } from "../../context/auth/AuthContextBase";
+import { useAuth } from "@/context/auth/AuthContextBase";
 // third party
 import axios from 'axios';
 import { toast } from "react-toastify";
 
 const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const containerRef = useRef(null);
   const [content, setContent] = useState('');

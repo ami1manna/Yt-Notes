@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import TranscriptTile from "../ui/TranscriptTile";
 import { useTranscript } from "../../context/TranscriptContext";
 import { Copy, Check, CloudDownload } from "lucide-react";
-import IconButton from "../ui/IconButton";
+import IconButton from "../common/IconButton";
 
 const TranscriptList = ({ videoId }) => {
   const {

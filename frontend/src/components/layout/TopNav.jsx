@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { NotebookPenIcon, Menu, X, Home, LayoutDashboard, Users } from "lucide-react";
-import ThemeToggle from "../ui/ThemeToggle";
-import Profile from "../ui/Profile";
+ 
+ 
 import { useGroupContext } from '../../context/GroupContext';
 import { useContext } from 'react';
-import { AuthContext } from '../../context/auth/AuthContextBase';
+import { useAuth } from "@/context/auth/AuthContextBase";
 import { Bell } from "lucide-react";
-import GroupInvitesBell from './GroupInvitesBell';
+import GroupInvitesBell from '../group/GroupInvitesBell';
+import Profile from "./Profile";
+import ThemeToggle from "../ui/ThemeToggle";
 
 const TopNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +17,7 @@ const TopNav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { fetchMyInvites, respondToInvite } = useGroupContext();
   const [invites, setInvites] = useState([]);
   const [invitesOpen, setInvitesOpen] = useState(false);

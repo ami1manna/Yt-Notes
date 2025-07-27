@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { useGroupContext } from '../../context/GroupContext';
-import { AuthContext } from '../../context/auth/AuthContextBase';
+import { useAuth } from "@/context/auth/AuthContextBase";
 
 const GroupInvitesBell = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { fetchMyInvites, respondToInvite } = useGroupContext();
   const [invites, setInvites] = useState([]);
   const [invitesOpen, setInvitesOpen] = useState(false);
