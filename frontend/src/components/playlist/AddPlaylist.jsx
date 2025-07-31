@@ -59,7 +59,7 @@ const AddPlaylist = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="mt-4 w-full h-full flex flex-col"
     >
-      <div className="lg:p-7 lg:bg-white lg:dark:bg-gray-800 lg:shadow-2xl lg:rounded-xl mb-6">
+      <div className="lg:p-7  lg:rounded-xl mb-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
          
           <h3 className="text-gray-600 dark:text-gray-300 mb-6">Enter a YouTube playlist URL to add it to your collection</h3>

@@ -23,16 +23,40 @@ exports.createGroupService = async ({ name, description, privacy }, user) => {
   return { success: true, group };
 };
 
+
 exports.getGroupsService = async (user) => {
-  const userId = user._id;
-  const groups = await GroupModel.find({
-    $or: [
-      { privacy: 'public' },
-      { 'members.userId': userId }
-    ]
-  });
-  return { success: true, groups };
+  try {
+    const userId = user._id;
+
+    const groups = await GroupModel.find({
+      $or: [
+        { privacy: "public" },
+        { "members.userId": userId },
+      ],
+    })
+      .sort({ createdAt: -1 })
+      .lean(); // lean so we can safely spread and add fields
+
+    const enhanced = groups.map((group) => {
+      const role =
+        group.createdBy &&
+        group.createdBy.toString() === userId.toString()
+          ? "admin"
+          : "member";
+      return {
+        ...group,
+        role,
+      };
+    });
+
+    return { success: true, groups: enhanced };
+  } catch (err) {
+    console.error("getGroupsService error:", err);
+    return { success: false, error: err.message || "Failed to fetch groups" };
+  }
 };
+
+
 
 exports.getGroupByIdService = async (id) => {
   const group = await GroupModel.findById(id);
