@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function fetchGroups() {
+export async function fetchGroupsAPI() {
   try {
     const res = await axios.get('/groups');
     if (res.data && res.data.success) {

@@ -6,11 +6,12 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import CourseScreen from './pages/CourseScreen/CourseScreen';
 import DashBoard from './pages/Dashboard/DashBoard';
-import GroupList from './components/group/GroupList';
-import GroupDetails from './pages/Groups/GroupDetails';
-import GroupCreate from './pages/Groups/GroupCreate';
+// import GroupList from './components/group/GroupList';
+// import GroupDetails from './pages/Groups/GroupDetails';
+// import GroupCreate from './pages/Groups/GroupCreate';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GroupDashboard from './pages/Groups/GroupDashboard';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,9 +19,10 @@ const router = createBrowserRouter(
       {/* Routes inside RootLayout */}
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
-        <Route path='/groups' element={<GroupList />} />
-        <Route path='/groups/create' element={<GroupCreate />} />
-        <Route path='/groups/:groupId' element={<GroupDetails />} />
+        {/* <Route path='/groups' element={<GroupList />} /> */}
+        <Route path='/groups' element={<GroupDashboard />} />
+        {/* <Route path='/groups/create' element={<GroupCreate />} /> */}
+        {/* <Route path='/groups/:groupId' element={<GroupDetails />} /> */}
       </Route>
 
       {/* Separate Routes for Login and Signup (No RootLayout) */}

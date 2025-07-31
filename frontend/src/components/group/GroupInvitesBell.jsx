@@ -1,40 +1,40 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Bell } from "lucide-react";
-import { useGroupContext } from '../../context/GroupContext';
+// import { useGroupContext } from '../../context/GroupContext';
 import { useAuth } from "@/context/auth/AuthContextBase";
 
 const GroupInvitesBell = () => {
   const { user } = useAuth();
-  const { fetchMyInvites, respondToInvite } = useGroupContext();
+  // const { fetchMyInvites, respondToInvite } = useGroupContext();
   const [invites, setInvites] = useState([]);
   const [invitesOpen, setInvitesOpen] = useState(false);
   const [invitesLoading, setInvitesLoading] = useState(false);
   const [inviteActionLoading, setInviteActionLoading] = useState(null);
   const [inviteError, setInviteError] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      setInvitesLoading(true);
-      fetchMyInvites().then(({ invites }) => {
-        setInvites(invites || []);
-        setInvitesLoading(false);
-      });
-    } else {
-      setInvites([]);
-    }
-  }, [user, fetchMyInvites]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setInvitesLoading(true);
+  //     fetchMyInvites().then(({ invites }) => {
+  //       setInvites(invites || []);
+  //       setInvitesLoading(false);
+  //     });
+  //   } else {
+  //     setInvites([]);
+  //   }
+  // }, [user, fetchMyInvites]);
 
-  const handleInviteResponse = async (inviteId, action) => {
-    setInviteActionLoading(inviteId + action);
-    setInviteError(null);
-    const { success, error } = await respondToInvite(inviteId, action);
-    setInviteActionLoading(null);
-    if (success) {
-      setInvites((prev) => prev.filter((i) => i._id !== inviteId));
-    } else {
-      setInviteError(error || 'Failed to respond to invite.');
-    }
-  };
+  // const handleInviteResponse = async (inviteId, action) => {
+  //   setInviteActionLoading(inviteId + action);
+  //   setInviteError(null);
+  //   const { success, error } = await respondToInvite(inviteId, action);
+  //   setInviteActionLoading(null);
+  //   if (success) {
+  //     setInvites((prev) => prev.filter((i) => i._id !== inviteId));
+  //   } else {
+  //     setInviteError(error || 'Failed to respond to invite.');
+  //   }
+  // };
 
   if (!user) return null;
 

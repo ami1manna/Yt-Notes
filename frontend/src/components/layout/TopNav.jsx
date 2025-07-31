@@ -3,11 +3,11 @@ import { NavLink } from "react-router-dom";
 import { NotebookPenIcon, Menu, X, Home, LayoutDashboard, Users } from "lucide-react";
  
  
-import { useGroupContext } from '../../context/GroupContext';
+// import { useGroupContext } from '../../context/GroupContext';
 import { useContext } from 'react';
 import { useAuth } from "@/context/auth/AuthContextBase";
 import { Bell } from "lucide-react";
-import GroupInvitesBell from '../group/GroupInvitesBell';
+// import GroupInvitesBell from '../group/GroupInvitesBell';
 import Profile from "./Profile";
 import ThemeToggle from "../ui/ThemeToggle";
 
@@ -18,36 +18,36 @@ const TopNav = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const { user } = useAuth();
-  const { fetchMyInvites, respondToInvite } = useGroupContext();
+  // const { fetchMyInvites, respondToInvite } = useGroupContext();
   const [invites, setInvites] = useState([]);
   const [invitesOpen, setInvitesOpen] = useState(false);
   const [invitesLoading, setInvitesLoading] = useState(false);
   const [inviteActionLoading, setInviteActionLoading] = useState(null);
   const [inviteError, setInviteError] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      setInvitesLoading(true);
-      fetchMyInvites().then(({ invites }) => {
-        setInvites(invites || []);
-        setInvitesLoading(false);
-      });
-    } else {
-      setInvites([]);
-    }
-  }, [user, fetchMyInvites]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setInvitesLoading(true);
+  //     fetchMyInvites().then(({ invites }) => {
+  //       setInvites(invites || []);
+  //       setInvitesLoading(false);
+  //     });
+  //   } else {
+  //     setInvites([]);
+  //   }
+  // }, [user, fetchMyInvites]);
 
-  const handleInviteResponse = async (inviteId, action) => {
-    setInviteActionLoading(inviteId + action);
-    setInviteError(null);
-    const { success, error } = await respondToInvite(inviteId, action);
-    setInviteActionLoading(null);
-    if (success) {
-      setInvites((prev) => prev.filter((i) => i._id !== inviteId));
-    } else {
-      setInviteError(error || 'Failed to respond to invite.');
-    }
-  };
+  // const handleInviteResponse = async (inviteId, action) => {
+  //   setInviteActionLoading(inviteId + action);
+  //   setInviteError(null);
+  //   const { success, error } = await respondToInvite(inviteId, action);
+  //   setInviteActionLoading(null);
+  //   if (success) {
+  //     setInvites((prev) => prev.filter((i) => i._id !== inviteId));
+  //   } else {
+  //     setInviteError(error || 'Failed to respond to invite.');
+  //   }
+  // };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,7 +90,7 @@ const TopNav = () => {
 
   return (
     <nav
-      className={`fixed w-full top-0 z-[999] transition-all duration-300 ${
+      className={` w-full  z-[999] transition-all duration-300 ${
         isScrolled
           ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg"
           : "bg-white dark:bg-gray-900"
@@ -128,7 +128,7 @@ const TopNav = () => {
               </NavLink>
             ))}
             {/* Invites Bell */}
-            <GroupInvitesBell />
+            {/* <GroupInvitesBell /> */}
             <div className="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">
               <ThemeToggle />
               <Profile />
@@ -173,7 +173,7 @@ const TopNav = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
-            <GroupInvitesBell />
+            {/* <GroupInvitesBell /> */}
             <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700 w-full justify-center">
               <ThemeToggle />
               <Profile />
