@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchGroups, createGroup } from "./groupThunks";
-import { fetchGroupById } from "../../utils/GroupUtils";
+import { fetchGroups, createGroup, fetchGroupDetails } from "./groupThunks";
+
 
 const initialState = {
   groupList: [],
@@ -70,15 +70,15 @@ const groupSlice = createSlice({
       })
 
       // FETCH GROUP DETAILS
-      .addCase(fetchGroupById.pending, (state) => {
+      .addCase(fetchGroupDetails.pending, (state) => {
         state.fetch.status = "pending";
         state.fetch.error = null;
       })
-      .addCase(fetchGroupById.fulfilled, (state, { payload }) => {
+      .addCase(fetchGroupDetails.fulfilled, (state, { payload }) => {
         state.group = payload;
         state.fetch.status = "succeeded";
       })
-      .addCase(fetchGroupById.rejected, (state, { error, payload }) => {
+      .addCase(fetchGroupDetails.rejected, (state, { error, payload }) => {
         state.fetch.status = "failed";
         state.fetch.error = payload || error?.message || "Failed to fetch group";
       });
