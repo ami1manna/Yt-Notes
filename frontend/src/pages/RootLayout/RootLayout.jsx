@@ -7,9 +7,9 @@ import TopNav from '@/components/layout/TopNav'
 const RootLayout = () => {
     return (
           
-        <div className='w-screen flex flex-col bg-white dark:bg-gray-800'>
+        <div className='w-screen min-h-screen    flex flex-col bg-white dark:bg-gray-800'>
             <TopNav />
-            <div className='flex flex-1 w-full px-2'>
+            <div className='flex flex-1 w-full min-h-full px-2'>
             <Outlet  />
             </div>
         </div>

@@ -1,6 +1,6 @@
 const Card = ({ children, className = "", hover = false, ...props }) => {
   const base =
-    "bg-white dark:bg-gray-700 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-sm transition-all duration-200";
+    "bg-white dark:bg-gray-900 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-sm transition-all duration-200";
   const hoverClasses = hover
     ? "hover:shadow-md hover:scale-[1.01] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
     : "";

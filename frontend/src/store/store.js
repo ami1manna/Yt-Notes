@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import groupReducer from './slices/groupSlice';
+import groupReducer from './group';
 
 const store = configureStore({
   reducer: {

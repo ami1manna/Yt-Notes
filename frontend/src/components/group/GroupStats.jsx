@@ -1,14 +1,15 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { Users, FileText, LayoutList, UserPlus } from "lucide-react";
 import Card from "../common/Card";
-import Loading from "../../components/common/Loading";
-import Error from "../../components/common/Error";
+import AsyncStateHandler from "@/components/common/AsyncStateHandler";
+import { groupsSelectors } from "../../store/group";
 
 const GroupStats = () => {
-  const { groupList = [], loading, error } = useSelector((state) => state.group);
+  const groupList = useSelector(groupsSelectors.selectGroupList);
+  const loading = useSelector(groupsSelectors.isGroupFetching);
+  const error = useSelector(groupsSelectors.getGroupFetchError);
 
-  // derive totals
+  // Derive stats
   const totalGroups = groupList.length;
   const totalPlaylists = groupList.reduce(
     (sum, g) => sum + (g.sharedPlaylists?.length || 0),
@@ -18,13 +19,12 @@ const GroupStats = () => {
     (sum, g) => sum + (g.members?.length || 0),
     0
   );
-  // assuming each group might have a notesCount or similar; fallback to 0
   const totalNotes = groupList.reduce(
     (sum, g) => sum + (g.notesCount ?? 0),
     0
   );
 
-  const statItems = [
+const statItems = [
     {
       label: "Groups",
       value: totalGroups,
@@ -62,15 +62,7 @@ const GroupStats = () => {
         groups, curate content, and learn together.
       </p>
 
-      {loading ? (
-        <div className="py-8 flex justify-center">
-          <Loading />
-        </div>
-      ) : error ? (
-        <div className="py-6">
-          <Error>{error}</Error>
-        </div>
-      ) : (
+      <AsyncStateHandler isLoading={loading} error={error}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-4">
           {statItems.map(({ label, value, bg, icon }) => (
             <Card key={label} hover className="text-center sm:p-6">
@@ -90,7 +82,7 @@ const GroupStats = () => {
             </Card>
           ))}
         </div>
-      )}
+      </AsyncStateHandler>
     </div>
   );
 };

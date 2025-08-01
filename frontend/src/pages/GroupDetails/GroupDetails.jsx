@@ -3,7 +3,7 @@ import React from 'react'
 const GroupDetails = () => {
   return (
     <div>
-      GRoup details apgepage
+      detail
     </div>
   )
 }
