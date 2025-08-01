@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchGroupsAPI, createGroupAPI, fetchGroupByIdAPI } from "./groupService";
+import { fetchGroupsAPI, createGroupAPI } from "./groupService";
 
 export const fetchGroups = createAsyncThunk(
   "group/fetchGroups",
@@ -19,11 +19,3 @@ export const createGroup = createAsyncThunk(
   }
 );
 
-export const fetchGroupDetails = createAsyncThunk(
-  "group/fetchGroupDetails",
-  async (groupId, thunkAPI) => {
-    const { group, error } = await fetchGroupByIdAPI(groupId);
-    if (error) return thunkAPI.rejectWithValue(error);
-    return group;
-  }
-)

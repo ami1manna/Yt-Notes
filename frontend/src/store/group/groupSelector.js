@@ -15,3 +15,6 @@ export const getGroupFetchError = (state) => state.group.fetch.error;
 // CREATE STATE
 export const isGroupCreating = (state) => state.group.create.status === "pending";
 export const getGroupCreateError = (state) => state.group.create.error;
+
+// GET GROUP BY ID
+export const getGroupById = (id) => (state) => state.group.groupList.find(group => group._id === id);

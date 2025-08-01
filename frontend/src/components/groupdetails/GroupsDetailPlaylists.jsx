@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GroupDetailOverview = () => {
+const GroupDetailsPlaylists = () => {
   return (
     <div>
       asd
@@ -8,4 +8,4 @@ const GroupDetailOverview = () => {
   )
 }
 
-export default GroupDetailOverview
+export default GroupDetailsPlaylists

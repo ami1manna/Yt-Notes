@@ -33,15 +33,3 @@ export async function createGroupAPI({ name, description, privacy }) {
 }
 
 
-export async function fetchGroupByIdAPI(groupId) {
-  try {
-    const res = await axios.get(`/groups/${groupId}`);
-    if (res.data && res.data.success) {
-      return { group: res.data.group, error: null };
-    } else {
-      return { group: null, error: 'Group not found.' };
-    }
-  } catch (err) {
-    return { group: null, error: 'Failed to load group.' };
-  }
-}

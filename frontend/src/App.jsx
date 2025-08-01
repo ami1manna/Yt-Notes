@@ -20,8 +20,8 @@ import GroupDashboard from "./pages/Groups/GroupDashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GroupDetails from "./pages/GroupDetails/GroupDetails";
-import GroupDetailOverview from "./components/groupdetails/GroupDetailOverview";
 import GroupDetailActivity from "./components/groupdetails/GroupDetailActivity";
+import GroupDetailsPlaylists from "./components/groupdetails/GroupsDetailPlaylists";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,12 +34,12 @@ const router = createBrowserRouter(
 
         {/* Parent layout route for group details */}
         <Route path="/groups/:groupId" element={<GroupDetails />}>
-          <Route index element={<Navigate to="overview" replace />} />
-          <Route path="overview" element={<GroupDetailOverview />} />
+          <Route index element={<Navigate to="playlists" replace />} />
+          {/* <Route path="overview" element={<GroupDetailOverview />} /> */}
           <Route path="activity" element={<GroupDetailActivity />} />
-          {/* <Route path="playlists" element={<PlaylistsPage />} />
-          <Route path="members" element={<MembersPage />} />
-          <Route path="notes" element={<NotesPage />} /> */}
+          <Route path="playlists" element={<GroupDetailsPlaylists />} />
+          // {/* <Route path="members" element={<MembersPage />} />
+          // <Route path="notes" element={<NotesPage />} /> */}
         </Route>
       </Route>
 

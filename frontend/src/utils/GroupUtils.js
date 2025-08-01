@@ -1,20 +1,7 @@
 import axios from 'axios';
 
 
-export async function fetchGroupById(groupId) {
-  try {
-    const res = await axios.get(`/groups/${groupId}`);
-    if (res.data && res.data.success) {
-      return { group: res.data.group, error: null };
-    } else {
-      return { group: null, error: 'Group not found.' };
-    }
-  } catch (err) {
-    return { group: null, error: 'Failed to load group.' };
-  }
-}
-
-
+ 
 
 export async function updateGroup(groupId, { name, description, privacy }) {
   try {
