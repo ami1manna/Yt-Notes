@@ -59,7 +59,9 @@ exports.getGroupsService = async (user) => {
 
  
 exports.getGroupByIdService = async (id) => {
-  const group = await GroupModel.findById(id).populate('createdBy', 'username email');
+  const group = await GroupModel.findById(id)
+    .populate('createdBy', 'username email')
+    .populate('members.userId', 'username email');
 
   if (!group) throw { status: 404, message: 'Group not found' };
 
@@ -82,8 +84,20 @@ exports.getGroupByIdService = async (id) => {
     };
   });
 
+  // Enrich members with user information
+  const enrichedMembers = group.members.map(member => {
+    const memberUser = member.userId;
+    return {
+      ...member.toObject(),
+      userId: memberUser._id,
+      username: memberUser.username,
+      email: memberUser.email
+    };
+  });
+
   const groupObject = group.toObject();
   groupObject.sharedPlaylists = enrichedPlaylists;
+  groupObject.members = enrichedMembers;
 
   return { success: true, group: groupObject };
 };

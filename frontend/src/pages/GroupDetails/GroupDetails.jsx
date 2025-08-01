@@ -1,5 +1,5 @@
 import GroupDetailsHeader from '@/components/groupdetails/GroupDetailsHeader';
-import GroupDetailsBody from '../../components/groupdetails/GroupDetailsBody';
+import GroupDetailsBody from '@/components/groupdetails/GroupDetailsBody';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";

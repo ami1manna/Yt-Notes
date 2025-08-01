@@ -21,7 +21,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GroupDetails from "./pages/GroupDetails/GroupDetails";
 import GroupDetailActivity from "./components/groupdetails/GroupDetailActivity";
-import GroupDetailsPlaylists from "./components/groupdetails/GroupsDetailPlaylists";
+import GroupDetailsPlaylists from "@/components/groupdetails/GroupsDetailPlaylists";
+import GroupMember from "./pages/GroupMember/GroupMember";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,8 +39,8 @@ const router = createBrowserRouter(
           {/* <Route path="overview" element={<GroupDetailOverview />} /> */}
           <Route path="activity" element={<GroupDetailActivity />} />
           <Route path="playlists" element={<GroupDetailsPlaylists />} />
-          // {/* <Route path="members" element={<MembersPage />} />
-          // <Route path="notes" element={<NotesPage />} /> */}
+         <Route path="members" element={<GroupMember />} />
+          {/*  // <Route path="notes" element={<NotesPage />} /> */}
         </Route>
       </Route>
 
@@ -52,12 +53,7 @@ const router = createBrowserRouter(
   )
 );
 
-/**
- * The main App component. Returns a RouterProvider with the router.
- * The router contains all the routes for the application.
- * @returns {JSX.Element} The main App component.
- * @constructor
- */
+ 
 function App() {
   return (
     <>
