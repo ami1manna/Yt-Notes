@@ -69,18 +69,30 @@ export async function fetchSharedPlaylistsForGroup(groupId) {
   }
 }
 
-export async function inviteToGroup(groupId, email) {
+export async function inviteToGroup(groupId, emails) {
   try {
-    const res = await axios.post(`/groups/${groupId}/invite`, { email });
+    const payload = Array.isArray(emails) ? { emails } : { emails: [emails] };
+
+    const res = await axios.post(`/groups/${groupId}/invite`, payload);
+
     if (res.data && res.data.success) {
-      return { success: true, invite: res.data.invite, error: null };
+      return { success: true, results: res.data.results };
     } else {
-      return { success: false, invite: null, error: res.data?.message || 'Failed to send invite.' };
+      return {
+        success: false,
+        results: [],
+        error: res.data?.message || "Failed to send invites.",
+      };
     }
   } catch (err) {
-    return { success: false, invite: null, error: err.response?.data?.message || 'Failed to send invite.' };
+    return {
+      success: false,
+      results: [],
+      error: err.response?.data?.message || "Failed to send invites.",
+    };
   }
 }
+
 
 export async function respondToInvite(inviteId, action) {
   try {

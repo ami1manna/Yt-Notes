@@ -36,6 +36,7 @@ const GroupDetailsHeader = () => {
       <SearchMemberModal
         isOpen={isInviteModalOpen}
         onClose={() => setInviteModalOpen(false)}
+        groupId={group._id}
       />
 
       <Card className="w-full overflow-hidden">

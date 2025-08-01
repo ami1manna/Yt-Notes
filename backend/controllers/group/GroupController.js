@@ -61,12 +61,29 @@ exports.deleteGroup = async (req, res) => {
 // Invite a user to a group (admin only)
 exports.inviteToGroup = async (req, res) => {
   try {
-    const result = await inviteToGroupService(req.params.groupId, req.user, req.body.email);
-    res.status(201).json(result);
+    const { emails } = req.body;
+
+    if (!Array.isArray(emails) || emails.length === 0) {
+      return res.status(400).json({ success: false, message: 'Emails must be a non-empty array.' });
+    }
+
+    const results = [];
+
+    for (const email of emails) {
+      try {
+        const result = await inviteToGroupService(req.params.groupId, req.user, email);
+        results.push({ email, success: true, invite: result.invite });
+      } catch (error) {
+        results.push({ email, success: false, message: error.message });
+      }
+    }
+
+    res.status(207).json({ success: true, results }); // 207: Multi-Status
   } catch (error) {
-    res.status(error.status || 500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 };
+
 
 // Accept or decline a group invite
 exports.respondToInvite = async (req, res) => {
