@@ -59,7 +59,7 @@ exports.getGroupsService = async (user) => {
 
 
 exports.getGroupByIdService = async (id) => {
-  const group = await GroupModel.findById(id);
+  const group = await GroupModel.findById(id).populate('createdBy', 'username email');
   if (!group) throw { status: 404, message: 'Group not found' };
   return { success: true, group };
 };

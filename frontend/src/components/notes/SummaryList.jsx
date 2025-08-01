@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { Clock, BookOpen, Award, List, Book, Link, Code, BookmarkIcon, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { useEducationalNotes } from '../../context/EducationalNotesContext';
 import { useTranscript } from '../../context/TranscriptContext';
@@ -280,10 +279,15 @@ const SummaryList = ({ videoId }) => {
                                       <div className="rounded-md overflow-hidden">
                                         <SyntaxHighlighter
                                           language={snippet.language || 'javascript'}
-                                          style={atomOneDark}
-                                          customStyle={{ fontSize: '0.8rem', padding: '0.75rem' }}
+                                          customStyle={{ 
+                                            fontSize: '0.8rem', 
+                                            padding: '0.75rem',
+                                            backgroundColor: '#1e1e1e',
+                                            color: '#d4d4d4',
+                                            wordBreak: 'break-all',
+                                            whiteSpace: 'pre-wrap'
+                                          }}
                                           wrapLines={true}
-                                          lineProps={{ style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap' } }}
                                         >
                                           {snippet.code}
                                         </SyntaxHighlighter>

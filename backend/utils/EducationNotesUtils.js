@@ -22,6 +22,8 @@ const formatTime = (seconds) => {
 // Generate structured educational notes from a transcript
 const generateEducationalNotes = async (transcript) => {
   try {
+    console.log('generateEducationalNotes called with transcript length:', transcript.length);
+    
     // Prompt designed to generate user-friendly, well-structured notes
     const prompt = `
       Generate comprehensive, well-structured educational notes from this transcript:
@@ -80,16 +82,25 @@ const generateEducationalNotes = async (transcript) => {
       Focus on clarity, readability, and practical understanding. Make sure explanations avoid jargon when possible.
     `;
 
+    console.log('Calling AI model with prompt...');
     const response = await genAIModel.generateContent(prompt);
+    console.log('AI model response received');
     
     // Extract and parse the JSON response
-    const jsonMatch = response.response.text().match(/\{[\s\S]*\}/);
+    const responseText = response.response.text();
+    console.log('AI response text length:', responseText.length);
+    
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
+      console.error('Failed to extract JSON from AI response. Response text:', responseText.substring(0, 500));
       throw new Error('Failed to extract valid JSON from AI response');
     }
     
+    console.log('JSON extracted successfully, parsing...');
+    const parsedNotes = JSON.parse(jsonMatch[0]);
+    console.log('Notes parsed successfully');
     
-    return JSON.parse(jsonMatch[0]);
+    return parsedNotes;
   } catch (error) {
     console.error('AI Generation Error:', error);
     throw new Error('Failed to generate educational notes: ' + error.message);

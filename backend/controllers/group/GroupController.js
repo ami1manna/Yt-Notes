@@ -7,8 +7,7 @@ const { genAIModel } = require('@/genAi/AiModel');
 const axios = require('axios');
 const {fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
 const { createGroupService, getGroupsService, getGroupByIdService, updateGroupService, deleteGroupService, inviteToGroupService, respondToInviteService, getMyInvitesService, sharePlaylistWithGroupService } = require('@/services/group/groupService');
-
-
+ 
 // Create a new group
 exports.createGroup = async (req, res) => {
   try {
@@ -111,3 +110,5 @@ exports.getSharedPlaylistsForGroup = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 }; 
+
+

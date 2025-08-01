@@ -1,10 +1,11 @@
 import React from 'react'
+import Card from '../common/Card'
 
 const GroupDetailsPlaylists = () => {
   return (
-    <div>
+    <Card className='h-full'>
       asd
-    </div>
+    </Card>
   )
 }
 

@@ -8,7 +8,8 @@ const {
   inviteToGroup,
   respondToInvite,
   getMyInvites,
-  sharePlaylistWithGroup
+  sharePlaylistWithGroup,
+  
 } = require('../controllers/group/GroupController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -34,5 +35,6 @@ router.get('/invites/mine', protect, getMyInvites);
 router.post('/:groupId/share-playlist', protect, sharePlaylistWithGroup);
 // Fetch all shared playlists for a group
 router.get('/:groupId/shared-playlists', protect, require('../controllers/group/GroupController').getSharedPlaylistsForGroup);
+
 
 module.exports = router; 

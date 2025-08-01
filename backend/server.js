@@ -9,6 +9,8 @@ const videoRoutes = require('./routes/videoRouters');
 const customTranscriptRoutes = require('./routes/transcriptRoutes');
 const sectionRoutes = require('./routes/sectionRoutes');
 const groupsRoutes = require('./routes/groupsRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const connectDB = require('./config/database');
@@ -39,6 +41,7 @@ app.use('/video', videoRoutes);
 app.use('/transcript',customTranscriptRoutes);
 app.use('/section',sectionRoutes)
 app.use('/groups', groupsRoutes);
+app.use('/user', userRoutes)
 // Health check route
 app.get('/', (req, res) => {
   res.json({ status: 'healthy', message: "API is working on Vercel!" });

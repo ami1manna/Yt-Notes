@@ -22,15 +22,38 @@ exports.getMeService = async (cookies) => {
 };
 
 exports.signupService = async ({ username, email, password }, setCookie) => {
-  if (!username || !email || !password) throw { status: 400, message: 'All fields are required' };
-  if (await User.findOne({ email: email.toLowerCase() })) throw { status: 400, message: 'User already exists' };
+  if (!username || !email || !password)
+    throw { status: 400, message: 'All fields are required' };
+
+  const cleanedEmail = validateEmail(email);
+  const cleanedUsername = cleanUsername(username);
+
+  const existingEmail = await User.findOne({ email: cleanedEmail });
+  if (existingEmail)
+    throw { status: 409, message: 'An account with this email already exists' };
+
+  const existingUsername = await User.findOne({ username: cleanedUsername });
+  if (existingUsername)
+    throw { status: 409, message: 'This username is already taken' };
+
   const hashedPassword = await bcrypt.hash(password, 12);
-  const user = await User.create({ username, email: email.toLowerCase(), password: hashedPassword });
+
+  const user = await User.create({
+    username: cleanedUsername,
+    email: cleanedEmail,
+    password: hashedPassword,
+  });
+
   const token = generateToken(user._id);
   setCookie('jwt', token, cookieOptions);
+
   return {
     status: 'success',
-    user: { id: user._id, username, email: user.email }
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
   };
 };
 
@@ -55,3 +78,31 @@ exports.logoutService = (cookies, clearCookie) => {
     message: 'Logged out successfully'
   };
 }; 
+
+
+const validateEmail = (email) => {
+  const cleaned = email.trim().toLowerCase();
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (cleaned.includes(' '))
+    throw { status: 400, message: 'Email must not contain spaces' };
+
+  if (!emailRegex.test(cleaned))
+    throw { status: 400, message: 'Invalid email format' };
+
+  return cleaned;
+};
+
+const cleanUsername = (username) => {
+  const cleaned = username.trim().replace(/\s+/g, ' '); // normalize spaces
+
+  if (cleaned.length > 30)
+    throw { status: 400, message: 'Username must be 30 characters or less' };
+
+  // Optional: reject usernames with special characters (except space)
+  const usernameRegex = /^[a-zA-Z0-9 ]+$/;
+  if (!usernameRegex.test(cleaned))
+    throw { status: 400, message: 'Username must contain only letters, numbers, and single spaces' };
+
+  return cleaned;
+};
