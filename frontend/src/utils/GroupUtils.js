@@ -13,6 +13,19 @@ export async function fetchGroupsAPI() {
   }
 }
 
+export async function createGroupAPI({ name, description, privacy }) {
+  try {
+    const res = await axios.post('/groups', { name, description, privacy });
+    if (res.data && res.data.success) {
+      return {group: res.data.group , success: true, error: null };
+    } else {
+      return { success: false, error: res.data?.message || 'Failed to create group.' };
+    }
+  } catch (err) {
+    return { success: false, error: err.response?.data?.message || 'Failed to create group.' };
+  }
+}
+
 export async function fetchGroupById(groupId) {
   try {
     const res = await axios.get(`/groups/${groupId}`);
@@ -26,18 +39,7 @@ export async function fetchGroupById(groupId) {
   }
 }
 
-export async function createGroupAPI({ name, description, privacy }) {
-  try {
-    const res = await axios.post('/groups', { name, description, privacy });
-    if (res.data && res.data.success) {
-      return {group: res.data.group , success: true, error: null };
-    } else {
-      return { success: false, error: res.data?.message || 'Failed to create group.' };
-    }
-  } catch (err) {
-    return { success: false, error: err.response?.data?.message || 'Failed to create group.' };
-  }
-}
+
 
 export async function updateGroup(groupId, { name, description, privacy }) {
   try {
