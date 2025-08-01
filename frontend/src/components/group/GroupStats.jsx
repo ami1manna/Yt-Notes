@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Users, FileText, LayoutList, UserPlus } from "lucide-react";
-import Card from "./card/Card";
+import Card from "../common/Card";
 import Loading from "../../components/common/Loading";
 import Error from "../../components/common/Error";
 

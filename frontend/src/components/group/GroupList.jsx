@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import Card from "./card/Card";
+import Card from "../common/Card";
 import CreateGroup from "./CreateGroup";
 import { BookOpen, Lock } from "lucide-react";
 import Loading from "../../components/common/Loading";

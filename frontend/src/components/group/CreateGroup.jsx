@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "./card/Card";
+import Card from "../common/Card";
 import IconButton from "../common/IconButton";
 import { PlusCircle } from "lucide-react";
 import GroupForm from "./GroupForm";
