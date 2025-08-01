@@ -26,13 +26,15 @@ const GroupDetails = () => {
   
   return (
 
-    <div className='flex flex-col w-full p-4 gap-4'>
+    <div className='flex flex-col w-full h-full p-4 gap-4'>
       
       {/* Wrap both header and body in AsyncStateHandler */}
       <AsyncStateHandler isLoading={isLoading} error={error}>
         <>
           <GroupDetailsHeader/>
-          <GroupDetailsBody/>
+          <div className='flex-1 min-h-0'>
+            <GroupDetailsBody/>
+          </div>
         </>
       </AsyncStateHandler>
     </div>

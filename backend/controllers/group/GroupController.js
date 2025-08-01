@@ -108,9 +108,11 @@ exports.getMyInvites = async (req, res) => {
 // Share a playlist with a group (any member)
 exports.sharePlaylistWithGroup = async (req, res) => {
   try {
+    
     const result = await sharePlaylistWithGroupService(req.params.groupId, req.user, req.body);
     res.json(result);
   } catch (error) {
+    console.error('sharePlaylistWithGroup error:', error);
     res.status(error.status || 500).json({ success: false, message: error.message });
   }
 };

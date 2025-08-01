@@ -5,7 +5,7 @@ const GroupModel = require('@/models/groups/GroupModel');
 const User = require('@/models/users/userModel');
 const { fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
 const BasePlaylist = require('@/models/playlists/base/basePlaylistModel');
-const mongoose = require('mongoose');
+ 
 const { genAIModel } = require('@/genAi/AiModel');
 
 exports.createGroupService = async ({ name, description, privacy }, user) => {
@@ -57,12 +57,37 @@ exports.getGroupsService = async (user) => {
 };
 
 
-
+ 
 exports.getGroupByIdService = async (id) => {
   const group = await GroupModel.findById(id).populate('createdBy', 'username email');
+
   if (!group) throw { status: 404, message: 'Group not found' };
-  return { success: true, group };
+
+  const playlistIds = group.sharedPlaylists.map(sp => sp.playlistId);
+
+  // Fetch corresponding playlist metadata
+  const basePlaylists = await BasePlaylist.find({ playlistId: { $in: playlistIds } });
+
+  // Enrich sharedPlaylists with metadata
+  const enrichedPlaylists = group.sharedPlaylists.map(share => {
+    const base = basePlaylists.find(p => p.playlistId === share.playlistId);
+    return {
+      ...share.toObject(),
+      ...(base ? {
+        playlistTitle: base.playlistTitle,
+        playlistThumbnailUrl: base.playlistThumbnailUrl,
+        channelTitle: base.channelTitle,
+        totalVideos: base.videos.length,
+      } : {})
+    };
+  });
+
+  const groupObject = group.toObject();
+  groupObject.sharedPlaylists = enrichedPlaylists;
+
+  return { success: true, group: groupObject };
 };
+
 
 exports.updateGroupService = async (id, user, { name, description, privacy }) => {
   const group = await GroupModel.findById(id);
@@ -127,6 +152,18 @@ exports.getMyInvitesService = async (user) => {
 
 exports.sharePlaylistWithGroupService = async (groupId, user, { playlistId, arrangeSections }) => {
   if (!playlistId) throw { status: 400, message: 'playlistId is required' };
+  
+  // Validate groupId format
+  if (!groupId || typeof groupId !== 'string') {
+    throw { status: 400, message: 'Invalid groupId format' };
+  }
+  
+  // Check if groupId is a valid ObjectId format
+  const mongoose = require('mongoose');
+  if (!mongoose.Types.ObjectId.isValid(groupId)) {
+    throw { status: 400, message: 'Invalid groupId format. Expected a valid ObjectId.' };
+  }
+  
   const group = await GroupModel.findById(groupId);
   if (!group) throw { status: 404, message: 'Group not found' };
   const isMember = group.members.some(m => m.userId.equals(user._id));

@@ -16,3 +16,7 @@ export const getGroupDetailsFetchError = createSelector(
   [selectGroupDetailsState],
   (groupDetailsState) => groupDetailsState.error
 );
+export const getGroupPlaylists = createSelector(
+  [selectGroupDetailsState],
+  (groupDetailsState) => groupDetailsState.groupDetails?.sharedPlaylists || []
+);

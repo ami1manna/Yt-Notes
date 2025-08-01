@@ -40,9 +40,11 @@ const GroupDetails = () => {
 
   useEffect(() => {
     const loadGroup = async () => {
+      console.log('Loading group with groupId:', groupId);
       setLoading(true);
       setError(null);
       const { group, error } = await fetchGroupById(groupId);
+      console.log('Group loaded:', group, 'Error:', error);
       setGroup(group);
       setError(error);
       setLoading(false);

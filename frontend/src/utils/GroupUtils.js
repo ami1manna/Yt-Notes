@@ -1,7 +1,17 @@
 import axios from 'axios';
 
-
- 
+export async function fetchGroupById(groupId) {
+  try {
+    const res = await axios.get(`/groups/${groupId}`);
+    if (res.data && res.data.success) {
+      return { group: res.data.group, error: null };
+    } else {
+      return { group: null, error: res.data?.message || 'Failed to fetch group.' };
+    }
+  } catch (err) {
+    return { group: null, error: err.response?.data?.message || 'Failed to fetch group.' };
+  }
+}
 
 export async function updateGroup(groupId, { name, description, privacy }) {
   try {
@@ -43,9 +53,12 @@ export async function fetchPlaylistSummary(playlistId) {
   }
 }
 
-export async function sharePlaylistWithGroup(groupId, playlistId) {
+export async function sharePlaylistWithGroup(groupId, playlistId, arrangeSections = false) {
   try {
-    const res = await axios.post(`/groups/${groupId}/share-playlist`, { playlistId });
+    const res = await axios.post(`/groups/${groupId}/share-playlist`, { 
+      playlistId, 
+      arrangeSections 
+    });
     if (res.data && res.data.success) {
       return { success: true, group: res.data.group, error: null };
     } else {

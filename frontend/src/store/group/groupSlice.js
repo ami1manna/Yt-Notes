@@ -36,8 +36,10 @@ const groupSlice = createSlice({
      resetCreateState: (state) => {
       state.create.status = "idle";
       state.create.error = null;
-      console.log(state.create);
-    }
+       
+    },
+    clearGroupList: () => initialState
+
   },
   extraReducers: (builder) => {
     builder
@@ -77,7 +79,8 @@ export const {
   removeGroup,
   updateGroup,
   setSelectedGroup,
-  resetCreateState
+  resetCreateState,
+  clearGroupList
 } = groupSlice.actions;
 
 export default groupSlice.reducer;
