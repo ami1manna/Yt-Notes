@@ -25,8 +25,7 @@ const GroupDashboard = () => {
   }
   
   return (
-    <div className='w-full px-4 h-full'>
-       
+    <div className='w-full px-4 h-full '>
        <GroupStats/>  
       <GroupList/>
     </div>

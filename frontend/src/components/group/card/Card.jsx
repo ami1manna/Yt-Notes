@@ -7,7 +7,7 @@ const Card = ({ children, className = "", hover = false, ...props }) => {
 
   return (
     <div
-      className={`${base} ${hoverClasses} ${className}`}
+      className={`${base} ${hoverClasses} ${className} `}
       {...props}
       tabIndex={hover ? 0 : undefined} // makes focusable if interactive
     >

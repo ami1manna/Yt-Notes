@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {fetchGroupsAPI} from '@/utils/GroupUtils';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchGroupsAPI, createGroupAPI } from "@/utils/GroupUtils";  
 
 const initialState = {
   groupList: [],
@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const fetchGroups = createAsyncThunk(
-  'group/fetchGroups',
+  "group/fetchGroups",
   async (_, thunkAPI) => {
     const { groups, error } = await fetchGroupsAPI();
     if (error) return thunkAPI.rejectWithValue(error);
@@ -16,8 +16,17 @@ export const fetchGroups = createAsyncThunk(
   }
 );
 
+export const createGroup = createAsyncThunk(
+  "group/createGroup",
+  async (groupPayload, thunkAPI) => {
+    const { group, error } = await createGroupAPI(groupPayload);
+    if (error) return thunkAPI.rejectWithValue(error);
+    return {...group , role: 'admin'};
+  }
+);
+
 const groupSlice = createSlice({
-  name: 'group',
+  name: "group",
   initialState,
   reducers: {
     addGroup: (state, action) => {
@@ -40,6 +49,7 @@ const groupSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetchGroups
       .addCase(fetchGroups.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -50,7 +60,23 @@ const groupSlice = createSlice({
       })
       .addCase(fetchGroups.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Failed to fetch groups';
+        state.error =
+          action.payload || action.error?.message || "Failed to fetch groups";
+      })
+
+      // createGroup
+      .addCase(createGroup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createGroup.fulfilled, (state, action) => {
+        state.groupList.push(action.payload);
+        state.loading = false;
+      })
+      .addCase(createGroup.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload || action.error?.message || "Failed to create group";
       });
   },
 });

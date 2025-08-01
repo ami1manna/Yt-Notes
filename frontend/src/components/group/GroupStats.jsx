@@ -50,7 +50,7 @@ const GroupStats = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-4">
         {statItems.map(({ label, value, bg, icon }) => (
-          <Card key={label} hover className="text-center p-4 sm:p-6">
+          <Card key={label} hover className="text-center  sm:p-6">
             <Card.Content className="flex flex-col items-center">
               <div
                 className={`w-8 h-8 sm:w-12 sm:h-12 ${bg} rounded-lg flex items-center justify-center mb-2 sm:mb-3`}

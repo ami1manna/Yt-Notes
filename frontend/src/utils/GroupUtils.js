@@ -26,11 +26,11 @@ export async function fetchGroupById(groupId) {
   }
 }
 
-export async function createGroup({ name, description, privacy }) {
+export async function createGroupAPI({ name, description, privacy }) {
   try {
     const res = await axios.post('/groups', { name, description, privacy });
     if (res.data && res.data.success) {
-      return { success: true, error: null };
+      return {group: res.data.group , success: true, error: null };
     } else {
       return { success: false, error: res.data?.message || 'Failed to create group.' };
     }
