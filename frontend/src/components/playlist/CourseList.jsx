@@ -20,7 +20,7 @@ const CourseList = () => {
     }
     // Only run on user change
     // eslint-disable-next-line
-  }, [user,userPlaylistSummaries]);
+  }, [user]);
 
   const handleDelete = async (e, playlistId) => {
     e.preventDefault();

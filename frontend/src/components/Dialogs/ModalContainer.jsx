@@ -17,7 +17,7 @@ const ModalContainer = ({ isOpen, children, className = "" }) => {
 
   return ReactDOM.createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-auto ${className}`}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-auto ${className}`}
     >
       {/* blurred overlay */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-gray-900/60" />

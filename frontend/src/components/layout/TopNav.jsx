@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { NotebookPenIcon, Menu, X, Home, LayoutDashboard, Users } from "lucide-react";
- 
- 
-// import { useGroupContext } from '../../context/GroupContext';
-import { useContext } from 'react';
 import { useAuth } from "@/context/auth/AuthContextBase";
-import { Bell } from "lucide-react";
-// import GroupInvitesBell from '../group/GroupInvitesBell';
 import Profile from "./Profile";
 import ThemeToggle from "../ui/ThemeToggle";
+import InviteBell from "../common/InviteBell";
 
 const TopNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,46 +13,36 @@ const TopNav = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const { user } = useAuth();
-  // const { fetchMyInvites, respondToInvite } = useGroupContext();
-  const [invites, setInvites] = useState([]);
-  const [invitesOpen, setInvitesOpen] = useState(false);
-  const [invitesLoading, setInvitesLoading] = useState(false);
-  const [inviteActionLoading, setInviteActionLoading] = useState(null);
-  const [inviteError, setInviteError] = useState(null);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setInvitesLoading(true);
-  //     fetchMyInvites().then(({ invites }) => {
-  //       setInvites(invites || []);
-  //       setInvitesLoading(false);
-  //     });
-  //   } else {
-  //     setInvites([]);
-  //   }
-  // }, [user, fetchMyInvites]);
+  // Memoize navLinks to prevent recreation on every render
+  const navLinks = useMemo(() => [
+    { to: "/", label: "Home", icon: Home },
+    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/groups", label: "Groups", icon: Users },
+  ], []);
 
-  // const handleInviteResponse = async (inviteId, action) => {
-  //   setInviteActionLoading(inviteId + action);
-  //   setInviteError(null);
-  //   const { success, error } = await respondToInvite(inviteId, action);
-  //   setInviteActionLoading(null);
-  //   if (success) {
-  //     setInvites((prev) => prev.filter((i) => i._id !== inviteId));
-  //   } else {
-  //     setInviteError(error || 'Failed to respond to invite.');
-  //   }
-  // };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  // Memoize scroll handler to prevent recreation
+  const handleScroll = useCallback(() => {
+    const scrolled = window.scrollY > 20;
+    setIsScrolled(prevScrolled => {
+      // Only update if the value actually changed
+      if (prevScrolled !== scrolled) {
+        return scrolled;
+      }
+      return prevScrolled;
+    });
   }, []);
 
+  // Scroll effect with proper cleanup
+  useEffect(() => {
+    // Set initial scroll state
+    handleScroll();
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  // Click outside handler with proper cleanup
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -72,30 +57,34 @@ const TopNav = () => {
 
     if (isUserDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, [isUserDropdownOpen]);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleUserDropdown = () => setIsUserDropdownOpen(!isUserDropdownOpen);
+  // Memoized toggle functions
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
-  const navLinks = [
-    { to: "/", label: "Home", icon: Home },
-    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/groups", label: "Groups", icon: Users },
-  ];
+  const toggleUserDropdown = useCallback(() => {
+    setIsUserDropdownOpen(prev => !prev);
+  }, []);
+
+  const handleMobileNavClick = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  // Memoized className for nav to prevent unnecessary recalculations
+  const navClassName = useMemo(() => 
+    `w-full z-[999] transition-all duration-300 ${
+      isScrolled
+        ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg"
+        : "bg-white dark:bg-gray-900"
+    }`, [isScrolled]
+  );
 
   return (
-    <nav
-      className={` w-full  z-[999] transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg"
-          : "bg-white dark:bg-gray-900"
-      }`}
-    >
+    <nav className={navClassName}>
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between px-6 py-4 md:px-10">
           {/* Logo Section */}
@@ -127,11 +116,11 @@ const TopNav = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
-            {/* Invites Bell */}
-            {/* <GroupInvitesBell /> */}
+            
             <div className="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">
               <ThemeToggle />
               <Profile />
+              <InviteBell/>
             </div>
           </div>
 
@@ -167,16 +156,17 @@ const TopNav = () => {
                       : "text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400"
                   }`
                 }
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleMobileNavClick}
               >
                 <link.icon className="w-5 h-5" />
                 <span>{link.label}</span>
               </NavLink>
             ))}
-            {/* <GroupInvitesBell /> */}
+            
             <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700 w-full justify-center">
               <ThemeToggle />
               <Profile />
+              <InviteBell/>
             </div>
           </div>
         </div>
@@ -185,4 +175,4 @@ const TopNav = () => {
   );
 };
 
-export default TopNav;
+export default React.memo(TopNav);

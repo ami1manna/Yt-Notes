@@ -5,6 +5,7 @@ import TopNav from '@/components/layout/TopNav'
  
 
 const RootLayout = () => {
+    
     return (
           
         <div className='w-screen min-h-screen    flex flex-col bg-white dark:bg-gray-800'>

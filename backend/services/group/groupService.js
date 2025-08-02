@@ -159,10 +159,34 @@ exports.respondToInviteService = async (inviteId, user, action) => {
   return { success: true, invite };
 };
 
+// exports.getMyInvitesService = async (user) => {
+//   const invites = await GroupInviteModel.find({ invitedUserId: user._id, status: 'pending' }).populate('groupId');
+//   return { success: true, invites };
+// };
+
 exports.getMyInvitesService = async (user) => {
-  const invites = await GroupInviteModel.find({ invitedUserId: user._id, status: 'pending' }).populate('groupId');
-  return { success: true, invites };
+  const invites = await GroupInviteModel.find({
+    invitedUserId: user._id,
+    status: 'pending',
+  })
+    .populate({
+      path: 'groupId',
+      select: 'name description',
+    })
+    .select('_id groupId');
+
+  // Format the response to return only required fields
+  const formattedInvites = invites.map((invite) => ({
+    _id: invite._id,
+    group: {
+      name: invite.groupId?.name,
+      description: invite.groupId?.description,
+    },
+  }));
+
+  return { success: true, invites: formattedInvites };
 };
+
 
 exports.sharePlaylistWithGroupService = async (groupId, user, { playlistId, arrangeSections }) => {
   if (!playlistId) throw { status: 400, message: 'playlistId is required' };
