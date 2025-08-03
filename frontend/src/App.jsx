@@ -19,13 +19,11 @@ import GroupDashboard from "./pages/Groups/GroupDashboard";
 // components
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 // group details Screen
 import GroupDetails from "./pages/GroupDetails/GroupDetails";
 import GroupMember from "./pages/GroupMember/GroupMember";
 import SharedNotes from "./pages/SharedNotes/SharedNotes";
 import GroupPlaylists from "./pages/GroupDetails/GroupPlaylists";
-
 // Group Playlist Details Screen
 import GroupPlaylistDetails from "./pages/GroupPlaylistDetails/GroupPlayListDetails";
 
@@ -44,11 +42,7 @@ const router = createBrowserRouter(
           <Route path="members" element={<GroupMember />} />
         </Route>
 
-        {/* 🔥 New route outside the nested structure */}
-        <Route
-          path="/groups/:groupId/playlists/:playlistId"
-          element={<GroupPlaylistDetails />}
-        />
+       
       </Route>
 
       {/* Standalone Routes */}
@@ -56,6 +50,10 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
       <Route path="/dashboard" element={<DashBoard />} />
+       <Route
+          path="/groups/:groupId/playlists/:playlistId"
+          element={<GroupPlaylistDetails />}
+        />
     </>
   )
 );

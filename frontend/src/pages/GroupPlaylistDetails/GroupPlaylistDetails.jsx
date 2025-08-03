@@ -10,6 +10,8 @@ import {
 import { clearGroupPlaylistDetails } from "@/store/groupPlaylist/groupPlaylistSlice";
 import AsyncStateHandler from "@/components/common/AsyncStateHandler";
 
+import SidebarNav from "../../components/groupPlaylistDetails/sidebar/SidebarNav ";
+
 const GroupPlaylistDetails = () => {
   const { groupId, playlistId } = useParams();
   const dispatch = useDispatch();
@@ -38,17 +40,18 @@ const GroupPlaylistDetails = () => {
   }, [dispatch, groupId, playlistId]);
 
   return (
-    <AsyncStateHandler
-      isLoading={isLoading}
-      error={error}
-      loadingMessage="Fetching shared playlist..."
-      errorMessagePrefix="Failed to fetch:"
-    >
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Playlist Details</h2>
-        <pre>{JSON.stringify(groupPlaylistDetails, null, 2)}</pre>
-      </div>
-    </AsyncStateHandler>
+<AsyncStateHandler
+  isLoading={isLoading}
+  error={error}
+  loadingMessage="Fetching shared playlist..."
+  errorMessagePrefix="Failed to fetch:"
+>
+ 
+    <SidebarNav />
+
+     
+</AsyncStateHandler>
+
   );
 };
 
