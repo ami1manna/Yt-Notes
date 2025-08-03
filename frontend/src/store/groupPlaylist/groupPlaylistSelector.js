@@ -20,3 +20,6 @@ export const getGroupPlaylistDetailsFetchError = createSelector(
   [selectGroupPlaylistDetailsState],
   (state) => state.error
 );
+
+// Selector: selected video
+export const getCurrentVideo = (state) => state.groupPlaylistDetails.selectedVideo;

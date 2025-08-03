@@ -1,19 +1,25 @@
-import { useSelector } from "react-redux";
 import { useState, useMemo } from "react";
-import { groupPlaylistDetailsSelectors } from "@/store/groupPlaylist";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  groupPlaylistDetailsSelectors,
+} from "@/store/groupPlaylist";
+
 import SidebarHeader from "./SidebarHeader";
 import SidebarTabs from "./SidebarTabs";
 import SectionPanel from "./SectionPanel";
 import VideoItem from "./VideoItem";
 import SidebarFooter from "./SidebarFooter";
+import { setSelectedVideo } from "@/store/groupPlaylist/groupPlaylistSlice";
 
 const SidebarNav = () => {
   const [activeTab, setActiveTab] = useState("sections");
-  const [currentVideo, setCurrentVideo] = useState(null);
   const [expandedSections, setExpandedSections] = useState(new Set());
   const [isHovered, setIsHovered] = useState(false);
 
+  const dispatch = useDispatch();
+  const currentVideo = useSelector(groupPlaylistDetailsSelectors.getCurrentVideo);
   const details = useSelector(groupPlaylistDetailsSelectors.getGroupPlaylistDetails);
+
   const sections = details?.sections || [];
   const videoOrder = details?.videoOrder || [];
 
@@ -27,9 +33,9 @@ const SidebarNav = () => {
 
   useMemo(() => {
     if (!currentVideo && videoOrder.length > 0) {
-      setCurrentVideo(videoOrder[0]);
+      dispatch(setSelectedVideo(videosById[videoOrder[0]]));
     }
-  }, [videoOrder, currentVideo]);
+  }, [videoOrder, currentVideo, dispatch, videosById]);
 
   const toggleSection = (sectionId) => {
     const newExpanded = new Set(expandedSections);
@@ -39,7 +45,10 @@ const SidebarNav = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-5 h-screen z-20 " onMouseEnter={() => setIsHovered(true)} />
+      <div
+        className="fixed top-0 left-0 w-5 h-screen z-20"
+        onMouseEnter={() => setIsHovered(true)}
+      />
       <aside
         className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-900 shadow-xl z-30 flex flex-col transition-all duration-300 ease-in-out ${
           isHovered ? "w-96 translate-x-0" : "w-96 -translate-x-full"
@@ -48,7 +57,6 @@ const SidebarNav = () => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <SidebarHeader details={details} />
-
         <SidebarTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className="flex-1 overflow-y-auto p-4">
@@ -61,7 +69,7 @@ const SidebarNav = () => {
                   index={i}
                   videosById={videosById}
                   currentVideo={currentVideo}
-                  setCurrentVideo={setCurrentVideo}
+                  onVideoSelect={(video) => dispatch(setSelectedVideo(video))}
                   isExpanded={expandedSections.has(section.sectionId)}
                   toggleSection={toggleSection}
                 />
@@ -69,22 +77,28 @@ const SidebarNav = () => {
             </div>
           ) : (
             <div className="space-y-1">
-              {videoOrder.map((videoId, index) => (
-                <VideoItem
-                  key={videoId}
-                  video={videosById[videoId]}
-                  index={index}
-                  isActive={currentVideo === videoId}
-                  onClick={() => setCurrentVideo(videoId)}
-                  showIndex
-                />
-              ))}
+              {videoOrder.map((videoId, index) => {
+                const video = videosById[videoId];
+                return (
+                  <VideoItem
+                    key={videoId}
+                    video={video}
+                    index={index}
+                    isActive={currentVideo?.videoId === videoId}
+                    onClick={() => dispatch(setSelectedVideo(video))}
+                    showIndex
+                  />
+                );
+              })}
             </div>
           )}
         </div>
 
         {currentVideo && (
-          <SidebarFooter currentIndex={videoOrder.indexOf(currentVideo)} total={videoOrder.length} />
+          <SidebarFooter
+            currentIndex={videoOrder.findIndex((id) => id === currentVideo.videoId)}
+            total={videoOrder.length}
+          />
         )}
       </aside>
     </>
