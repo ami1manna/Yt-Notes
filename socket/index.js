@@ -1,41 +1,55 @@
-// index.js
-
-const express = require('express');
-const http = require('http');
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
 const { Server } = require("socket.io");
 
 const app = express();
-const server = http.createServer(app);
+app.use(cors());
 
-// Initialize Socket.IO with CORS configuration
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // IMPORTANT: For production, change this to your Vercel frontend URL
-    methods: ["GET", "POST"]
-  }
+    origin: "*", // In production, specify your frontend URL
+    methods: ["GET", "POST"],
+  },
 });
 
+const roomUsers = {}; // { roomId: Set(socketId) }
 
- 
-// This block runs every time a new client connects to our server
-io.on('connection', (socket) => {
-  console.log('✅ A user connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("🔌 New client connected:", socket.id);
 
-  // Listen for a custom event named 'message' from a client
-  socket.on('message', (data) => {
-    console.log(`Received message from ${socket.id}: ${data}`);
+  socket.on("join_room", ({ groupId, playlistId, user }) => {
+    const roomId = `${groupId}-${playlistId}`;
 
-    // Broadcast the received message to all connected clients
-    io.emit('message', data);
+    socket.join(roomId);
+
+    if (!roomUsers[roomId]) roomUsers[roomId] = new Map();
+    roomUsers[roomId].set(socket.id, user);
+
+    console.log(`✅ ${user.name} joined room: ${roomId}`);
+
+    io.to(roomId).emit("room_users", Array.from(roomUsers[roomId].values()));
   });
 
-  // This block runs when that specific client disconnects
-  socket.on('disconnect', () => {
-    console.log('❌ A user disconnected:', socket.id);
+  socket.on("disconnect", () => {
+    for (const [roomId, users] of Object.entries(roomUsers)) {
+      if (users.has(socket.id)) {
+        const user = users.get(socket.id);
+        users.delete(socket.id);
+        console.log(`❌ ${user.name} disconnected from ${roomId}`);
+
+        io.to(roomId).emit("room_users", Array.from(users.values()));
+
+        if (users.size === 0) {
+          delete roomUsers[roomId];
+        }
+        break;
+      }
+    }
   });
 });
- 
-const PORT = 3001; 
-server.listen(PORT, () => {
-  console.log(`Real-time server is running on port ${PORT}`);
+
+server.listen(5001, () => {
+  console.log("🚀 Server running on http://localhost:5001");
 });
