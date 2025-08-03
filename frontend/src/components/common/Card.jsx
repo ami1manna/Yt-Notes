@@ -113,12 +113,12 @@ const CardDescription = ({
   };
 
   return (
-    <p
+    <div
       className={`${sizes[size]} text-gray-600 dark:text-gray-400 mt-1 leading-relaxed ${className}`}
       {...props}
     >
       {children}
-    </p>
+    </div>
   );
 };
 

@@ -53,21 +53,7 @@ export async function fetchPlaylistSummary(playlistId) {
   }
 }
 
-export async function sharePlaylistWithGroup(groupId, playlistId, arrangeSections = false) {
-  try {
-    const res = await axios.post(`/groups/${groupId}/share-playlist`, { 
-      playlistId, 
-      arrangeSections 
-    });
-    if (res.data && res.data.success) {
-      return { success: true, group: res.data.group, error: null };
-    } else {
-      return { success: false, group: null, error: res.data?.message || 'Failed to share playlist.' };
-    }
-  } catch (err) {
-    return { success: false, group: null, error: err.response?.data?.message || 'Failed to share playlist.' };
-  }
-}
+
 
 export async function fetchSharedPlaylistsForGroup(groupId) {
   try {

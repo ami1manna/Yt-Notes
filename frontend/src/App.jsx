@@ -19,32 +19,39 @@ import GroupDashboard from "./pages/Groups/GroupDashboard";
 // components
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// group details Screen
 import GroupDetails from "./pages/GroupDetails/GroupDetails";
-import GroupDetailActivity from "./components/groupdetails/GroupDetailActivity";
-import GroupDetailsPlaylists from "@/components/groupdetails/GroupsDetailPlaylists";
 import GroupMember from "./pages/GroupMember/GroupMember";
+import SharedNotes from "./pages/SharedNotes/SharedNotes";
+import GroupPlaylists from "./pages/GroupDetails/GroupPlaylists";
+
+// Group Playlist Details Screen
+import GroupPlaylistDetails from "./pages/GroupPlaylistDetails/GroupPlayListDetails";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* Routes inside RootLayout */}
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
-
         <Route path="/groups" element={<GroupDashboard />} />
 
-        {/* Parent layout route for group details */}
+        {/* GROUP DETAILS nested under groupId */}
         <Route path="/groups/:groupId" element={<GroupDetails />}>
           <Route index element={<Navigate to="playlists" replace />} />
-          {/* <Route path="overview" element={<GroupDetailOverview />} /> */}
-          <Route path="activity" element={<GroupDetailActivity />} />
-          <Route path="playlists" element={<GroupDetailsPlaylists />} />
-         <Route path="members" element={<GroupMember />} />
-          {/*  // <Route path="notes" element={<NotesPage />} /> */}
+          <Route path="notes" element={<SharedNotes />} />
+          <Route path="playlists" element={<GroupPlaylists />} />
+          <Route path="members" element={<GroupMember />} />
         </Route>
+
+        {/* 🔥 New route outside the nested structure */}
+        <Route
+          path="/groups/:groupId/playlists/:playlistId"
+          element={<GroupPlaylistDetails />}
+        />
       </Route>
 
-      {/* Separate Routes for Login and Signup (No RootLayout) */}
+      {/* Standalone Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
@@ -53,7 +60,6 @@ const router = createBrowserRouter(
   )
 );
 
- 
 function App() {
   return (
     <>

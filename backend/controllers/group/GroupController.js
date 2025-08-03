@@ -7,6 +7,7 @@ const { genAIModel } = require('@/genAi/AiModel');
 const axios = require('axios');
 const {fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
 const { createGroupService, getGroupsService, getGroupByIdService, updateGroupService, deleteGroupService, inviteToGroupService, respondToInviteService, getMyInvitesService, sharePlaylistWithGroupService } = require('@/services/group/groupService');
+const { getSharedPlaylistDetailsService } = require('../../services/group/groupService');
  
 // Create a new group
 exports.createGroup = async (req, res) => {
@@ -117,17 +118,18 @@ exports.sharePlaylistWithGroup = async (req, res) => {
   }
 };
 
-// Fetch all shared playlists for a group
-exports.getSharedPlaylistsForGroup = async (req, res) => {
+// Fetch all shared playlists details
+exports.getSharedPlaylistDetails = async (req, res) => {
   try {
-    const group = await require('@/models/groups/GroupModel').findById(req.params.groupId).populate('sharedPlaylists.playlistId');
-    if (!group) {
-      return res.status(404).json({ success: false, message: 'Group not found' });
+    const { groupId, playlistId } = req.params;
+    const result = await getSharedPlaylistDetailsService(groupId, playlistId);
+
+    if (!result.success) {
+      return res.status(404).json({ success: false, message: result.message });
     }
-    res.json({ success: true, sharedPlaylists: group.sharedPlaylists });
+
+    res.json({ success: true, playlist: result.playlist });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-}; 
-
-
+};

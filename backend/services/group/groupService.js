@@ -249,3 +249,22 @@ exports.sharePlaylistWithGroupService = async (groupId, user, { playlistId, arra
   await group.save();
   return { success: true, group };
 }; 
+
+exports.getSharedPlaylistDetailsService = async (groupId, playlistId) => {
+  const group = await GroupModel.findById(groupId).lean();
+  if (!group) {
+    return { success: false, message: 'Group not found' };
+  }
+
+  const isShared = group.sharedPlaylists.some(p => p.playlistId === playlistId);
+  if (!isShared) {
+    return { success: false, message: 'This playlist is not shared in this group' };
+  }
+
+  const playlist = await BasePlaylist.findOne({ playlistId }).lean();
+  if (!playlist) {
+    return { success: false, message: 'Playlist not found' };
+  }
+
+  return { success: true, playlist };
+};

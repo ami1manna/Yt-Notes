@@ -6,19 +6,20 @@ import {
   Clock,
   FileText,
   Music,
+  Plus,
   UserPlus,
   Users,
 } from "lucide-react";
 import Card from "../common/Card";
 import IconButton from "@/components/common/IconButton";
-import {
-  groupDetailSelectors,
-} from "@/store/groupDetails";
+import { groupDetailSelectors } from "@/store/groupDetails";
 import SearchMemberModal from "./SearchMemberModal";
+import AddPlaylistModal from "./AddPlaylistModel";
 
 const GroupDetailsHeader = () => {
   // local state
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
+  const [isAddPlaylistModalOpen, setAddPlaylistModalOpen] = useState(false);
 
   // global state
   const group = useSelector(groupDetailSelectors.getGroupDetails);
@@ -36,6 +37,13 @@ const GroupDetailsHeader = () => {
       <SearchMemberModal
         isOpen={isInviteModalOpen}
         onClose={() => setInviteModalOpen(false)}
+        groupId={group._id}
+      />
+
+      {/* Add PlayLIst Button */}
+      <AddPlaylistModal
+        isOpen={isAddPlaylistModalOpen}
+        onClose={() => setAddPlaylistModalOpen(false)}
         groupId={group._id}
       />
 
@@ -73,13 +81,17 @@ const GroupDetailsHeader = () => {
                       <span>
                         Created by{" "}
                         <span className="font-medium text-gray-700 dark:text-gray-300">
-                          {group.createdBy?.username || group.createdBy || "Unknown"}
+                          {group.createdBy?.username ||
+                            group.createdBy ||
+                            "Unknown"}
                         </span>
                       </span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(group.createdAt).toLocaleDateString()}</span>
+                      <span>
+                        {new Date(group.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Clock className="w-4 h-4" />
@@ -92,14 +104,23 @@ const GroupDetailsHeader = () => {
                 </div>
               </div>
 
-              <div className="flex-shrink-0 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <IconButton
                   type="button"
-                  className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                  className="px-6 py-3  hover:bg-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
                   icon={UserPlus}
                   onClick={() => setInviteModalOpen(true)}
                 >
                   <span>Invite Members</span>
+                </IconButton>
+
+                <IconButton
+                  type="button"
+                  className="px-6 py-3  hover:bg-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                  icon={Plus}
+                  onClick={() => setAddPlaylistModalOpen(true)}
+                >
+                  <span>Add Playlist</span>
                 </IconButton>
               </div>
             </div>
@@ -119,7 +140,6 @@ const GroupDetailsHeader = () => {
                 <div className="text-sm font-medium text-blue-800 dark:text-blue-300">
                   Members
                 </div>
-
               </div>
 
               <div className="group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-6 rounded-xl border border-green-200 dark:border-green-800 hover:shadow-md transition-all duration-200">
@@ -134,7 +154,6 @@ const GroupDetailsHeader = () => {
                 <div className="text-sm font-medium text-green-800 dark:text-green-300">
                   Shared Playlists
                 </div>
-
               </div>
 
               <div className="group bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 p-6 rounded-xl border border-amber-200 dark:border-amber-800 hover:shadow-md transition-all duration-200">
@@ -149,13 +168,11 @@ const GroupDetailsHeader = () => {
                 <div className="text-sm font-medium text-amber-800 dark:text-amber-300">
                   Shared Notes
                 </div>
-
               </div>
             </div>
           </div>
         </Card.Content>
       </Card>
-
     </>
   );
 };
