@@ -1,4 +1,4 @@
-const SidebarTabs = ({ activeTab, setActiveTab }) => {
+const SidebarTabs = ({ activeTab , setActiveTab }) => {
   return (
     <div className="flex-shrink-0 p-4 border-b border-gray-100 dark:border-gray-700">
       <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">

@@ -14,15 +14,17 @@ import SidebarNav from "@/components/groupPlaylistDetails/sidebar/SidebarNav ";
 import MainSection from "@/components/groupPlaylistDetails/MainSection";
 import NotesSection from "@/components/groupPlaylistDetails/NotesSection";
 import TopBar from "@/components/groupPlaylistDetails/TopBar";
+import { useAuth } from "@/context/auth/AuthContextBase";
+ 
+ import { usePresence } from "../../store/presence/usePresence";
+
 
 const GroupPlaylistDetails = () => {
   const { groupId, playlistId } = useParams();
+   const user = useAuth();
   const dispatch = useDispatch();
 
-  // Selectors
-  const groupPlaylistDetails = useSelector(
-    groupPlaylistDetailsSelectors.getGroupPlaylistDetails
-  );
+   
   const isLoading = useSelector(
     groupPlaylistDetailsSelectors.isGroupPlaylistDetailsFetching
   );
@@ -42,6 +44,11 @@ const GroupPlaylistDetails = () => {
     };
   }, [dispatch, groupId, playlistId]);
 
+
+  // Calling update playlist presence 
+  // usePresence({ groupId, playlistId, user });
+
+  
   return (
 <AsyncStateHandler
       isLoading={isLoading}

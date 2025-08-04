@@ -43,7 +43,7 @@ app.use('/transcript',customTranscriptRoutes);
 app.use('/section',sectionRoutes)
 app.use('/groups', groupsRoutes);
 app.use('/user', userRoutes);
-app.use('/notes', collabRoutes);
+app.use('/collab', collabRoutes);
 
 // Health check route
 app.get('/', (req, res) => {

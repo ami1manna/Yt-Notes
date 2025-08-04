@@ -10,10 +10,10 @@ const GroupDashboard = () => {
 
   useEffect(() => {
     dispatch(groupsThunks.fetchGroups());
-
+    console.log("Group DashBoard remove");
     return () => {
       dispatch(clearGroupList());
-      console.log("called");
+      console.log("Group DashBoard remove");
     };
   }, [dispatch]);
 

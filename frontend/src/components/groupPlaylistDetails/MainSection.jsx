@@ -1,11 +1,18 @@
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { groupPlaylistDetailsSelectors } from "@/store/groupPlaylist";
-
+import { usePresence } from "../../store/presence/usePresence";
+ import { useAuth } from "@/context/auth/AuthContextBase";
+ 
 const MainSection = () => {
+  const { groupId, playlistId } = useParams();
+  const user = useAuth();
   const selectedVideo = useSelector(
     groupPlaylistDetailsSelectors.getCurrentVideo
   );
-  console.log(selectedVideo);
+
+  usePresence(groupId, playlistId , selectedVideo?.videoId, user);
+
   if (!selectedVideo) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-500">

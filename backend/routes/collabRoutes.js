@@ -13,16 +13,16 @@ const router = express.Router();
 // Apply authentication middleware to all routes
 router.use(protect);
 
-// POST /api/notes/create
+// POST /api/collab/create
 router.post('/create', createCollabNote);
 
-// GET /api/notes (pass query like ?videoId=xyz&groupId=abc)
+// GET /api/collab (pass query like ?videoId=xyz&playlistId=123&groupId=abc)
 router.get('/', getCollabNoteForVideo);
 
-// PATCH /api/notes/:noteId
+// PATCH /api/collab/:noteId
 router.patch('/:noteId', updateCollabNote);
 
-// DELETE /api/notes/:noteId
+// DELETE /api/collab/:noteId
 router.delete('/:noteId', deleteCollabNote);
 
 module.exports = router;

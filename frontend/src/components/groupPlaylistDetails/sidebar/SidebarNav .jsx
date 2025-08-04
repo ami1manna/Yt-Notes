@@ -10,9 +10,14 @@ import SectionPanel from "./SectionPanel";
 import VideoItem from "./VideoItem";
 import SidebarFooter from "./SidebarFooter";
 import { setSelectedVideo } from "@/store/groupPlaylist/groupPlaylistSlice";
+import { usePresence } from "../../../store/presence/usePresence";
+import { useAuth } from "@/context/auth/AuthContextBase";
+import { useParams } from "react-router-dom";
 
 const SidebarNav = () => {
-  const [activeTab, setActiveTab] = useState("sections");
+  const user = useAuth();
+  const { groupId, playlistId } = useParams();
+  const [activeTab, setActiveTab] = useState("order");
   const [expandedSections, setExpandedSections] = useState(new Set());
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,6 +42,14 @@ const SidebarNav = () => {
     }
   }, [videoOrder, currentVideo, dispatch, videosById]);
 
+  // presence
+  usePresence({
+    groupId ,
+     playlistId,
+    videoId: currentVideo?.videoId,
+    user
+  });
+  
   const toggleSection = (sectionId) => {
     const newExpanded = new Set(expandedSections);
     newExpanded.has(sectionId) ? newExpanded.delete(sectionId) : newExpanded.add(sectionId);

@@ -1,5 +1,5 @@
 // components/groupdetails/GroupDetailsHeader.jsx
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Calendar,
@@ -12,18 +12,28 @@ import {
 } from "lucide-react";
 import Card from "../common/Card";
 import IconButton from "@/components/common/IconButton";
+
 import { groupDetailSelectors } from "@/store/groupDetails";
 import SearchMemberModal from "./SearchMemberModal";
 import AddPlaylistModal from "./AddPlaylistModel";
+
+import { useParams } from "react-router-dom";
+ 
+import ActiveUserBadges from "../common/ActiveUserBadges";
+import { selectAllUsers } from "@/store/presence/presenceSelectors";
+import AllConnectedUsers from "../common/AllConnectedUsers";
 
 const GroupDetailsHeader = () => {
   // local state
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
   const [isAddPlaylistModalOpen, setAddPlaylistModalOpen] = useState(false);
-
+  const { groupId } = useParams();
+  const users = useSelector(selectAllUsers);
+  
   // global state
   const group = useSelector(groupDetailSelectors.getGroupDetails);
 
+  
   // Return early if group is not loaded yet
   if (!group) {
     return null;
@@ -69,6 +79,8 @@ const GroupDetailsHeader = () => {
                     <div className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
                       {group.privacy === "private" ? "Private" : "Public"}
                     </div>
+
+                    <AllConnectedUsers   />
                   </div>
 
                   <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 text-base">
