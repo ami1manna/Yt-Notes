@@ -1,45 +1,70 @@
-import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } from 'react-router-dom';
-import RootLayout from './pages/RootLayout';
-import Signup from './pages/Signup';
-import Home from './pages/Home';
-import AddPlaylist from './components/widgets/AddPlaylist';
-import Login from './pages/Login';
-import CourseScreen from './pages/CourseScreen';
-import DashBoard from './pages/DashBoard';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// library
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  createRoutesFromElements,
+  Navigate,
+} from "react-router-dom";
+
+// pages
+import RootLayout from "./pages/RootLayout/RootLayout";
+import Signup from "./pages/Signup/Signup";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import CourseScreen from "./pages/CourseScreen/CourseScreen";
+import DashBoard from "./pages/Dashboard/DashBoard";
+import GroupDashboard from "./pages/Groups/GroupDashboard";
+
+// components
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// group details Screen
+import GroupDetails from "./pages/GroupDetails/GroupDetails";
+import GroupMember from "./pages/GroupMember/GroupMember";
+import SharedNotes from "./pages/SharedNotes/SharedNotes";
+import GroupPlaylists from "./pages/GroupDetails/GroupPlaylists";
+// Group Playlist Details Screen
+import GroupPlaylistDetails from "./pages/GroupPlaylistDetails/GroupPlayListDetails";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* Routes inside RootLayout */}
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
-        <Route path="addPlaylist" element={<AddPlaylist />} />
+        <Route path="/groups" element={<GroupDashboard />} />
+
+        {/* GROUP DETAILS nested under groupId */}
+        <Route path="/groups/:groupId" element={<GroupDetails />}>
+          <Route index element={<Navigate to="playlists" replace />} />
+          <Route path="notes" element={<SharedNotes />} />
+          <Route path="playlists" element={<GroupPlaylists />} />
+          <Route path="members" element={<GroupMember />} />
+        </Route>
+
+       
       </Route>
 
-      {/* Separate Routes for Login and Signup (No RootLayout) */}
+      {/* Standalone Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/courseScreen/:playlistId" element={<CourseScreen />} />
-      <Route path='/dashboard' element={<DashBoard />} />
+      <Route path="/dashboard" element={<DashBoard />} />
+       <Route
+          path="/groups/:groupId/playlists/:playlistId"
+          element={<GroupPlaylistDetails />}
+        />
     </>
   )
 );
 
-
-/**
- * The main App component. Returns a RouterProvider with the router.
- * The router contains all the routes for the application.
- * @returns {JSX.Element} The main App component.
- * @constructor
- */
 function App() {
-  return <>
-  <RouterProvider router={router} />
-  <ToastContainer position="top-right" autoClose={3000} />
-  </>
-
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
 }
 
 export default App;

@@ -1,5 +1,6 @@
 // imports
 const { google } = require('googleapis');
+const axios = require('axios');
 
 
 // SectionModel section
@@ -118,6 +119,67 @@ exports.parseDuration = (duration) => {
     return (hours * 3600) + (minutes * 60) + seconds;
 };
 
+exports.fetchPlaylistFromYouTube = async (playlistId, apiKey) => {
+  async function getAllPlaylistItems(playlistId) {
+    let allItems = [];
+    let nextPageToken = '';
+    do {
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
+        params: {
+          part: 'snippet',
+          maxResults: 50,
+          playlistId,
+          pageToken: nextPageToken,
+          key: apiKey,
+        },
+      });
+      allItems = [...allItems, ...response.data.items];
+      nextPageToken = response.data.nextPageToken;
+    } while (nextPageToken);
+    return allItems;
+  }
+  async function getVideoDetails(videoIds) {
+    const batchSize = 50;
+    const promises = [];
+    for (let i = 0; i < videoIds.length; i += batchSize) {
+      const batchIds = videoIds.slice(i, i + batchSize).join(',');
+      promises.push(
+        axios.get('https://www.googleapis.com/youtube/v3/videos', {
+          params: { part: 'contentDetails', id: batchIds, key: apiKey },
+        })
+      );
+    }
+    const responses = await Promise.all(promises);
+    return responses.flatMap(response => response.data.items);
+  }
+  const videosData = await getAllPlaylistItems(playlistId);
+  if (!videosData.length) {
+    throw new Error('Playlist is empty or invalid');
+  }
+  const videoIds = videosData.map(item => item.snippet.resourceId.videoId);
+  const videoDetails = await getVideoDetails(videoIds);
+  // Build videos array for base playlist
+  const videos = videosData.map(item => {
+    const videoId = item.snippet.resourceId.videoId;
+    const videoDetail = videoDetails.find(v => v.id === videoId);
+    return {
+      videoId,
+      title: item.snippet.title,
+      thumbnailUrl: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
+      duration: exports.parseDuration(videoDetail?.contentDetails?.duration || 'PT0S')
+    };
+  });
+  const videoOrder = videoIds;
+  return {
+    playlistTitle: videosData[0].snippet.title,
+    playlistUrl: `https://www.youtube.com/playlist?list=${playlistId}`,
+    channelTitle: videosData[0].snippet.channelTitle,
+    playlistThumbnailUrl: videosData[0].snippet.thumbnails.high?.url || videosData[0].snippet.thumbnails.default?.url,
+    totalDuration: videos.reduce((sum, v) => sum + (v.duration || 0), 0),
+    videos,
+    videoOrder,
+  };
+};
 
 // null checker
 exports.checkEmpty = (...params) => {

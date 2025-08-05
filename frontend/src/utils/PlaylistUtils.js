@@ -46,50 +46,40 @@ export const validatePlaylistUrl = (url) => {
 
 // DATABASE UTILS
 // Remove useContext(PlaylistContext) from here
-export const fetchUserPlaylists = async (email, setPlaylistData) => {
+// Fetch summarized playlists for a user (for CourseScreen and CourseList)
+export const fetchUserPlaylistSummaries = async (userId, setPlaylistSummaries) => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/getPlaylist`,
-      { userEmail: email },
+      `/playlists/summaries`,
+      { userId },
       {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       }
     );
-
-    const userData = response.data;
-    const playlists = userData?.playlists ?? {};
-
-    if (Object.keys(playlists).length === 0) {
-      console.warn("No playlists found for user:", email);
-    }
-
-    // ✅ Store playlists in context by passing setPlaylistData
-    setPlaylistData(playlists);
-
+    const playlists = response.data?.playlists ?? [];
+    setPlaylistSummaries(playlists);
     return playlists;
   } catch (error) {
-    const errorMessage = error.response?.data?.message || "Error fetching playlists";
+    const errorMessage = error.response?.data?.message || "Error fetching playlist summaries";
     toast.error(errorMessage, { position: "top-right", icon: "⚠️" });
-
-    // ✅ Reset playlist data on failure
-    setPlaylistData({});
-    return {};
+    setPlaylistSummaries([]);
+    return [];
   }
 };
+
+// Update fetchUserPlaylists to use the new summaries endpoint for consistency
+export const fetchUserPlaylists = fetchUserPlaylistSummaries;
 
 
 // Add this function to your utils file (where fetchUserPlaylists and other functions are)
 
-export const deletePlaylist = async (userEmail, playlistId, setPlaylistData) => {
+export const deletePlaylist = async (userId, playlistId, setPlaylistSummaries) => {
   try {
     const response = await axios.delete(
-      `${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/delete`,
+      `/playlists/delete`,
       {
-        data: { 
-          userEmail: userEmail, 
-          playlistId: playlistId 
-        },
+        data: { userId, playlistId },
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       }
@@ -98,10 +88,10 @@ export const deletePlaylist = async (userEmail, playlistId, setPlaylistData) => 
     if (response.data) {
       // Option 1: Use the returned playlists from the response directly
       if (response.data.playlists) {
-        setPlaylistData(response.data.playlists);
+        setPlaylistSummaries(response.data.playlists);
       } else {
         // Option 2: Fetch fresh playlists data
-        await fetchUserPlaylists(userEmail, setPlaylistData);
+        await fetchUserPlaylistSummaries(userId, setPlaylistSummaries);
       }
       
       toast.success("Course deleted successfully", { position: "top-right" });
@@ -116,7 +106,7 @@ export const deletePlaylist = async (userEmail, playlistId, setPlaylistData) => 
   }
 };
 
-export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlaylistData, inputRef, navigate) => {
+export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlaylistSummaries, inputRef, navigate) => {
   try {
     if (!user) {
       navigate("/login");
@@ -124,7 +114,7 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
     }
 
     const trimmedUrl = extractPlaylistId(playlistUrl);
-    if (trimmedUrl.error) {
+    if (typeof trimmedUrl === "object" && trimmedUrl.error) {
       toast.error(trimmedUrl.error, { position: "top-right", icon: "❌" });
       inputRef.current?.focus();
       return false;
@@ -133,16 +123,24 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
     
     setLoading(true);
 
-    const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/add`, {
-      userEmail: user.email,
-      playlistId: extractPlaylistId(trimmedUrl),
-      playlistUrl: trimmedUrl
+    const playlistId = extractPlaylistId(trimmedUrl);
+    if (typeof playlistId === "object" && playlistId.error) {
+      toast.error(playlistId.error, { position: "top-right", icon: "❌" });
+      inputRef.current?.focus();
+      return false;
+    }
+
+    // console.log(user.userId);
+    // console.log(playlistId);
+    const response = await axios.post(`/playlists/add`, {
+      userId: user.userId,
+      playlistId
     });
 
 
     if (response.data.playlist) {
       // setPlaylistData(response.data.playlist);
-      await fetchUserPlaylists(user.email, setPlaylistData);
+      await fetchUserPlaylistSummaries(user.userId, setPlaylistSummaries);
 
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }
@@ -157,12 +155,12 @@ export const handleAddPlaylist = async (playlistUrl, user, setLoading, setPlayli
   }
 };
 
-export const handlePlaylistSection = async (url, user, setLoading, setPlaylistData,) => {
+export const handlePlaylistSection = async (url, user, setLoading, setPlaylistSummaries) => {
 
 
   try {
 
-    if (!user || !user.email) {
+    if (!user || !user.userId) {
       toast.error("User is not logged in!", { position: "top-right", icon: "⚠️" });
       return false;
     }
@@ -179,20 +177,20 @@ export const handlePlaylistSection = async (url, user, setLoading, setPlaylistDa
     setLoading(true);
 
 
-    const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/section/arrange`, {
-      userEmail: user.email,
+    const response = await axios.post(`/section/arrange`, {
+      userId: user.userId,
       playlistId: playId,
     });
 
-    const sectionFlag = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/displaySection`, {
-      userEmail: user.email,
+    const sectionFlag = await axios.post(`/playlists/displaySection`, {
+      userId: user.userId,
       playlistId: playId,
       displaySection: true
     });
 
 
     if (response.data.playlist && sectionFlag.data.message) {
-      await fetchUserPlaylists(user.email, setPlaylistData);
+      await fetchUserPlaylistSummaries(user.userId, setPlaylistSummaries);
       // setPlaylistData(response.data.playlist);
       toast.success(`${response.data.message} 🎉`, { position: "top-right" });
     }

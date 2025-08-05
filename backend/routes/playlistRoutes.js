@@ -1,6 +1,6 @@
 // playlistRoutes.js
 const express = require('express');
-const { addPlaylist, getPlaylistsByUser,deletePlaylist, selectedVideoId, deleteVideo, displaySection } = require('../controllers/playlistControllers');
+const { addPlaylist, getPlaylistsByUser,deletePlaylist, selectedVideoId, deleteVideo, displaySection, getUserPlaylistSummaries, fetchPlaylistById } = require('../controllers/playlist/PlaylistController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -13,4 +13,6 @@ router.delete('/delete', deletePlaylist);
 router.put('/setVideoId',selectedVideoId);
 router.delete('/deleteVideo' , deleteVideo);
 router.post('/displaySection' , displaySection);
+router.post('/summaries', getUserPlaylistSummaries);
+router.post('/fetchById', fetchPlaylistById);
 module.exports = router;

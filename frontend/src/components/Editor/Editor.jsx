@@ -1,18 +1,19 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import  { useRef, useState, useEffect, useContext } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { responsiveButtonList, templates } from "./toolbarConfig.js";
 import { decodeLatex } from "./utils.js";
-import { AuthContext } from "../../context/AuthContext.jsx";
+import { useAuth } from "@/context/auth/AuthContextBase";
 // third party
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { editorOptions } from "./editorConfig.js";
 
 const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const containerRef = useRef(null);
   const [content, setContent] = useState('');
@@ -29,11 +30,11 @@ const Editor = ({ videoId, playlistId }) => {
         
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/getNotes`,
+          `/notes/getNotes`,
           {
             videoId,
             playlistId,
-            userEmail: user?.email
+            userId: user?.userId
           }
         );
         
@@ -50,11 +51,11 @@ const Editor = ({ videoId, playlistId }) => {
       }
     };
 
-    if (videoId && playlistId && user?.email) {
+    if (videoId && playlistId && user?.userId) {
       fetchNotes();
      
     }
-  }, [videoId, playlistId, user?.email]);
+  }, [videoId, playlistId, user?.userId]);
   
   const handleChange = (updatedContent) => {
    
@@ -67,9 +68,9 @@ const Editor = ({ videoId, playlistId }) => {
       setLoading(true);
   
       await axios.put(
-        `${import.meta.env.VITE_REACT_APP_BASE_URL}/video/saveNotes`,
+        `/notes/saveNotes`,
         {
-          userEmail: user?.email,
+          userId: user?.userId,
           playlistId,
           videoId,
           text: editor.current?.getContents(),  // Get latest content from editor
@@ -116,13 +117,7 @@ const Editor = ({ videoId, playlistId }) => {
             autoFocus={false}
             onChange={handleChange}
             setOptions={{
-              stickyToolbar: true,
-              width: "100%",
-              popupDisplay: "full",
-              templates: templates,
-              katex: katex,
-              buttonList: responsiveButtonList,
-              responsiveToolbar: true,
+              ...editorOptions,
               callBackSave: saveContent,  
             }}
           />
