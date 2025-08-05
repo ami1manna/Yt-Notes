@@ -1,7 +1,7 @@
-const NotesModel = require('@/models/notes/NotesModel');
-const { generateEducationalNotes } = require('@/utils/EducationNotesUtils');
-const TranscriptList = require('@/models/notes/transcriptModel');
-const { getEducationalNotesService } = require('@/services/notes/sumarizeService');
+const NotesModel = require('../../models/notes/NotesModel');
+const { generateEducationalNotes } = require('../../utils/EducationNotesUtils');
+const TranscriptList = require('../../models/notes/transcriptModel');
+const { getEducationalNotesService } = require('../../services/notes/sumarizeService');
 
 exports.getEducationalNotes = async (req, res) => {
   try {

@@ -1,6 +1,6 @@
 // Video service logic
 
-const UserProgress = require('@/models/playlists/userProgressModel');
+const UserProgress = require('../../models/playlists/userProgressModel');
 
 exports.toggleVideoService = async ({ userId, playlistId, videoId }) => {
   const userProgress = await UserProgress.findOne({ userId, playlistId });

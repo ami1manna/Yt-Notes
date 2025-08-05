@@ -1,6 +1,6 @@
-const UserProgress = require('@/models/playlists/userProgressModel');
-const User = require('@/models/users/userModel');
-const { addNoteToVideoService, getNotesForVideoService, deleteNoteFromVideoService } = require('@/services/notes/notesService');
+const UserProgress = require('../../models/playlists/userProgressModel');
+const User = require('../../models/users/userModel');
+const { addNoteToVideoService, getNotesForVideoService, deleteNoteFromVideoService } = require('../../services/notes/notesService');
 
 exports.addNoteToVideo = async (req, res) => {
     try {

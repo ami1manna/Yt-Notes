@@ -1,8 +1,8 @@
 // Transcript service logic
 
-const UserProgress = require('@/models/playlists/userProgressModel');
+const UserProgress = require('../../models/playlists/userProgressModel');
 const axios = require('axios');
-const TranscriptList = require('@/models/notes/transcriptModel');
+const TranscriptList = require('../../models/notes/transcriptModel');
 
 exports.addTranscriptService = async ({ videoId }) => {
   if (!videoId) throw { status: 400, message: 'Missing required fields' };

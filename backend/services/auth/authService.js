@@ -1,9 +1,9 @@
 // Auth service logic
 
-const User = require('@/models/users/userModel');
+const User = require('../../models/users/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { generateToken, cookieOptions, clearCookieOptions } = require('@/utils/CookiesUtils');
+const { generateToken, cookieOptions, clearCookieOptions } = require('../../utils/CookiesUtils');
 
 exports.getMeService = async (cookies) => {
   const token = cookies.jwt;

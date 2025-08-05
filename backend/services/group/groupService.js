@@ -1,12 +1,12 @@
 // Group service logic
 
-const GroupInviteModel = require('@/models/groups/GroupInviteModel');
-const GroupModel = require('@/models/groups/GroupModel');
-const User = require('@/models/users/userModel');
-const { fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
-const BasePlaylist = require('@/models/playlists/base/basePlaylistModel');
+const GroupInviteModel = require('../../models/groups/GroupInviteModel');
+const GroupModel = require('../../models/groups/GroupModel');
+const User = require('../../models/users/userModel');
+const { fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
+const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
  
-const { genAIModel } = require('@/genAi/AiModel');
+const { genAIModel } = require('../../genAi/AiModel');
 
 exports.createGroupService = async ({ name, description, privacy }, user) => {
   const createdBy = user._id;

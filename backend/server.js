@@ -1,4 +1,4 @@
-require('module-alias/register');
+ 
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
@@ -10,7 +10,7 @@ const customTranscriptRoutes = require('./routes/transcriptRoutes');
 const sectionRoutes = require('./routes/sectionRoutes');
 const groupsRoutes = require('./routes/groupsRoutes');
 const userRoutes = require('./routes/userRoutes');
-const collabRoutes = require('@/routes/collabRoutes');
+const collabRoutes = require('./routes/collabRoutes');
 
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -56,8 +56,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something broke!' });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Default Route
 
 // // Export for Vercel

@@ -1,6 +1,6 @@
-const UserProgress = require('@/models/playlists/userProgressModel');
-const User = require('@/models/users/userModel');
-const { toggleVideoService } = require('@/services/video/videoService');
+const UserProgress = require('../../models/playlists/userProgressModel');
+const User = require('../../models/users/userModel');
+const { toggleVideoService } = require('../../services/video/videoService');
 
 exports.toggleVideo = async (req, res) => {
     try {

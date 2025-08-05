@@ -1,12 +1,12 @@
 
-const GroupInviteModel = require('@/models/groups/GroupInviteModel');
-const GroupModel = require('@/models/groups/GroupModel');
-const User = require('@/models/users/userModel');
+const GroupInviteModel = require('../../models/groups/GroupInviteModel');
+const GroupModel = require('../../models/groups/GroupModel');
+const User = require('../../models/users/userModel');
 
-const { genAIModel } = require('@/genAi/AiModel');
+const { genAIModel } = require('../../genAi/AiModel');
 const axios = require('axios');
-const {fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
-const { createGroupService, getGroupsService, getGroupByIdService, updateGroupService, deleteGroupService, inviteToGroupService, respondToInviteService, getMyInvitesService, sharePlaylistWithGroupService } = require('@/services/group/groupService');
+const {fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
+const { createGroupService, getGroupsService, getGroupByIdService, updateGroupService, deleteGroupService, inviteToGroupService, respondToInviteService, getMyInvitesService, sharePlaylistWithGroupService } = require('../../services/group/groupService');
 const { getSharedPlaylistDetailsService } = require('../../services/group/groupService');
  
 // Create a new group
