@@ -15,14 +15,13 @@ import MainSection from "@/components/groupPlaylistDetails/MainSection";
 import NotesSection from "@/components/groupPlaylistDetails/NotesSection";
 import TopBar from "@/components/groupPlaylistDetails/TopBar";
 import { useAuth } from "@/context/auth/AuthContextBase";
- 
+import ResizableSplitView from "@/components/common/ResizableSplitView";
 
 const GroupPlaylistDetails = () => {
   const { groupId, playlistId } = useParams();
-   const user = useAuth();
+  const user = useAuth();
   const dispatch = useDispatch();
 
-   
   const isLoading = useSelector(
     groupPlaylistDetailsSelectors.isGroupPlaylistDetailsFetching
   );
@@ -33,7 +32,10 @@ const GroupPlaylistDetails = () => {
   useEffect(() => {
     if (groupId && playlistId) {
       dispatch(
-        groupPlaylistDetailsThunks.fetchGroupPlaylistDetails({ groupId, playlistId })
+        groupPlaylistDetailsThunks.fetchGroupPlaylistDetails({
+          groupId,
+          playlistId,
+        })
       );
     }
 
@@ -42,13 +44,11 @@ const GroupPlaylistDetails = () => {
     };
   }, [dispatch, groupId, playlistId]);
 
-
-  // Calling update playlist presence 
+  // Calling update playlist presence
   // usePresence({ groupId, playlistId, user });
 
-  
   return (
-<AsyncStateHandler
+    <AsyncStateHandler
       isLoading={isLoading}
       error={error}
       loadingMessage="Fetching shared playlist..."
@@ -61,11 +61,11 @@ const GroupPlaylistDetails = () => {
         {/* Main content area (TopBar + content sections) */}
         <div className="flex flex-col flex-1 overflow-hidden">
           <TopBar />
-
-          <div className="flex flex-1 overflow-hidden">
-            <MainSection />
-            <NotesSection groupId={groupId} playlistId={playlistId}/>
-          </div>
+        
+          <ResizableSplitView
+            left={<MainSection />}
+            right={<NotesSection groupId={groupId} playlistId={playlistId} />}
+          />
         </div>
       </div>
     </AsyncStateHandler>

@@ -22,20 +22,20 @@ const collabNoteSlice = createSlice({
     },
     clearNote(state) {
       state.note = null;
-      state.status = 'idle';
+      state.status = "idle";
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(collabNoteThunks.createNote.pending, (state) => {
+      .addCase(collabNoteThunks.saveNote.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(collabNoteThunks.createNote.fulfilled, (state, action) => {
+      .addCase(collabNoteThunks.saveNote.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.note = action.payload;
       })
-      .addCase(collabNoteThunks.createNote.rejected, (state, action) => {
+      .addCase(collabNoteThunks.saveNote.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
@@ -51,18 +51,7 @@ const collabNoteSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      
-      .addCase(collabNoteThunks.updateNote.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(collabNoteThunks.updateNote.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.note = action.payload;
-      })
-      .addCase(collabNoteThunks.updateNote.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
-      })
+
       .addCase(collabNoteThunks.deleteNote.pending, (state) => {
         state.status = "loading";
       })
@@ -77,6 +66,7 @@ const collabNoteSlice = createSlice({
   },
 });
 
-export const { setNote, setStatus, setError, clearNote } = collabNoteSlice.actions;
+export const { setNote, setStatus, setError, clearNote } =
+  collabNoteSlice.actions;
 
 export default collabNoteSlice.reducer;

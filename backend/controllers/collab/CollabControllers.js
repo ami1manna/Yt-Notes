@@ -1,16 +1,25 @@
 
 const {
-  createNoteService,
+   
   getNoteForVideoService,
-  updateNoteService,
+  saveOrUpdateNoteService,
   deleteNoteService
 } = require('@/services/collab/CollabService.js');  
 
-exports.createCollabNote = async (req, res) => {
+exports.saveOrUpdateCollabNote = async (req, res) => {
   try {
-    const noteData = { ...req.body, createdBy: req.user.id };
-    const newNote = await createNoteService(noteData);
-    res.status(201).json(newNote);
+    const { groupId, playlistId, videoId, content } = req.body;
+    const userId = req.user.id;
+
+    const savedNote = await saveOrUpdateNoteService({
+      groupId,
+      playlistId,
+      videoId,
+      content,
+      userId,
+    });
+
+    res.status(200).json(savedNote);
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }
@@ -25,23 +34,7 @@ exports.getCollabNoteForVideo = async (req, res) => {
   }
 };
 
-exports.updateCollabNote = async (req, res) => {
-  try {
-    const { noteId } = req.params;
-    const updateData = { ...req.body, lastModifiedBy: req.user.id };
-    const updatedNote = await updateNoteService(noteId, updateData);
-    
-    // Socket.IO logic
-    const io = req.app.get('socketio');
-    if (io) {
-        io.to(`note-${noteId}`).emit('note_updated', updatedNote);
-    }
 
-    res.status(200).json(updatedNote);
-  } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
-  }
-};
 
 exports.deleteCollabNote = async (req, res) => {
   try {

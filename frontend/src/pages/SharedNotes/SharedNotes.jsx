@@ -3,7 +3,7 @@ import React from 'react'
 const SharedNotes = () => {
   return (
     <div>
-      SharedNotes
+      😊 Comming Soon 
     </div>
   )
 }

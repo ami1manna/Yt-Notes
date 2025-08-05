@@ -17,10 +17,10 @@ const IconButton = ({
       {...props}
       disabled={isLoading}
     >
-      {iconPosition === "left" && Icon && <Icon className="w-5 h-4  lg:h-6 "  />}
+      {iconPosition === "left" && Icon && <Icon className="w-5  "  />}
       
       {isLoading ? <Loader /> : children}
-      {iconPosition === "right" && Icon && <Icon className="w-5 h-4  lg:h-6" />}
+      {iconPosition === "right" && Icon && <Icon className="w-5 " />}
     </button>
   );
 };

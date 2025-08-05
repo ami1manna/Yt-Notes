@@ -2,27 +2,28 @@ const express = require('express');
 const { protect } = require('@/middleware/authMiddleware');
 
 const {
-  createCollabNote,
+   
   getCollabNoteForVideo,
-  updateCollabNote,
-  deleteCollabNote
+ 
+  deleteCollabNote,
+  saveOrUpdateCollabNote, // ✅ NEW FUNCTION
 } = require('../controllers/collab/CollabControllers');
 
 const router = express.Router();
 
-// Apply authentication middleware to all routes
+// ✅ Apply authentication middleware to all routes
 router.use(protect);
 
-// POST /api/collab/create
-router.post('/create', createCollabNote);
-
-// GET /api/collab (pass query like ?videoId=xyz&playlistId=123&groupId=abc)
+// ✅ GET a note for a video
+// GET /collab?videoId=xyz&playlistId=123&groupId=abc
 router.get('/', getCollabNoteForVideo);
 
-// PATCH /api/collab/:noteId
-router.patch('/:noteId', updateCollabNote);
+// ✅ NEW: CREATE or UPDATE a note
+// POST /collab/saveNote
+router.post('/saveNote', saveOrUpdateCollabNote);
 
-// DELETE /api/collab/:noteId
+// ✅ DELETE a note
+// DELETE /collab/:noteId
 router.delete('/:noteId', deleteCollabNote);
 
 module.exports = router;

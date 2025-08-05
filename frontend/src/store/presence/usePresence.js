@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setPresence, clearPresence } from "@/store/presence/presenceSlice";
 import { io } from "socket.io-client";
-
-const socket = io(import.meta.env.VITE_SOCKET_URL, {
-  transports: ["websocket"],
-});
+import socket from "@/sockets";
+// const socket = io(import.meta.env.VITE_SOCKET_URL, {
+//   transports: ["websocket"],
+// });
 
 export const usePresence = ({
   groupId,
@@ -19,7 +19,12 @@ export const usePresence = ({
 
   useEffect(() => {
     if (!groupId || !user) return;
-  
+    
+    // Connect if not already connected
+    if (!socket.connected) {
+      socket.connect();
+    }
+
     const userPresence = {
       ...user.user,
       selectedPlaylistId: playlistId,
@@ -53,8 +58,11 @@ export const usePresence = ({
 
     // 4. Cleanup on unmount
     return () => {
+      console.log("usePresence cleanup");
       dispatch(clearPresence());
       socket.off("group_presence_update");
+      socket.disconnect();
+      
     };
   }, [groupId, playlistId, videoId, noteId, notesContent, user, dispatch]);
 };

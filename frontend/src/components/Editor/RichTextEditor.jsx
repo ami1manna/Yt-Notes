@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
-
 import { ThemeContext } from "@/context/ThemeContext";
+import { editorOptions } from "./editorConfig";
+ 
 
 const RichTextEditor = ({ value = "", onChange }) => {
   const { theme } = useContext(ThemeContext);
@@ -13,37 +14,11 @@ const RichTextEditor = ({ value = "", onChange }) => {
     color: isDarkMode ? "#ffffff" : "#000000",
   };
 
-  const options = {
-    buttonList: [
-      ["undo", "redo"],
-      ["font", "fontSize", "formatBlock"],
-      ["bold", "underline", "italic", "strike", "subscript", "superscript"],
-      ["removeFormat"],
-      ["fontColor", "hiliteColor"],
-      ["indent", "outdent"],
-      ["align", "horizontalRule", "list", "table"],
-      ["link"],
-      ["fullScreen", "showBlocks", "codeView"],
-      ["preview", "print"],
-    ],
-    defaultTag: "p",
-    stickyToolbar: "40",
-    rtl: false,
-    showPathLabel: false,
-    attributesWhitelist: {
-      all: "style",
-      table: "cellpadding|width|cellspacing|height|style",
-      tr: "style",
-      td: "style",
-      img: "style|src|alt",
-    },
-  };
-
   return (
     <div className="w-full">
       <style>
-        {`
-          ${isDarkMode ? `
+        {isDarkMode &&
+          `
             .sun-editor {
               background-color: #1a1a1a !important;
               border-color: #374151 !important;
@@ -81,12 +56,11 @@ const RichTextEditor = ({ value = "", onChange }) => {
               border-color: #374151 !important;
               color: #ffffff !important;
             }
-          ` : ""}
-        `}
+          `}
       </style>
 
       <SunEditor
-        setOptions={options}
+        setOptions={editorOptions}
         onChange={onChange}
         setDefaultStyle={`
           font-family: arial;

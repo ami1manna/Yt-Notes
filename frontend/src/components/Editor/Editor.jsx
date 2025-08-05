@@ -9,6 +9,7 @@ import { useAuth } from "@/context/auth/AuthContextBase";
 // third party
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { editorOptions } from "./editorConfig.js";
 
 const Editor = ({ videoId, playlistId }) => {
   const editor = useRef();
@@ -116,13 +117,7 @@ const Editor = ({ videoId, playlistId }) => {
             autoFocus={false}
             onChange={handleChange}
             setOptions={{
-              stickyToolbar: true,
-              width: "100%",
-              popupDisplay: "full",
-              templates: templates,
-              katex: katex,
-              buttonList: responsiveButtonList,
-              responsiveToolbar: true,
+              ...editorOptions,
               callBackSave: saveContent,  
             }}
           />

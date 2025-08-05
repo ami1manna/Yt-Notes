@@ -5,6 +5,7 @@ import IconButton from "@/components/common/IconButton";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { groupDetailThunks } from "../../store/groupDetails";
+import { extractPlaylistId } from "@/utils/PlaylistUtils";
 
 const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
   const [playlistId, setPlaylistId] = useState("");
@@ -12,13 +13,21 @@ const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    if (!playlistId.trim()) {
+    const trimmedUrl = playlistId.trim();
+    if (!trimmedUrl) {
       toast.error("Playlist ID is required.");
       return;
     }
-
+    //  SEEE IF VALID PLAYLIST ID 
+     const playId = extractPlaylistId(trimmedUrl);
+        if (typeof playlistId === "object" && playlistId.error) {
+          toast.error(playlistId.error, { position: "top-right", icon: "❌" });
+          inputRef.current?.focus();
+          return false;
+        }
+        // console.log({groupId, playId, isSectioned});
     dispatch(
-      groupDetailThunks.sharePlaylistWithGroup({ groupId, playlistId, isSectioned })
+      groupDetailThunks.sharePlaylistWithGroup({ groupId, playlistId:playId, isSectioned })
     );
 
     setPlaylistId("");

@@ -1,19 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-export const createNote = createAsyncThunk(
-  "collabNote/createNote",
-  async (noteData, thunkAPI) => {
+ 
+// POST /collab/saveNote
+export const saveNote = createAsyncThunk(
+  "collabNote/saveNote",
+  async ({ groupId, playlistId, videoId, content }, thunkAPI) => {
     try {
-      const response = await axios.post("/collab/create", noteData);
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
+      const response = await axios.post("/collab/saveNote", {
+        groupId,
+        playlistId,
+        videoId,
+        content,
+      });
 
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return response.data; // full note object
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Save failed");
     }
   }
 );
+
 
 export const fetchNote = createAsyncThunk(
   "collabNote/fetchNote",
@@ -30,17 +36,7 @@ export const fetchNote = createAsyncThunk(
   }
 );
 
-export const updateNote = createAsyncThunk(
-  "collabNote/updateNote",
-  async ({ noteId, noteData }, thunkAPI) => {
-    try {
-      const response = await axios.patch(`/collab/${noteId}`, noteData);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
-    }
-  }
-);
+ 
 
 export const deleteNote = createAsyncThunk(
   "collabNote/deleteNote",
