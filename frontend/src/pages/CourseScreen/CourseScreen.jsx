@@ -1,14 +1,15 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import  { useContext, useState, useEffect, useRef } from "react";
 import { PlaylistsContext } from "../../context/PlaylistsContext";
 import { useParams } from "react-router-dom";
-import { ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
+ 
 import { useAuth } from "@/context/auth/AuthContextBase";
 import TranscriptList from "../../components/notes/TranscriptList";
-import Editor from "@/components/editor/Editor";
+
 import SummaryList from "../../components/notes/SummaryList";
 import CourseNav from "../../components/course/CourseNav";
 import axios from "axios";
 import { setVideoStatus as setVideoStatusUtil } from "../../utils/VideoUtils";
+import Editor from "../../components/editor/Editor";
 
 const CourseScreen = () => {
     const { playlistData, setFullPlaylistData } = useContext(PlaylistsContext);
