@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { groupsThunks } from "@/store/group";
-import GroupStats from "@/components/group/GRoupStats";
+import GroupStats from "@/components/group/GroupStats";
 import GroupList from "@/components/group/GroupList";
 import { clearGroupList } from "../../store/group/groupSlice";
 
