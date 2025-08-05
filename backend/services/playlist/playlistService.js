@@ -1,8 +1,8 @@
 // Playlist service logic
 
-const UserProgress = require('@/models/playlists/userProgressModel');
-const BasePlaylist = require('@/models/playlists/base/basePlaylistModel');
-const { fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
+const UserProgress = require('../../models/playlists/userProgressModel');
+const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
+const { fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
 
 exports.addPlaylistService = async ({ userId, playlistId }) => {
   let basePlaylist = await BasePlaylist.findOne({ playlistId });

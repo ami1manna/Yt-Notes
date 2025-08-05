@@ -1,8 +1,8 @@
-const UserProgress = require('@/models/playlists/userProgressModel');
+const UserProgress = require('../../models/playlists/userProgressModel');
 const axios = require('axios');
-const { handleDelete, parseDuration, fetchPlaylistFromYouTube } = require('@/utils/VideoUtils');
-const BasePlaylist = require('@/models/playlists/base/basePlaylistModel');
-const { addPlaylistService, getPlaylistsByUserService, deletePlaylistService, selectedVideoIdService, deleteVideoService, displaySectionService, getUserPlaylistSummariesService, fetchPlaylistByIdService } = require('@/services/playlist/playlistService');
+const { handleDelete, parseDuration, fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
+const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
+const { addPlaylistService, getPlaylistsByUserService, deletePlaylistService, selectedVideoIdService, deleteVideoService, displaySectionService, getUserPlaylistSummariesService, fetchPlaylistByIdService } = require('../../services/playlist/playlistService');
  
 // Helper function to convert ISO 8601 duration (PT5M30S) to seconds
 exports.addPlaylist = async (req, res) => {

@@ -1,4 +1,4 @@
-const collaborativeNoteModel = require('@/models/collab/CollabNoteModel');
+const collaborativeNoteModel = require('../../models/collab/CollabNoteModel');
 
 exports.saveOrUpdateNoteService = async ({ groupId, playlistId, videoId, content, userId }) => {
   const existingNote = await collaborativeNoteModel.findOne({ groupId, playlistId, videoId });

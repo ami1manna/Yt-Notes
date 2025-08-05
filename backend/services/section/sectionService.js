@@ -1,8 +1,8 @@
 // Section service logic
 
 const mongoose = require('mongoose');
-const BasePlaylist = require('@/models/playlists/base/basePlaylistModel');
-const { genAIModel } = require('@/genAi/AiModel');
+const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
+const { genAIModel } = require('../../genAi/AiModel');
 
 exports.arrangeVideosService = async ({ userId, playlistId }) => {
   const basePlaylist = await BasePlaylist.findOne({ playlistId });

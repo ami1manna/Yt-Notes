@@ -1,7 +1,7 @@
 // Notes service logic
 
-const UserProgress = require('@/models/playlists/userProgressModel');
-const User = require('@/models/users/userModel');
+const UserProgress = require('../../models/playlists/userProgressModel');
+const User = require('../../models/users/userModel');
 
 exports.addNoteToVideoService = async ({ userId, playlistId, videoId, text }) => {
   const userProgress = await UserProgress.findOne({ userId, playlistId });

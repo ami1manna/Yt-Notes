@@ -1,8 +1,8 @@
-const User = require('@/models/users/userModel');
+const User = require('../../models/users/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); // Added missing import
-const { generateToken, cookieOptions, clearCookieOptions } = require('@/utils/CookiesUtils');
-const { signupService, loginService, logoutService, getMeService } = require('@/services/auth/authService');
+const { generateToken, cookieOptions, clearCookieOptions } = require('../../utils/CookiesUtils');
+const { signupService, loginService, logoutService, getMeService } = require('../../services/auth/authService');
 
 // Get current user
 exports.getMe = async (req, res) => {

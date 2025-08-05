@@ -1,8 +1,8 @@
 // Summarize service logic
 
-const NotesModel = require('@/models/notes/NotesModel');
-const { generateEducationalNotes } = require('@/utils/EducationNotesUtils');
-const TranscriptList = require('@/models/notes/transcriptModel');
+const NotesModel = require('../../models/notes/NotesModel');
+const { generateEducationalNotes } = require('../../utils/EducationNotesUtils');
+const TranscriptList = require('../../models/notes/transcriptModel');
 
 const formatTimestampForDisplay = (seconds) => {
   if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) {

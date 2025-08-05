@@ -1,7 +1,7 @@
-const UserProgress = require('@/models/playlists/userProgressModel');
+const UserProgress = require('../../models/playlists/userProgressModel');
 const axios = require('axios');
-const TranscriptList = require('@/models/notes/transcriptModel');
-const { addTranscriptService, getTranscriptService } = require('@/services/notes/transcriptService');
+const TranscriptList = require('../../models/notes/transcriptModel');
+const { addTranscriptService, getTranscriptService } = require('../../services/notes/transcriptService');
 
 exports.addTranscript = async (req, res) => {
     try {

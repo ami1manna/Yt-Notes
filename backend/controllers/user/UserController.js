@@ -1,4 +1,4 @@
-const {searchUsersService} =  require('@/services/user/UserService')
+const {searchUsersService} =  require('../../services/user/UserService')
 
 // Search User 
 exports.searchUsersByUsername = async (req, res) => {

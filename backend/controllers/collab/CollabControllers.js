@@ -4,7 +4,7 @@ const {
   getNoteForVideoService,
   saveOrUpdateNoteService,
   deleteNoteService
-} = require('@/services/collab/CollabService.js');  
+} = require('../../services/collab/CollabService.js');  
 
 exports.saveOrUpdateCollabNote = async (req, res) => {
   try {
