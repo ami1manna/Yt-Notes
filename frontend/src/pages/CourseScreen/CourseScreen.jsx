@@ -9,7 +9,7 @@ import SummaryList from "../../components/notes/SummaryList";
 import CourseNav from "../../components/course/CourseNav";
 import axios from "axios";
 import { setVideoStatus as setVideoStatusUtil } from "../../utils/VideoUtils";
-import Editor from "../../components/editor/EditorComponent";
+import Editor from "../../components/Editor/EditorComponent";
 
 const CourseScreen = () => {
     const { playlistData, setFullPlaylistData } = useContext(PlaylistsContext);
