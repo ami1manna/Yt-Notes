@@ -1,12 +1,12 @@
 const express = require('express');
-const {arrangeVideos, deleteSectionVideo , addSectionVideo } = require('../controllers/sectionControllers');
+const {arrangeVideos  } = require('../controllers/playlist/SectionController');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.use(protect);
 
 router.post('/arrange', arrangeVideos);
-router.delete('/deleteSectionVideo' , deleteSectionVideo);
-router.patch('/addSectionVideo' , addSectionVideo);
+// router.delete('/deleteSectionVideo' , deleteSectionVideo);
+// router.patch('/addSectionVideo' , addSectionVideo);
 
 module.exports = router;

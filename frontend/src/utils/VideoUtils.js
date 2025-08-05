@@ -1,41 +1,46 @@
 import axios from "axios";
-import { useContext } from "react";
 import { toast } from "react-toastify";
-import { AuthContext } from "../context/AuthContext";
 
-// Toggle video status on the backend
-export const toggleVideo = async (videoId, playlistId, userEmail) => {
+export const setPlaylistVideoId = async (userId, playlistId, videoId) => {
     try {
-        //fetch using cache 
-        
-        const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/video/toggle`, {
-            userEmail,
-            videoId,
+        await axios.put(`/playlists/setVideoId`, {
+            userId,
             playlistId,
+            videoId,
         });
-        
-        return response.data; // Return updated video object
+        // Refetch the playlist to get updated selected video
+        const response = await axios.post("/playlists/fetchById", {
+            userId,
+            playlistId
+        });
+        return response.data.playlist;
     } catch (error) {
-        const errorMessage = error.response?.data?.error || "Failed to Toggle Video";
-        toast.error(errorMessage, { position: "top-right", icon: "❌" });
+        const errorMessage = error.response?.data?.error || "Failed to set playlist index";
+        toast.error(errorMessage, { position: "top-right", icon: "❌" });   
         throw error;
     }
 };
 
-export const setPlaylistVideoId = async ( userEmail ,playlistId, videoId) => {
-  
+// Set video status (done/undone) and refetch playlist
+export const setVideoStatus = async (videoId, playlistId, userId, sectionId, done) => {
     try {
-        const response = await axios.put(`${import.meta.env.VITE_REACT_APP_BASE_URL}/playlists/setVideoId`, {
-            userEmail,
-            playlistId,
+        await axios.put("/video/toggle", {
+            userId,
             videoId,
+            playlistId,
+            sectionId,
+            done
         });
-        
+        // Refetch the playlist to get updated status
+        const response = await axios.post("/playlists/fetchById", {
+            userId,
+            playlistId
+        });
+        return response.data.playlist;
     } catch (error) {
-        const errorMessage = error.response.data.error || "Failed to set playlist index";
-        toast.error(errorMessage, { position: "top-right", icon: "❌" });   
-        console.log(errorMessage);
-       
+        const errorMessage = error.response?.data?.error || "Failed to update video status";
+        toast.error(errorMessage, { position: "top-right", icon: "❌" });
+        throw error;
     }
 };
 

@@ -1,3 +1,4 @@
+require('module-alias/register');
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
@@ -7,8 +8,13 @@ const notesRoutes = require('./routes/notesRoutes');
 const videoRoutes = require('./routes/videoRouters');
 const customTranscriptRoutes = require('./routes/transcriptRoutes');
 const sectionRoutes = require('./routes/sectionRoutes');
+const groupsRoutes = require('./routes/groupsRoutes');
+const userRoutes = require('./routes/userRoutes');
+const collabRoutes = require('@/routes/collabRoutes');
+
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const connectDB = require('./config/database');
 require('dotenv').config();
 
 const app = express();
@@ -26,17 +32,19 @@ app.use(cors({
 
 
 // Database connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+connectDB();
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/playlists', playlistRoutes);
-app.use('/video', notesRoutes);
+app.use('/notes', notesRoutes);
 app.use('/video', videoRoutes);
 app.use('/transcript',customTranscriptRoutes);
 app.use('/section',sectionRoutes)
+app.use('/groups', groupsRoutes);
+app.use('/user', userRoutes);
+app.use('/collab', collabRoutes);
+
 // Health check route
 app.get('/', (req, res) => {
   res.json({ status: 'healthy', message: "API is working on Vercel!" });

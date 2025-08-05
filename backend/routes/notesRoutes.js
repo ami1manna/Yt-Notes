@@ -1,5 +1,5 @@
 const express = require('express');
-const { addNoteToVideo, getNotesForVideo, deleteNoteFromVideo } = require('../controllers/notesControllers');
+const { addNoteToVideo, getNotesForVideo, deleteNoteFromVideo } = require('../controllers/notes/NotesController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
