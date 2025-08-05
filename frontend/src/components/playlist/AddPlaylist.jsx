@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { PlaylistSummariesContext } from "../../context/PlaylistSummariesContext";
 import { useAuth } from "@/context/auth/AuthContextBase";
 import { PlusCircle, Loader2 } from "lucide-react";
-import StaticModal from "@/components/Dialogs/StaticModal";
+import StaticModal from "@/components/dialogs/StaticModal";
 
 import CourseList from "@/components/playlist/CourseList";
 import { handleAddPlaylist, handlePlaylistSection } from "../../utils/PlaylistUtils";

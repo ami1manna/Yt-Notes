@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Bell, Check, X, Users, Clock } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { inviteThunks, inviteSelectors } from "@/store/invite";
-import ModalContainer from "@/components/Dialogs/ModalContainer"; // adjust path if needed
+import ModalContainer from "@/components/dialogs/ModalContainer"; // adjust path if needed
 
 const InviteBell = () => {
   const dispatch = useDispatch();
