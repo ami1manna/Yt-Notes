@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "@/components/dialogs/ModalContainer";
+import Modal from "@/components/Dialogs/ModalContainer";
 import { X, Plus } from "lucide-react";
 import IconButton from "@/components/common/IconButton";
 import { toast } from "react-toastify";

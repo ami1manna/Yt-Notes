@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Modal from "@/components/dialogs/ModalContainer";
+import Modal from "@/components/Dialogs/ModalContainer";
 import { X, Search, Plus, Send, Trash2 } from "lucide-react";
 import IconButton from "@/components/common/IconButton";
 import { debounce } from "lodash";

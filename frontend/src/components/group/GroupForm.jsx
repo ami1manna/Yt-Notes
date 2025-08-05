@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from "@/components/dialogs/ModalContainer";
+import Modal from "@/components/Dialogs/ModalContainer";
 import { Loader2, Globe, Lock, X } from "lucide-react";
 import { groupsThunks } from "@/store/group";
 import { groupsSelectors } from "@/store/group";
