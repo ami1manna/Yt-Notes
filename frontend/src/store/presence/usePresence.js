@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setPresence, clearPresence } from "@/store/presence/presenceSlice";
-import { io } from "socket.io-client";
+ 
 import socket from "@/sockets";
-// const socket = io(import.meta.env.VITE_SOCKET_URL, {
-//   transports: ["websocket"],
-// });
+ 
 
 export const usePresence = ({
   groupId,

@@ -1,5 +1,5 @@
 import {  createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchMyInvitesAPI, respondToInviteAPI } from './InviteService';
+import { fetchMyInvitesAPI, respondToInviteAPI } from './inviteService';
  
 
 // Thunk: Fetch user's invites
