@@ -1,6 +1,6 @@
 import katex from "katex";
 import "katex/dist/katex.min.css";
-import { responsiveButtonList, templates } from "@/components/editor/toolbarConfig";
+import { responsiveButtonList, templates } from "@/components/Editor/toolbarConfig";
 
 export const editorOptions = {
   stickyToolbar: true,
