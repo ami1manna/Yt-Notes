@@ -24,9 +24,9 @@ import GroupDetails from "./pages/GroupDetails/GroupDetails";
 import GroupMember from "./pages/GroupMember/GroupMember";
 import SharedNotes from "./pages/SharedNotes/SharedNotes";
 import GroupPlaylists from "./pages/GroupDetails/GroupPlaylists";
-// Group Playlist Details Screen
-import GroupPlaylistDetails from "./pages/GroupPlaylistDetails/GroupPlayListDetails";
-
+import GroupPlaylistDetails from "@/pages/GroupPlaylistDetails/GroupPlayListDetails";
+ 
+ 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
