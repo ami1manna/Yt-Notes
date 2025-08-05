@@ -7,7 +7,7 @@ import { groupPlaylistDetailsSelectors } from "../../store/groupPlaylist";
 import { Save, FileText } from "lucide-react";
 import IconButton from "@/components/common/IconButton";
 import { clearNote } from "../../store/collabNote/collabNoteSlice";
-import RichTextEditor from "../editor/RichTextEditor";
+import RichTextEditor from "@/components/editor/RichTextEditor";
 
 const NotesSection = ({ groupId, playlistId }) => {
   const dispatch = useDispatch();
