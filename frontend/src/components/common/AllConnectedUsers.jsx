@@ -8,7 +8,7 @@ const AllConnectedUsers = ({ selector = selectAllUsers, tooltip = true }) => {
   const [hoveredUser, setHoveredUser] = useState(null);
 
   // Generate consistent random color for each user based on their email
-  const generateUserColor = (email) => {
+  const generateUserColor = (email="") => {
     const colors = [
       'bg-red-500 dark:bg-red-600', 'bg-blue-500 dark:bg-blue-600', 'bg-green-500 dark:bg-green-600', 'bg-yellow-500 dark:bg-yellow-600', 
       'bg-purple-500 dark:bg-purple-600', 'bg-pink-500 dark:bg-pink-600', 'bg-indigo-500 dark:bg-indigo-600', 'bg-teal-500 dark:bg-teal-600',
@@ -24,7 +24,7 @@ const AllConnectedUsers = ({ selector = selectAllUsers, tooltip = true }) => {
   };
 
   // Extract initials from username
-  const getInitials = (username) => {
+  const getInitials = (username="") => {
     const names = username.trim().split(' ');
     if (names.length >= 2) {
       return (names[0][0] + names[names.length - 1][0]).toUpperCase();

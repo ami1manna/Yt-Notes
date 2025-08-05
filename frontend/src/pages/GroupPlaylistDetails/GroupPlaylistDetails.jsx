@@ -16,8 +16,6 @@ import NotesSection from "@/components/groupPlaylistDetails/NotesSection";
 import TopBar from "@/components/groupPlaylistDetails/TopBar";
 import { useAuth } from "@/context/auth/AuthContextBase";
  
- import { usePresence } from "../../store/presence/usePresence";
-
 
 const GroupPlaylistDetails = () => {
   const { groupId, playlistId } = useParams();
@@ -66,7 +64,7 @@ const GroupPlaylistDetails = () => {
 
           <div className="flex flex-1 overflow-hidden">
             <MainSection />
-            <NotesSection />
+            <NotesSection groupId={groupId} playlistId={playlistId}/>
           </div>
         </div>
       </div>

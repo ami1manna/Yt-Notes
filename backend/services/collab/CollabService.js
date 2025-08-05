@@ -31,7 +31,7 @@ exports.getNoteForVideoService = async (query) => {
     .populate('lastModifiedBy', 'name email');
 
   if (!note) {
-    throw { status: 404, message: "Note not found." };
+    return null;
   }
   return note;
 };
