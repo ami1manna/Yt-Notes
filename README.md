@@ -1,12 +1,167 @@
+# 🎥 YT-Notes
 
- 
-Here's a detailed GitHub README file for your project:  
+<div align="center">
+  <p align="center">
+    <img src="frontend/public/logo.svg" alt="YT-Notes Logo" width="150" height="150">
+  </p>
+  <h1>Enhance Your YouTube Learning Experience</h1>
+  <p>Take timestamped notes, collaborate with others, and get AI-powered insights from YouTube videos.</p>
+  
+  [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+  [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+  [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+  [![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
+</div>
 
+## 🌟 Features
 
-https://github.com/user-attachments/assets/27fb7ab4-db23-438d-9ef6-6fe2fa2d4cd8
+### 📝 Note-Taking
+- Timestamped notes synced with YouTube videos
+- Rich text editing with Markdown and LaTeX support
+- AI-powered summaries and educational insights
 
+### 👥 Collaboration
+- Real-time collaborative note-taking
+- Shared workspaces and group projects
+- Activity tracking and version history
 
----
+### 🎯 Learning Management
+- Create and organize video playlists
+- Categorize content with custom tags
+- Track learning progress
+
+### 🎨 Modern UI/UX
+- Clean, responsive design
+- Dark/Light mode
+- Keyboard shortcuts for power users
+
+## 🏗 Tech Stack
+
+### Frontend
+- **Framework**: React 18
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Real-time**: Socket.IO Client
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT
+- **Caching**: Redis
+
+### AI & Integrations
+- Google Generative AI
+- YouTube Data API
+- Real-time collaboration engine
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18.x or later
+- MongoDB Atlas or local MongoDB instance
+- Redis server (for caching)
+- Google Cloud account (for AI features)
+
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/yt-notes.git
+   cd yt-notes
+   ```
+
+2. **Set up the backend**
+   ```bash
+   cd backend
+   cp .env.example .env  # Update with your credentials
+   npm install
+   npm start
+   ```
+
+3. **Set up the frontend**
+   ```bash
+   cd ../frontend
+   cp .env.example .env  # Update with your backend URL
+   npm install
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Visit `http://localhost:5173` to access the application
+
+## 📂 Project Structure
+
+```
+yt-notes/
+├── backend/         # Backend server (Node.js + Express)
+│   ├── config/      # Configuration files
+│   ├── controllers/ # Request handlers
+│   ├── models/      # Database models
+│   ├── routes/      # API routes
+│   └── services/    # Business logic
+│
+├── frontend/        # Frontend application (React)
+│   ├── public/      # Static assets
+│   ├── src/         # Source code
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Page components
+│   │   └── store/       # Redux store
+│   └── ...
+│
+└── socket-backend/  # Real-time collaboration server
+```
+
+## 🌐 API Documentation
+
+For detailed API documentation, please refer to the [Backend README](backend/README.md).
+
+## 🛠 Development
+
+### Running in Development Mode
+```bash
+# Start backend server
+cd backend
+npm run dev
+
+# In a new terminal, start frontend
+cd ../frontend
+npm run dev
+```
+
+### Building for Production
+```bash
+# Build frontend
+cd frontend
+npm run build
+
+# Start production server (backend)
+cd ../backend
+npm start
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
+- [Express](https://expressjs.com/) - Fast, unopinionated web framework for Node.js
+- [MongoDB](https://www.mongodb.com/) - The database for modern applications
+- [Socket.IO](https://socket.io/) - Enables real-time, bidirectional and event-based communication
+- And all the amazing open-source projects that made this possible!
 
 ### **YT Notes Manager** 🎥✍️  
 A powerful web application that streamlines note-taking and progress tracking for YouTube playlists. Users can organize educational content, generate AI-powered summaries, and take notes—all in one place.
@@ -83,12 +238,6 @@ MONGO_URI=your_mongodb_uri
 YOUTUBE_API_KEY=your_youtube_api_key
 GEMINI_AI_KEY=your_gemini_api_key
 ```
-
----
-
-## 📌 **API Endpoints**  
-
-Here's the updated **API Endpoints** table without the **Protected** column:  
 
 ---
 
