@@ -5,7 +5,7 @@ const GroupModel = require('../../models/groups/GroupModel');
 const User = require('../../models/users/userModel');
 const { fetchPlaylistFromYouTube } = require('../../utils/VideoUtils');
 const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
- 
+
 const { genAIModel } = require('../../genAi/AiModel');
 
 exports.createGroupService = async ({ name, description, privacy }, user) => {
@@ -40,7 +40,7 @@ exports.getGroupsService = async (user) => {
     const enhanced = groups.map((group) => {
       const role =
         group.createdBy &&
-        group.createdBy.toString() === userId.toString()
+          group.createdBy.toString() === userId.toString()
           ? "admin"
           : "member";
       return {
@@ -57,7 +57,7 @@ exports.getGroupsService = async (user) => {
 };
 
 
- 
+
 exports.getGroupByIdService = async (id) => {
   const group = await GroupModel.findById(id)
     .populate('createdBy', 'username email')
@@ -189,19 +189,22 @@ exports.getMyInvitesService = async (user) => {
 
 
 exports.sharePlaylistWithGroupService = async (groupId, user, { playlistId, arrangeSections }) => {
-  if (!playlistId) throw { status: 400, message: 'playlistId is required' };
+
+  console.log('sharePlaylistWithGroupService', groupId, user, playlistId, arrangeSections);
   
+  if (!playlistId) throw { status: 400, message: 'playlistId is required' };
+
   // Validate groupId format
   if (!groupId || typeof groupId !== 'string') {
     throw { status: 400, message: 'Invalid groupId format' };
   }
-  
+
   // Check if groupId is a valid ObjectId format
   const mongoose = require('mongoose');
   if (!mongoose.Types.ObjectId.isValid(groupId)) {
     throw { status: 400, message: 'Invalid groupId format. Expected a valid ObjectId.' };
   }
-  
+
   const group = await GroupModel.findById(groupId);
   if (!group) throw { status: 404, message: 'Group not found' };
   const isMember = group.members.some(m => m.userId.equals(user._id));
@@ -248,7 +251,7 @@ exports.sharePlaylistWithGroupService = async (groupId, user, { playlistId, arra
   group.sharedPlaylists.push({ playlistId, sharedBy: user._id });
   await group.save();
   return { success: true, group };
-}; 
+};
 
 exports.getSharedPlaylistDetailsService = async (groupId, playlistId) => {
   const group = await GroupModel.findById(groupId).lean();

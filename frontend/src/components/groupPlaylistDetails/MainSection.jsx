@@ -22,7 +22,7 @@ const MainSection = () => {
   }
 
   return (
-    <div className="    p-4   h-full">
+    <div className="p-4  h-full">
       <div className="relative w-full h-full rounded-xl overflow-hidden">
         <iframe
           key={selectedVideo.videoId}

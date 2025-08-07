@@ -27,7 +27,7 @@ const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
         }
         // console.log({groupId, playId, isSectioned});
     dispatch(
-      groupDetailThunks.sharePlaylistWithGroup({ groupId, playlistId:playId, isSectioned })
+      groupDetailThunks.sharePlaylistWithGroup({ groupId, playlistId:playId,arrangeSections: isSectioned })
     );
 
     setPlaylistId("");

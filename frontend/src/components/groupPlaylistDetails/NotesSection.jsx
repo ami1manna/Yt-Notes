@@ -63,9 +63,9 @@ const NotesSection = ({ groupId, playlistId }) => {
               <FileText className="w-5 h-5 text-cyan-400" />
               <div className="hidden lg:block">
                 <h2 className="text-lg font-semibold text-white">Notes</h2>
-                <p className="text-sm text-gray-400">
+                {/* <p className="text-sm text-gray-400">
                   {video?.title || "Select a video to take notes"}
-                </p>
+                </p> */}
               </div>
             </div>
 
