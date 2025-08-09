@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const BasePlaylist = require('../../models/playlists/base/basePlaylistModel');
 const { genAIModel } = require('../../genAi/AiModel');
 
-exports.arrangeVideosService = async ({ userId, playlistId }) => {
+exports.arrangeVideosService = async ({   playlistId }) => {
   const basePlaylist = await BasePlaylist.findOne({ playlistId });
   if (!basePlaylist) throw { status: 404, message: 'Base playlist not found' };
   const videos = basePlaylist.videoOrder.map(videoId => basePlaylist.videos.find(v => v.videoId === videoId));

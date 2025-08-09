@@ -14,8 +14,9 @@ export async function fetchGroupByIdAPI(groupId) {
 }
 
 
-export async function sharePlaylistWithGroupAPI(groupId, playlistId, arrangeSections = false) {
+export async function sharePlaylistWithGroupAPI(groupId, playlistId, arrangeSections) {
   try {
+    console.log(arrangeSections);
     const res = await axios.post(`/groups/${groupId}/share-playlist`, { 
       playlistId, 
       arrangeSections 

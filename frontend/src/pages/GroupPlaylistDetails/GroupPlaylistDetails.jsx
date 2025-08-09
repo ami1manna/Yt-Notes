@@ -65,6 +65,7 @@ const GroupPlaylistDetails = () => {
           <ResizableSplitView
             left={<MainSection />}
             right={<NotesSection groupId={groupId} playlistId={playlistId} />}
+            initialLeftWidth={7}
           />
         </div>
       </div>

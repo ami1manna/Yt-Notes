@@ -1,15 +1,21 @@
 import { ChevronDown, ChevronRight, Video } from "lucide-react";
 import VideoItem from "./VideoItem";
+import { setSelectedVideo } from "@/store/groupPlaylist/groupPlaylistSlice";
+import { useDispatch } from "react-redux";
 
 const SectionPanel = ({
   section,
   index,
   videosById,
   currentVideo,
-  setCurrentVideo,
   isExpanded,
   toggleSection,
 }) => {
+
+  console.log(currentVideo);
+  // console.log(section);
+    const dispatch = useDispatch();
+
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
       <button
@@ -51,8 +57,11 @@ const SectionPanel = ({
                 key={videoId}
                 video={video}
                 index={i}
-                isActive={currentVideo === videoId}
-                onClick={() => setCurrentVideo(videoId)}
+                isActive={currentVideo?.videoId === videoId}
+                onClick={() => {
+                  dispatch(setSelectedVideo(video))
+                  
+                }}
               />
             );
           })}

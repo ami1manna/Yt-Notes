@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 const ResizableSplitView = ({
   left,
   right,
+  initialLeftWidth = 5, // value from 1–10 → 10%–100%
   minLeftWidth = 300,
   minRightWidth = 200,
   minTopHeight = 200,
@@ -10,22 +11,35 @@ const ResizableSplitView = ({
 }) => {
   const containerRef = useRef(null);
   const isDragging = useRef(false);
-  const [isVertical, setIsVertical] = useState(false); // vertical = mobile mode
-  const [primarySize, setPrimarySize] = useState(500); // width or height depending on mode
+  const [isVertical, setIsVertical] = useState(false);
+  const [primarySize, setPrimarySize] = useState(500); // px
 
-  // Toggle vertical mode on screen size change
+  // Converts 1–10 to percent-based width (desktop)
+  const calculateInitialSize = () => {
+    if (isVertical) return 300; // default top height
+
+    const containerWidth = containerRef.current?.offsetWidth || window.innerWidth;
+
+    const clamped = Math.max(1, Math.min(initialLeftWidth, 10)); // clamp to 1-10
+    const percent = (clamped / 10) * containerWidth;
+
+    // Ensure it respects min/max widths
+    return Math.max(minLeftWidth, Math.min(percent, containerWidth - minRightWidth));
+  };
+
+  // Set initial layout mode and size
   const handleResize = () => {
     if (window.innerWidth <= 768) {
       setIsVertical(true);
-      setPrimarySize(300); // initial top height
+      setPrimarySize(300); // mobile height
     } else {
       setIsVertical(false);
-      setPrimarySize(500); // initial left width
+      setPrimarySize(calculateInitialSize());
     }
   };
 
   useEffect(() => {
-    handleResize(); // initialize
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
