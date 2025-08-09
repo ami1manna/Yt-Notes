@@ -9,7 +9,7 @@ import { extractPlaylistId } from "@/utils/PlaylistUtils";
 
 const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
   const [playlistId, setPlaylistId] = useState("");
-  const [isSectioned, setIsSectioned] = useState(false);
+  const [isSectioned, setIsSectioned] = useState(true);
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
@@ -31,7 +31,7 @@ const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
     );
 
     setPlaylistId("");
-    setIsSectioned(false);
+    // setIsSectioned(false);
     onClose();
   };
 
@@ -59,7 +59,7 @@ const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
             className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           />
 
-          <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-200">
+          {/* <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-200">
             <input
               type="checkbox"
               checked={isSectioned}
@@ -67,7 +67,7 @@ const AddPlaylistModal = ({ isOpen, onClose, groupId }) => {
               className="form-checkbox h-4 w-4 text-indigo-600"
             />
             <span>Arrange in Sections?</span>
-          </label>
+          </label> */}
 
           <IconButton
             onClick={handleSubmit}

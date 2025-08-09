@@ -46,6 +46,8 @@ const NotesSection = ({ groupId, playlistId }) => {
         content: editorContent,
       })
     );
+
+    console.log(editorContent);
   };
 
   return (
@@ -102,6 +104,7 @@ const NotesSection = ({ groupId, playlistId }) => {
               value={editorContent}
               onChange={setEditorContent}
               className="h-full"
+              handleNoteSave={handleNoteSave}
             />
           ) : (
             <div className="h-full flex items-center justify-center text-center text-gray-400">

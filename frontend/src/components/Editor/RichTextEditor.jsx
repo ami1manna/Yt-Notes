@@ -5,7 +5,7 @@ import { ThemeContext } from "@/context/ThemeContext";
 import { editorOptions } from "./editorConfig";
  
 
-const RichTextEditor = ({ value = "", onChange }) => {
+const RichTextEditor = ({ value = "", onChange , handleNoteSave}) => {
   const { theme } = useContext(ThemeContext);
   const isDarkMode = theme === "dark";
 
@@ -13,6 +13,9 @@ const RichTextEditor = ({ value = "", onChange }) => {
     backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
     color: isDarkMode ? "#ffffff" : "#000000",
   };
+ 
+
+ 
 
   return (
     <div className="w-full">
@@ -60,7 +63,10 @@ const RichTextEditor = ({ value = "", onChange }) => {
       </style>
 
       <SunEditor
-        setOptions={editorOptions}
+        setOptions={{
+              ...editorOptions,
+              callBackSave: handleNoteSave,  
+            }}
         onChange={onChange}
         setDefaultStyle={`
           font-family: arial;
