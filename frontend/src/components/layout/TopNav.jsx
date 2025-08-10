@@ -94,7 +94,7 @@ const TopNav = () => {
           >
             <NotebookPenIcon className="w-8 h-8 text-teal-500 dark:text-teal-400 transition-transform duration-300 group-hover:rotate-12" />
             <span className="hidden md:block text-2xl font-bold bg-gradient-to-r from-teal-500 to-blue-500 bg-clip-text text-transparent">
-              YouLearn
+              YT NOTES
             </span>
           </NavLink>
 

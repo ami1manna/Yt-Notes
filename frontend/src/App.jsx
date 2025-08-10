@@ -25,6 +25,7 @@ import GroupMember from "./pages/GroupMember/GroupMember";
 import SharedNotes from "./pages/SharedNotes/SharedNotes";
 import GroupPlaylists from "./pages/GroupDetails/GroupPlaylists";
 import GroupPlaylistDetails from "@/pages/GroupPlaylistDetails/GroupPlaylistDetails";
+import Roadmap from "@/pages/Roadmap/Roadmap";
  
  
 const router = createBrowserRouter(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
         <Route path="/groups/:groupId" element={<GroupDetails />}>
           <Route index element={<Navigate to="playlists" replace />} />
           <Route path="notes" element={<SharedNotes />} />
+          <Route path="roadmap" element={<Roadmap />} />
           <Route path="playlists" element={<GroupPlaylists />} />
           <Route path="members" element={<GroupMember />} />
         </Route>
