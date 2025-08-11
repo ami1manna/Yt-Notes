@@ -1,0 +1,783 @@
+{
+  "playlistId": "PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb",
+  "playlistTitle": "Welcome to C++",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb",
+  "channelTitle": "The Cherno",
+  "playlistThumbnailUrl": "https://i.ytimg.com/vi/18c3MTX0PK0/hqdefault.jpg",
+  "totalDuration": 94819,
+  "videos": [
+    {
+      "videoId": "18c3MTX0PK0",
+      "title": "Welcome to C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/18c3MTX0PK0/hqdefault.jpg",
+      "duration": 425
+    },
+    {
+      "videoId": "1OsGXuNA5cc",
+      "title": "How to Setup C++ on Windows",
+      "thumbnailUrl": "https://i.ytimg.com/vi/1OsGXuNA5cc/hqdefault.jpg",
+      "duration": 516
+    },
+    {
+      "videoId": "1E_kBSka_ec",
+      "title": "How to Setup C++ on Mac",
+      "thumbnailUrl": "https://i.ytimg.com/vi/1E_kBSka_ec/hqdefault.jpg",
+      "duration": 209
+    },
+    {
+      "videoId": "LKLuvoY6U0I",
+      "title": "How to Setup C++ on Linux",
+      "thumbnailUrl": "https://i.ytimg.com/vi/LKLuvoY6U0I/hqdefault.jpg",
+      "duration": 492
+    },
+    {
+      "videoId": "SfGuIVzE_Os",
+      "title": "How C++ Works",
+      "thumbnailUrl": "https://i.ytimg.com/vi/SfGuIVzE_Os/hqdefault.jpg",
+      "duration": 1221
+    },
+    {
+      "videoId": "3tIqpEmWMLI",
+      "title": "How the C++ Compiler Works",
+      "thumbnailUrl": "https://i.ytimg.com/vi/3tIqpEmWMLI/hqdefault.jpg",
+      "duration": 1075
+    },
+    {
+      "videoId": "H4s55GgAg0I",
+      "title": "How the C++ Linker Works",
+      "thumbnailUrl": "https://i.ytimg.com/vi/H4s55GgAg0I/hqdefault.jpg",
+      "duration": 952
+    },
+    {
+      "videoId": "zB9RI8_wExo",
+      "title": "Variables in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/zB9RI8_wExo/hqdefault.jpg",
+      "duration": 826
+    },
+    {
+      "videoId": "V9zuox47zr0",
+      "title": "Functions in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/V9zuox47zr0/hqdefault.jpg",
+      "duration": 590
+    },
+    {
+      "videoId": "9RJTQmK0YPI",
+      "title": "C++ Header Files",
+      "thumbnailUrl": "https://i.ytimg.com/vi/9RJTQmK0YPI/hqdefault.jpg",
+      "duration": 910
+    },
+    {
+      "videoId": "0ebzPwixrJA",
+      "title": "How to DEBUG C++ in VISUAL STUDIO",
+      "thumbnailUrl": "https://i.ytimg.com/vi/0ebzPwixrJA/hqdefault.jpg",
+      "duration": 1160
+    },
+    {
+      "videoId": "qEgCT87KOfc",
+      "title": "CONDITIONS and BRANCHES in C++ (if statements)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qEgCT87KOfc/hqdefault.jpg",
+      "duration": 1423
+    },
+    {
+      "videoId": "qeH9Xv_90KM",
+      "title": "BEST Visual Studio Setup for C++ Projects!",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qeH9Xv_90KM/hqdefault.jpg",
+      "duration": 728
+    },
+    {
+      "videoId": "_1AwR-un4Hk",
+      "title": "Loops in C++ (for loops, while loops)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/_1AwR-un4Hk/hqdefault.jpg",
+      "duration": 740
+    },
+    {
+      "videoId": "a3IZ8WaIFAA",
+      "title": "Control Flow in C++ (continue, break, return)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/a3IZ8WaIFAA/hqdefault.jpg",
+      "duration": 500
+    },
+    {
+      "videoId": "DTxHyVn0ODg",
+      "title": "POINTERS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/DTxHyVn0ODg/hqdefault.jpg",
+      "duration": 1019
+    },
+    {
+      "videoId": "IzoFn3dfsPA",
+      "title": "REFERENCES in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/IzoFn3dfsPA/hqdefault.jpg",
+      "duration": 613
+    },
+    {
+      "videoId": "2BP8NhxjrO0",
+      "title": "CLASSES in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/2BP8NhxjrO0/hqdefault.jpg",
+      "duration": 522
+    },
+    {
+      "videoId": "fLgTtaqqJp0",
+      "title": "CLASSES vs STRUCTS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/fLgTtaqqJp0/hqdefault.jpg",
+      "duration": 512
+    },
+    {
+      "videoId": "3dHBFBw13E0",
+      "title": "How to Write a C++ Class",
+      "thumbnailUrl": "https://i.ytimg.com/vi/3dHBFBw13E0/hqdefault.jpg",
+      "duration": 692
+    },
+    {
+      "videoId": "f3FVU-iwNuA",
+      "title": "Static in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/f3FVU-iwNuA/hqdefault.jpg",
+      "duration": 389
+    },
+    {
+      "videoId": "V-BFlMrBtqQ",
+      "title": "Static for Classes and Structs in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/V-BFlMrBtqQ/hqdefault.jpg",
+      "duration": 552
+    },
+    {
+      "videoId": "x55jfOd5PEE",
+      "title": "ENUMS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/x55jfOd5PEE/hqdefault.jpg",
+      "duration": 465
+    },
+    {
+      "videoId": "FXhALMsHwEY",
+      "title": "Constructors in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/FXhALMsHwEY/hqdefault.jpg",
+      "duration": 418
+    },
+    {
+      "videoId": "D8cWquReFqw",
+      "title": "Destructors in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/D8cWquReFqw/hqdefault.jpg",
+      "duration": 287
+    },
+    {
+      "videoId": "X8nYM8wdNRE",
+      "title": "Inheritance in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/X8nYM8wdNRE/hqdefault.jpg",
+      "duration": 480
+    },
+    {
+      "videoId": "oIV2KchSyGQ",
+      "title": "Virtual Functions in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/oIV2KchSyGQ/hqdefault.jpg",
+      "duration": 405
+    },
+    {
+      "videoId": "UWAdd13EfM8",
+      "title": "Interfaces in C++ (Pure Virtual Functions)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/UWAdd13EfM8/hqdefault.jpg",
+      "duration": 415
+    },
+    {
+      "videoId": "6OVQ8nh3KP0",
+      "title": "Visibility in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/6OVQ8nh3KP0/hqdefault.jpg",
+      "duration": 529
+    },
+    {
+      "videoId": "ENDaJi08jCU",
+      "title": "Arrays in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ENDaJi08jCU/hqdefault.jpg",
+      "duration": 1111
+    },
+    {
+      "videoId": "ijIxcB9qjaU",
+      "title": "How Strings Work in C++ (and how to use them)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ijIxcB9qjaU/hqdefault.jpg",
+      "duration": 1166
+    },
+    {
+      "videoId": "FeHZHF0f2dw",
+      "title": "String Literals in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/FeHZHF0f2dw/hqdefault.jpg",
+      "duration": 847
+    },
+    {
+      "videoId": "4fJBrditnJU",
+      "title": "CONST in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4fJBrditnJU/hqdefault.jpg",
+      "duration": 774
+    },
+    {
+      "videoId": "bP9z3H3cVMY",
+      "title": "The Mutable Keyword in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/bP9z3H3cVMY/hqdefault.jpg",
+      "duration": 416
+    },
+    {
+      "videoId": "1nfuYMXjZsA",
+      "title": "Member Initializer Lists in C++ (Constructor Initializer List)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/1nfuYMXjZsA/hqdefault.jpg",
+      "duration": 517
+    },
+    {
+      "videoId": "ezqsL-st8qg",
+      "title": "Ternary Operators in C++ (Conditional Assignment)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ezqsL-st8qg/hqdefault.jpg",
+      "duration": 481
+    },
+    {
+      "videoId": "Ks97R1knQDY",
+      "title": "How to CREATE/INSTANTIATE OBJECTS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Ks97R1knQDY/hqdefault.jpg",
+      "duration": 783
+    },
+    {
+      "videoId": "NUZdUSqsCs4",
+      "title": "The NEW Keyword in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/NUZdUSqsCs4/hqdefault.jpg",
+      "duration": 653
+    },
+    {
+      "videoId": "Rr1NX1lH3oE",
+      "title": "Implicit Conversion and the Explicit Keyword in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Rr1NX1lH3oE/hqdefault.jpg",
+      "duration": 474
+    },
+    {
+      "videoId": "mS9755gF66w",
+      "title": "OPERATORS and OPERATOR OVERLOADING in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/mS9755gF66w/hqdefault.jpg",
+      "duration": 764
+    },
+    {
+      "videoId": "Z_hPJ_EhceI",
+      "title": "The \"this\" keyword in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Z_hPJ_EhceI/hqdefault.jpg",
+      "duration": 368
+    },
+    {
+      "videoId": "iNuTwvD6ciI",
+      "title": "Object Lifetime in C++ (Stack/Scope Lifetimes)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/iNuTwvD6ciI/hqdefault.jpg",
+      "duration": 660
+    },
+    {
+      "videoId": "UOB7-B2MfwA",
+      "title": "SMART POINTERS in C++ (std::unique_ptr, std::shared_ptr, std::weak_ptr)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/UOB7-B2MfwA/hqdefault.jpg",
+      "duration": 697
+    },
+    {
+      "videoId": "BvR1Pgzzr38",
+      "title": "Copying and Copy Constructors in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/BvR1Pgzzr38/hqdefault.jpg",
+      "duration": 1252
+    },
+    {
+      "videoId": "4p3grlSpWYA",
+      "title": "The Arrow Operator in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4p3grlSpWYA/hqdefault.jpg",
+      "duration": 473
+    },
+    {
+      "videoId": "PocJ5jXv8No",
+      "title": "Dynamic Arrays in C++ (std::vector)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/PocJ5jXv8No/hqdefault.jpg",
+      "duration": 854
+    },
+    {
+      "videoId": "HcESuwmlHEY",
+      "title": "Optimizing the usage of std::vector in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/HcESuwmlHEY/hqdefault.jpg",
+      "duration": 584
+    },
+    {
+      "videoId": "f7mtWD9GdJ4",
+      "title": "Local Static in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/f7mtWD9GdJ4/hqdefault.jpg",
+      "duration": 460
+    },
+    {
+      "videoId": "or1dAmUO8k0",
+      "title": "Using Libraries in C++ (Static Linking)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/or1dAmUO8k0/hqdefault.jpg",
+      "duration": 1123
+    },
+    {
+      "videoId": "pLy69V2F_8M",
+      "title": "Using Dynamic Libraries in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/pLy69V2F_8M/hqdefault.jpg",
+      "duration": 607
+    },
+    {
+      "videoId": "Wt4dxDNmDA8",
+      "title": "Making and Working with Libraries in C++ (Multiple Projects in Visual Studio)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Wt4dxDNmDA8/hqdefault.jpg",
+      "duration": 747
+    },
+    {
+      "videoId": "3cm0VckC8q0",
+      "title": "How to Deal with Multiple Return Values in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/3cm0VckC8q0/hqdefault.jpg",
+      "duration": 1040
+    },
+    {
+      "videoId": "I-hZkUa9mIs",
+      "title": "Templates in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/I-hZkUa9mIs/hqdefault.jpg",
+      "duration": 1078
+    },
+    {
+      "videoId": "wJ1L2nSIV1s",
+      "title": "Stack vs Heap Memory in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/wJ1L2nSIV1s/hqdefault.jpg",
+      "duration": 1171
+    },
+    {
+      "videoId": "j3mYki1SrKE",
+      "title": "Macros in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/j3mYki1SrKE/hqdefault.jpg",
+      "duration": 1176
+    },
+    {
+      "videoId": "2vOPEuiGXVo",
+      "title": "The \"auto\" keyword in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/2vOPEuiGXVo/hqdefault.jpg",
+      "duration": 1024
+    },
+    {
+      "videoId": "Hw42GkHPyvk",
+      "title": "Static Arrays in C++ (std::array)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Hw42GkHPyvk/hqdefault.jpg",
+      "duration": 639
+    },
+    {
+      "videoId": "p4sDgQ-jao4",
+      "title": "Function Pointers in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/p4sDgQ-jao4/hqdefault.jpg",
+      "duration": 761
+    },
+    {
+      "videoId": "mWgmBBz0y8c",
+      "title": "Lambdas in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/mWgmBBz0y8c/hqdefault.jpg",
+      "duration": 714
+    },
+    {
+      "videoId": "4NYC-VU-svE",
+      "title": "Why I don't \"using namespace std\"",
+      "thumbnailUrl": "https://i.ytimg.com/vi/4NYC-VU-svE/hqdefault.jpg",
+      "duration": 875
+    },
+    {
+      "videoId": "ts1Eek5w7ZA",
+      "title": "Namespaces in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ts1Eek5w7ZA/hqdefault.jpg",
+      "duration": 797
+    },
+    {
+      "videoId": "wXBcwHwIt_I",
+      "title": "Threads in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/wXBcwHwIt_I/hqdefault.jpg",
+      "duration": 695
+    },
+    {
+      "videoId": "oEx5vGNFrLk",
+      "title": "Timing in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/oEx5vGNFrLk/hqdefault.jpg",
+      "duration": 675
+    },
+    {
+      "videoId": "gNgUMA_Ur0U",
+      "title": "Multidimensional Arrays in C++ (2D arrays)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/gNgUMA_Ur0U/hqdefault.jpg",
+      "duration": 1221
+    },
+    {
+      "videoId": "x0uUKWJzSO4",
+      "title": "Sorting in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/x0uUKWJzSO4/hqdefault.jpg",
+      "duration": 403
+    },
+    {
+      "videoId": "8egZ_5GA9Bc",
+      "title": "Type Punning in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/8egZ_5GA9Bc/hqdefault.jpg",
+      "duration": 800
+    },
+    {
+      "videoId": "6uqU9Y578n4",
+      "title": "Unions in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/6uqU9Y578n4/hqdefault.jpg",
+      "duration": 530
+    },
+    {
+      "videoId": "jELbKhGkEi0",
+      "title": "Virtual Destructors in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/jELbKhGkEi0/hqdefault.jpg",
+      "duration": 475
+    },
+    {
+      "videoId": "pWZS1MtxI-A",
+      "title": "Casting in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/pWZS1MtxI-A/hqdefault.jpg",
+      "duration": 805
+    },
+    {
+      "videoId": "9ncNA6Co2Nk",
+      "title": "Conditional and Action Breakpoints in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/9ncNA6Co2Nk/hqdefault.jpg",
+      "duration": 668
+    },
+    {
+      "videoId": "CWglkNBUmD4",
+      "title": "Safety in modern C++ and how to teach it",
+      "thumbnailUrl": "https://i.ytimg.com/vi/CWglkNBUmD4/hqdefault.jpg",
+      "duration": 1072
+    },
+    {
+      "videoId": "eSI4wctZUto",
+      "title": "Precompiled Headers in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/eSI4wctZUto/hqdefault.jpg",
+      "duration": 1290
+    },
+    {
+      "videoId": "CiHfz6pTolQ",
+      "title": "Dynamic Casting in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/CiHfz6pTolQ/hqdefault.jpg",
+      "duration": 839
+    },
+    {
+      "videoId": "YG4jexlSAjc",
+      "title": "BENCHMARKING in C++ (how to measure performance)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/YG4jexlSAjc/hqdefault.jpg",
+      "duration": 892
+    },
+    {
+      "videoId": "eUsTO5BO3WI",
+      "title": "STRUCTURED BINDINGS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/eUsTO5BO3WI/hqdefault.jpg",
+      "duration": 603
+    },
+    {
+      "videoId": "UAAiwObNhQ0",
+      "title": "How to Deal with OPTIONAL Data in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/UAAiwObNhQ0/hqdefault.jpg",
+      "duration": 606
+    },
+    {
+      "videoId": "qCc_Vqg3hJk",
+      "title": "Multiple TYPES of Data in a SINGLE VARIABLE in C++?",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qCc_Vqg3hJk/hqdefault.jpg",
+      "duration": 603
+    },
+    {
+      "videoId": "7nPrUBNGRAk",
+      "title": "How to store ANY data in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/7nPrUBNGRAk/hqdefault.jpg",
+      "duration": 794
+    },
+    {
+      "videoId": "5HWCsmE9DrE",
+      "title": "How to make C++ run FASTER (with std::async)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/5HWCsmE9DrE/hqdefault.jpg",
+      "duration": 1390
+    },
+    {
+      "videoId": "ZO68JEgoPeg",
+      "title": "How to make your STRINGS FASTER in C++!",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ZO68JEgoPeg/hqdefault.jpg",
+      "duration": 902
+    },
+    {
+      "videoId": "xlAH4dbMVnU",
+      "title": "VISUAL BENCHMARKING in C++ (how to measure performance visually)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/xlAH4dbMVnU/hqdefault.jpg",
+      "duration": 1089
+    },
+    {
+      "videoId": "PPup1yeU45I",
+      "title": "SINGLETONS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/PPup1yeU45I/hqdefault.jpg",
+      "duration": 1156
+    },
+    {
+      "videoId": "S7oVXMzTo4w",
+      "title": "Small String Optimization in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/S7oVXMzTo4w/hqdefault.jpg",
+      "duration": 794
+    },
+    {
+      "videoId": "sLlGEUO_EGE",
+      "title": "Track MEMORY ALLOCATIONS the Easy Way in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/sLlGEUO_EGE/hqdefault.jpg",
+      "duration": 805
+    },
+    {
+      "videoId": "fbYknr-HPYE",
+      "title": "lvalues and rvalues in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/fbYknr-HPYE/hqdefault.jpg",
+      "duration": 853
+    },
+    {
+      "videoId": "FHPtchw-eHA",
+      "title": "Continuous Integration in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/FHPtchw-eHA/hqdefault.jpg",
+      "duration": 882
+    },
+    {
+      "videoId": "vYW6TOwFK2M",
+      "title": "Static Analysis in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/vYW6TOwFK2M/hqdefault.jpg",
+      "duration": 875
+    },
+    {
+      "videoId": "qYxTP7wrCho",
+      "title": "Argument Evaluation Order in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qYxTP7wrCho/hqdefault.jpg",
+      "duration": 682
+    },
+    {
+      "videoId": "ehMg6zvXuMY",
+      "title": "Move Semantics in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ehMg6zvXuMY/hqdefault.jpg",
+      "duration": 790
+    },
+    {
+      "videoId": "OWNeCTd7yQE",
+      "title": "std::move and the Move Assignment Operator in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/OWNeCTd7yQE/hqdefault.jpg",
+      "duration": 966
+    },
+    {
+      "videoId": "TzB5ZeKQIHM",
+      "title": "ARRAY - Making DATA STRUCTURES in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/TzB5ZeKQIHM/hqdefault.jpg",
+      "duration": 1399
+    },
+    {
+      "videoId": "ryRf4Jh_YC0",
+      "title": "VECTOR/DYNAMIC ARRAY -  Making DATA STRUCTURES in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ryRf4Jh_YC0/hqdefault.jpg",
+      "duration": 2725
+    },
+    {
+      "videoId": "SgcHcbQ0RCQ",
+      "title": "ITERATORS in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/SgcHcbQ0RCQ/hqdefault.jpg",
+      "duration": 1029
+    },
+    {
+      "videoId": "F9eDv-YIOQ0",
+      "title": "Writing an ITERATOR in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/F9eDv-YIOQ0/hqdefault.jpg",
+      "duration": 1184
+    },
+    {
+      "videoId": "_zQqN5OYCCM",
+      "title": "How to REALLY learn C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/_zQqN5OYCCM/hqdefault.jpg",
+      "duration": 493
+    },
+    {
+      "videoId": "KXwRt7og0gI",
+      "title": "Intro to Binary and Bitwise Operators in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/KXwRt7og0gI/hqdefault.jpg",
+      "duration": 1300
+    },
+    {
+      "videoId": "HoQhw6_1NAA",
+      "title": "Bitwise AND (&), OR (|), XOR (^) and NOT (~) in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/HoQhw6_1NAA/hqdefault.jpg",
+      "duration": 1227
+    },
+    {
+      "videoId": "kQsHF7C-FUY",
+      "title": "I did a C++ University Assignment",
+      "thumbnailUrl": "https://i.ytimg.com/vi/kQsHF7C-FUY/hqdefault.jpg",
+      "duration": 3023
+    },
+    {
+      "videoId": "vWXrFetSH8w",
+      "title": "BEST WAY to make Desktop Applications in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/vWXrFetSH8w/hqdefault.jpg",
+      "duration": 1560
+    },
+    {
+      "videoId": "KiB0vRi2wlc",
+      "title": "Maps in C++ (std::map and std::unordered_map)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/KiB0vRi2wlc/hqdefault.jpg",
+      "duration": 1800
+    },
+    {
+      "videoId": "PksUUwvq-po",
+      "title": "What exactly is NULL?",
+      "thumbnailUrl": "https://i.ytimg.com/vi/PksUUwvq-po/hqdefault.jpg",
+      "duration": 1086
+    },
+    {
+      "videoId": "5glH8dGoeCA",
+      "title": "How to Properly Setup C++ Projects",
+      "thumbnailUrl": "https://i.ytimg.com/vi/5glH8dGoeCA/hqdefault.jpg",
+      "duration": 1966
+    },
+    {
+      "videoId": "OK0G4cmeX-I",
+      "title": "Conversion Operators in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/OK0G4cmeX-I/hqdefault.jpg",
+      "duration": 1196
+    },
+    {
+      "videoId": "JPlTuRj1OJo",
+      "title": "Make C++ Apps & Games FOR THE WEB",
+      "thumbnailUrl": "https://i.ytimg.com/vi/JPlTuRj1OJo/hqdefault.jpg",
+      "duration": 930
+    },
+    {
+      "videoId": "M0GLQEfplxs",
+      "title": "Weak Pointers in C++ (std::weak_ptr)",
+      "thumbnailUrl": "https://i.ytimg.com/vi/M0GLQEfplxs/hqdefault.jpg",
+      "duration": 1045
+    },
+    {
+      "videoId": "Xx-NcqmveDc",
+      "title": "Stop using std::vector wrong",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Xx-NcqmveDc/hqdefault.jpg",
+      "duration": 1394
+    },
+    {
+      "videoId": "LlzT3OBD5fA",
+      "title": "Naming Conventions in C++",
+      "thumbnailUrl": "https://i.ytimg.com/vi/LlzT3OBD5fA/hqdefault.jpg",
+      "duration": 968
+    },
+    {
+      "videoId": "teOe2IKGlC0",
+      "title": "C++ FINALLY Made Logging GOOD!",
+      "thumbnailUrl": "https://i.ytimg.com/vi/teOe2IKGlC0/hqdefault.jpg",
+      "duration": 837
+    },
+    {
+      "videoId": "Vz40rDiWnN8",
+      "title": "C++ FINALLY Improved Error Handling with std::expected!",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Vz40rDiWnN8/hqdefault.jpg",
+      "duration": 1351
+    }
+  ],
+  "videoOrder": [
+    "18c3MTX0PK0",
+    "1OsGXuNA5cc",
+    "1E_kBSka_ec",
+    "LKLuvoY6U0I",
+    "SfGuIVzE_Os",
+    "3tIqpEmWMLI",
+    "H4s55GgAg0I",
+    "zB9RI8_wExo",
+    "V9zuox47zr0",
+    "9RJTQmK0YPI",
+    "0ebzPwixrJA",
+    "qEgCT87KOfc",
+    "qeH9Xv_90KM",
+    "_1AwR-un4Hk",
+    "a3IZ8WaIFAA",
+    "DTxHyVn0ODg",
+    "IzoFn3dfsPA",
+    "2BP8NhxjrO0",
+    "fLgTtaqqJp0",
+    "3dHBFBw13E0",
+    "f3FVU-iwNuA",
+    "V-BFlMrBtqQ",
+    "x55jfOd5PEE",
+    "FXhALMsHwEY",
+    "D8cWquReFqw",
+    "X8nYM8wdNRE",
+    "oIV2KchSyGQ",
+    "UWAdd13EfM8",
+    "6OVQ8nh3KP0",
+    "ENDaJi08jCU",
+    "ijIxcB9qjaU",
+    "FeHZHF0f2dw",
+    "4fJBrditnJU",
+    "bP9z3H3cVMY",
+    "1nfuYMXjZsA",
+    "ezqsL-st8qg",
+    "Ks97R1knQDY",
+    "NUZdUSqsCs4",
+    "Rr1NX1lH3oE",
+    "mS9755gF66w",
+    "Z_hPJ_EhceI",
+    "iNuTwvD6ciI",
+    "UOB7-B2MfwA",
+    "BvR1Pgzzr38",
+    "4p3grlSpWYA",
+    "PocJ5jXv8No",
+    "HcESuwmlHEY",
+    "f7mtWD9GdJ4",
+    "or1dAmUO8k0",
+    "pLy69V2F_8M",
+    "Wt4dxDNmDA8",
+    "3cm0VckC8q0",
+    "I-hZkUa9mIs",
+    "wJ1L2nSIV1s",
+    "j3mYki1SrKE",
+    "2vOPEuiGXVo",
+    "Hw42GkHPyvk",
+    "p4sDgQ-jao4",
+    "mWgmBBz0y8c",
+    "4NYC-VU-svE",
+    "ts1Eek5w7ZA",
+    "wXBcwHwIt_I",
+    "oEx5vGNFrLk",
+    "gNgUMA_Ur0U",
+    "x0uUKWJzSO4",
+    "8egZ_5GA9Bc",
+    "6uqU9Y578n4",
+    "jELbKhGkEi0",
+    "pWZS1MtxI-A",
+    "9ncNA6Co2Nk",
+    "CWglkNBUmD4",
+    "eSI4wctZUto",
+    "CiHfz6pTolQ",
+    "YG4jexlSAjc",
+    "eUsTO5BO3WI",
+    "UAAiwObNhQ0",
+    "qCc_Vqg3hJk",
+    "7nPrUBNGRAk",
+    "5HWCsmE9DrE",
+    "ZO68JEgoPeg",
+    "xlAH4dbMVnU",
+    "PPup1yeU45I",
+    "S7oVXMzTo4w",
+    "sLlGEUO_EGE",
+    "fbYknr-HPYE",
+    "FHPtchw-eHA",
+    "vYW6TOwFK2M",
+    "qYxTP7wrCho",
+    "ehMg6zvXuMY",
+    "OWNeCTd7yQE",
+    "TzB5ZeKQIHM",
+    "ryRf4Jh_YC0",
+    "SgcHcbQ0RCQ",
+    "F9eDv-YIOQ0",
+    "_zQqN5OYCCM",
+    "KXwRt7og0gI",
+    "HoQhw6_1NAA",
+    "kQsHF7C-FUY",
+    "vWXrFetSH8w",
+    "KiB0vRi2wlc",
+    "PksUUwvq-po",
+    "5glH8dGoeCA",
+    "OK0G4cmeX-I",
+    "JPlTuRj1OJo",
+    "M0GLQEfplxs",
+    "Xx-NcqmveDc",
+    "LlzT3OBD5fA",
+    "teOe2IKGlC0",
+    "Vz40rDiWnN8"
+  ],
+  "sections": [],
+  "createdAt": {
+    "$date": "2025-08-07T16:47:40.312Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-07T16:47:40.312Z"
+  },
+  "__v": 0
+}
