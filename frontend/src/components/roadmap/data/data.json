@@ -1,0 +1,134 @@
+{
+  "nodes": [
+    {
+      "id": "root_node",
+      "data": { "label": "All Learning Paths" },
+      "position": { "x": 0, "y": 0 },
+      "style": {
+        "width": 900,
+        "height": 450,
+        "backgroundColor": "rgba(240, 240, 240, 0.25)"
+      }
+    },
+    {
+      "id": "pl_1",
+      "position": { "x": 300, "y": 25 },
+      "data": {
+        "label": "React JS Roadmap",
+        "duration": 72446,
+        "sections": [
+          {
+            "id": "689a0dabfd1ee77403cff417",
+            "name": "React Fundamentals & Core Concepts",
+            "videos": [
+              { "videoId": "vz1RlUyrc3w", "title": "React JS roadmap | chai aur react series", "duration": 1818 },
+              { "videoId": "k3KqQvywToE", "title": "Create react projects | chai aur react", "duration": 2116 },
+              { "videoId": "yNbnA5pryMg", "title": "Understand the react flow and structure", "duration": 2159 }
+            ]
+          },
+          {
+            "id": "689a0dabfd1ee77403cff418",
+            "name": "State Management & Data Handling",
+            "videos": [
+              { "videoId": "Lt4vy8hfc-s", "title": "useEffect, useRef and useCallback with 1 project", "duration": 3435 },
+              { "videoId": "AFDYnd-XPa8", "title": "Custom hooks in react | currency Project", "duration": 3698 }
+            ]
+          }
+        ]
+      },
+      "type": "default",
+      "parentNode": "root_node",
+      "extent": "parent"
+    },
+    {
+      "id": "pl_2",
+      "position": { "x": 100, "y": 125 },
+      "data": {
+        "label": "Advanced React Patterns",
+        "duration": 55000,
+        "sections": []
+      },
+      "type": "default",
+      "parentNode": "root_node",
+      "extent": "parent"
+    },
+    {
+      "id": "pl_3",
+      "position": { "x": 500, "y": 125 },
+      "data": {
+        "label": "Node.js for Beginners",
+        "duration": 68000,
+        "sections": []
+      },
+      "type": "default",
+      "parentNode": "root_node",
+      "extent": "parent"
+    },
+    {
+      "id": "pl_4",
+      "position": { "x": 300, "y": 225 },
+      "data": {
+        "label": "Full-Stack Project with React & Node",
+        "duration": 95000,
+        "sections": []
+      },
+      "type": "default",
+      "parentNode": "root_node",
+      "extent": "parent"
+    },
+    {
+      "id": "pl_5",
+      "position": { "x": 100, "y": 225 },
+      "data": {
+        "label": "React Native Basics",
+        "duration": 48000,
+        "sections": []
+      },
+      "type": "default",
+      "parentNode": "root_node",
+      "extent": "parent"
+    }
+  ],
+  "edges": [
+    {
+      "id": "eroot-1",
+      "source": "root_node",
+      "target": "pl_1",
+      "label": "Start Here",
+      "animated": false
+    },
+    {
+      "id": "e1-2",
+      "source": "pl_1",
+      "target": "pl_2",
+      "label": "Prerequisite for",
+      "animated": true
+    },
+    {
+      "id": "e1-3",
+      "source": "pl_1",
+      "target": "pl_3",
+      "label": "Related Topic"
+    },
+    {
+      "id": "e2-4",
+      "source": "pl_2",
+      "target": "pl_4",
+      "label": "Leads to",
+      "animated": true
+    },
+    {
+      "id": "e3-4",
+      "source": "pl_3",
+      "target": "pl_4",
+      "label": "Leads to",
+      "animated": true
+    },
+    {
+      "id": "e2-5",
+      "source": "pl_2",
+      "target": "pl_5",
+      "label": "Also see"
+    }
+  ]
+}
