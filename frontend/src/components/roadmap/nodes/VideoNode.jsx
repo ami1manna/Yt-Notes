@@ -1,86 +1,44 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
- 
-import { handleStyle } from '../styles/handleStyles';
+import { CheckCircle2, PlayCircle, Clock } from 'lucide-react';
+import { formatDuration } from "@/utils/Coverter";
 
-import { Play, Clock } from 'lucide-react';
-import { formatDuration } from '@/utils/Coverter';
-
-const VideoNode = ({ data }) => {
-  const { video, filter, onVideoClick } = data;
-
-  const handleVideoClick = (e) => {
-    e.stopPropagation();
-    if (onVideoClick) {
-      onVideoClick(video);
-    }
-  };
-  
-  return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[280px] max-w-[320px] cursor-pointer group">
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={handleStyle}
-        className="!bg-blue-500 !border-white"
-      />
-      
-      <div onClick={handleVideoClick} className="p-4">
-        {filter?.showImages && (
-          <div className="mb-3 relative">
-            <img
-              src={video.thumbnailUrl}
-              alt={video.title}
-              className="w-full h-32 object-cover rounded-md group-hover:opacity-90 transition-opacity"
-              loading="lazy"
-            />
-            {/* Play overlay on hover */}
-            <div className="absolute inset-0 bg-black bg-opacity-40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <Play size={24} className="text-white" fill="currentColor" />
-            </div>
-            {/* Duration badge */}
-            <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs font-mono">
-              {formatDuration(video.duration)}
-            </div>
-          </div>
-        )}
+const VideoNode = memo(({ data, selected }) => {
+    const isCompleted = data.completed || false;
+    
+    return (
+      <div className={`
+        ${isCompleted ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-400'} 
+        dark:bg-gray-700 border-2 rounded-lg shadow-md 
+        w-64 text-gray-900 dark:text-gray-100 p-4
+        transform transition-all duration-300 ease-out
+        hover:scale-105 hover:shadow-lg
+        ${selected ? 'ring-4 ring-green-300 scale-105' : ''}
+        ${isCompleted ? 'hover:border-green-400' : 'hover:border-gray-500'}
+      `}>
+        <Handle type="target" position={Position.Top} className={`!border-white !border-2 !w-3 !h-3 ${isCompleted ? '!bg-green-500' : '!bg-gray-400'}`} />
         
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">
-              VIDEO
-            </span>
-            {!filter?.showImages && (
-              <span className="text-xs font-mono text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded flex items-center gap-1">
-                <Clock size={12} />
-                {formatDuration(video.duration)}
-              </span>
+        <div className="flex items-start space-x-3">
+          <div className={`flex-shrink-0 p-2 rounded-lg ${isCompleted ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-gray-600'}`}>
+            {isCompleted ? (
+              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+            ) : (
+              <PlayCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             )}
           </div>
           
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-tight line-clamp-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            {video.title}
-          </h3>
-          
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            ID: {video.videoId}
-          </div>
-
-          {/* Click hint */}
-          <div className="text-xs text-blue-500 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity pt-1">
-            Click to preview →
+          <div className="flex-1 min-w-0">
+            <p className={`font-semibold text-sm leading-tight ${isCompleted ? 'text-green-800 dark:text-green-300' : 'text-gray-800 dark:text-gray-200'}`}>
+              {data.title}
+            </p>
+            <div className="flex items-center mt-2 space-x-2">
+              <Clock className="w-3 h-3 text-gray-500" />
+              <span className="text-xs text-gray-600 dark:text-gray-400">{formatDuration(data.duration)}</span>
+            </div>
           </div>
         </div>
       </div>
-      
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={handleStyle}
-        className="!bg-blue-500 !border-white"
-      />
-    </div>
-  );
-};
+    );
+});
 
 export default VideoNode;

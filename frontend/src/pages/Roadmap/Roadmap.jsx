@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Canvas from '@/components/roadmap/Canvas';
 import { Eye, EyeOff } from 'lucide-react';
-
+ 
 const Roadmap = () => {
   const [filter, setFilter] = useState({ showImages: true });
 
@@ -32,6 +32,7 @@ const Roadmap = () => {
       </div>
 
       <Canvas filter={filter} />
+     
     </div>
   );
 };
