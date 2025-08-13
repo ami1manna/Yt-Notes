@@ -1,5 +1,4 @@
- 
-// server.js
+ // server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
@@ -11,6 +10,7 @@ const sectionRoutes = require('./routes/sectionRoutes');
 const groupsRoutes = require('./routes/groupsRoutes');
 const userRoutes = require('./routes/userRoutes');
 const collabRoutes = require('./routes/collabRoutes');
+const groupPlaylistProgressRoutes = require('./routes/groupPlaylistProgressRoutes');
 
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -30,7 +30,6 @@ app.use(cors({
   credentials: true 
 }));
 
-
 // Database connection
 connectDB();
 
@@ -44,6 +43,7 @@ app.use('/section',sectionRoutes)
 app.use('/groups', groupsRoutes);
 app.use('/user', userRoutes);
 app.use('/collab', collabRoutes);
+app.use('/group-progress', groupPlaylistProgressRoutes); // Updated route prefix
 
 // Health check route
 app.get('/', (req, res) => {
@@ -58,6 +58,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
- 
-// // Export for Vercel
+
+// Export for Vercel
 module.exports = app;

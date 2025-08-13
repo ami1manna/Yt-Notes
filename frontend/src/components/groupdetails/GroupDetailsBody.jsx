@@ -5,7 +5,9 @@ import clsx from "clsx";
 import {
   Youtube,
   Users2,
-  StickyNote
+  StickyNote,
+  TreePalm,
+  Network
 } from "lucide-react";
 
 const tabs = [
@@ -13,6 +15,11 @@ const tabs = [
     label: "Playlists",
     route: "playlists",
     icon: <Youtube className="w-4 h-4" />
+  },
+   {
+    label:"Roadmap",
+    route:"roadmap",
+    icon:<Network className="w-4 h-4"/>
   },
   {
     label: "Members",
@@ -23,7 +30,8 @@ const tabs = [
     label: "Notes",
     route: "notes",
     icon: <StickyNote className="w-4 h-4" />
-  },
+  }
+ 
 ];
 
 const GroupDetailsBody = () => {
