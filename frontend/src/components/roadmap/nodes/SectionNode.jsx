@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { ChevronDown, ChevronUp, Layers } from 'lucide-react';
-import ProgressBar from './ProgressBar';
 
 const SectionNode = memo(({ data, selected }) => {
     const isExpanded = data.expanded || false;
@@ -28,15 +27,7 @@ const SectionNode = memo(({ data, selected }) => {
           </div>
         </div>
         
-        {data.progress !== undefined && (
-          <div className="mt-3">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Section Progress</span>
-              <span className="text-xs font-bold text-gray-800 dark:text-gray-200">{data.progress}%</span>
-            </div>
-            <ProgressBar progress={data.progress} size="sm" />
-          </div>
-        )}
+        {/* Progress bar section removed */}
       </div>
     );
 });

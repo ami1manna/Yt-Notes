@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -8,167 +8,112 @@ import {
 } from '@xyflow/react';
 import { RotateCw, Expand, Shrink } from 'lucide-react';
 import '@xyflow/react/dist/style.css';
-
-import './styles/Canvas.css';
-import { flowData } from './data/data';
+import { useParams } from 'react-router-dom';
+import { roadmapApi } from '../../utils/roadmapUtils';
 import { getNodeTypes } from './nodes/nodeTypes';
+import './styles/Canvas.css';
+
+// Static node types
+const nodeTypes = getNodeTypes(new Set());
 
 const Canvas = () => {
     const containerRef = useRef(null);
-    const [nodes, setNodes] = useState([flowData.nodes.find(n => n.id === 'root_node')]);
+    const { groupId } = useParams();
+    const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [selectedNodes, setSelectedNodes] = useState(new Set());
-  
-    const handleNodeClick = useCallback((event, clickedNode) => {
-      const isExpanded = nodes.some(node => node.data.parentId === clickedNode.id);
-  
-      setSelectedNodes(prev => new Set([clickedNode.id]));
-  
-      if (isExpanded) {
-        const nodesToRemove = new Set();
-        const queue = [clickedNode.id];
-        
-        while(queue.length > 0) {
-          const currentId = queue.shift();
-          const children = nodes.filter(n => n.data.parentId === currentId);
-          children.forEach(child => {
-            nodesToRemove.add(child.id);
-            queue.push(child.id);
-          });
-        }
-        
-        setNodes(prev => prev.map(n => 
-          n.id === clickedNode.id 
-            ? { ...n, data: { ...n.data, expanded: false } }
-            : n
-        ).filter(n => !nodesToRemove.has(n.id)));
-        
-        setEdges(prev => prev.filter(e => {
-            const sourceNodeExists = !nodesToRemove.has(e.source);
-            const targetNodeExists = !nodesToRemove.has(e.target);
-            return sourceNodeExists && targetNodeExists;
-        }));
-  
-      } else {
-        const childrenData = clickedNode.data.type === 'root'
-          ? flowData.nodes.filter(n => flowData.edges.some(e => e.source === clickedNode.id && e.target === n.id))
-          : clickedNode.data.children || [];
-  
-        if (childrenData.length === 0) return;
-  
-        const newNodes = [];
-        const newEdges = [];
-        
-        childrenData.forEach((childData, index) => {
-          let position;
-          if (clickedNode.data.type === 'section') {
-              position = {
-                  x: clickedNode.position.x,
-                  y: clickedNode.position.y + 120 + (index * 90),
-              };
-          } else {
-              position = {
-                  x: clickedNode.position.x - ((childrenData.length - 1) * 200) + (index * 400),
-                  y: clickedNode.position.y + 180,
-              };
-          }
-  
-          const childNode = {
-            id: childData.id || childData.data?.id,
-            data: { ...childData.data, ...childData, parentId: clickedNode.id },
-            position: position,
-            type: childData.type === 'playlistNode' ? 'playlistNode' : `${childData.type}Node`,
-          };
-          newNodes.push(childNode);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch and display all nodes and edges
+    useEffect(() => {
+      const fetchRoadmapData = async () => {
+        try {
+          setLoading(true);
+          const response = await roadmapApi.getRoadmap(groupId);
           
-          const newEdge = {
-            id: `e-${clickedNode.id}-${childNode.id}`,
-            source: clickedNode.id,
-            target: childNode.id,
-            type: 'smoothstep',
-            animated: true,
-            style: { stroke: '#6366f1', strokeWidth: 2 }
-          };
-          newEdges.push(newEdge);
-        });
-  
-        setNodes(prev => prev.map(n => 
-          n.id === clickedNode.id 
-            ? { ...n, data: { ...n.data, expanded: true } }
-            : n
-        ).concat(newNodes));
-        
-        setEdges(prev => [...prev, ...newEdges]);
-      }
-    }, [nodes]);
-  
-    const nodeTypes = useMemo(() => getNodeTypes(selectedNodes), [selectedNodes]);
-  
+          if (response.success && response.data) {
+            setNodes(response.data.nodes || []);
+            setEdges(response.data.edges || []);
+          } else {
+            setError('Failed to load roadmap data');
+          }
+        } catch (err) {
+          console.error('Error fetching roadmap data:', err);
+          setError('Failed to load roadmap. Please try again.');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchRoadmapData();
+    }, [groupId]);
+
     const toggleFullscreen = () => {
       if (!document.fullscreenElement) {
-        containerRef.current.requestFullscreen().catch(err => {
-          alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-        });
+        containerRef.current?.requestFullscreen?.()
+          .then(() => setIsFullscreen(true))
+          .catch(console.error);
       } else {
-        document.exitFullscreen();
+        document.exitFullscreen?.()
+          .then(() => setIsFullscreen(false))
+          .catch(console.error);
       }
     };
-  
+
     const resetView = () => {
-      setNodes([flowData.nodes.find(n => n.id === 'root_node')]);
-      setEdges([]);
-      setSelectedNodes(new Set());
+      // This will be handled by ReactFlow's fitView prop
     };
-  
-    useEffect(() => {
-      const onFullscreenChange = () => {
-        setIsFullscreen(!!document.fullscreenElement);
-      };
-      document.addEventListener('fullscreenchange', onFullscreenChange);
-      return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
-    }, []);
-    
+
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center w-full h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Loading roadmap...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex items-center justify-center w-full h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-red-500 text-5xl mb-4">⚠️</div>
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error Loading Roadmap</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div ref={containerRef} className="w-full h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-       
         <ReactFlow
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
-          onNodeClick={handleNodeClick}
           fitView
           attributionPosition="top-right"
           className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800"
-          defaultEdgeOptions={{
-            type: 'smoothstep',
-            animated: false,
-            style: { stroke: '#94a3b8', strokeWidth: 2 }
-          }}
         >
-          <MiniMap 
-            nodeColor={(node) => {
-                if (node.id === 'root_node') return '#10b981';
-                if (node.type === 'sectionNode') return '#a855f7';
-                if (node.type === 'videoNode') return '#22c55e';
-                return '#3b82f6';
-            }}
-            maskColor="rgba(255, 255, 255, 0.1)"
-          />
           <Controls>
-              <ControlButton onClick={resetView} title="Reset View">
-                  <RotateCw size={16} />
-              </ControlButton>
-              <ControlButton onClick={toggleFullscreen} title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}>
-                  {isFullscreen ? <Shrink size={16} /> : <Expand size={16} />}
-              </ControlButton>
+            <ControlButton onClick={resetView} title="Reset View">
+              <RotateCw className="w-4 h-4" />
+            </ControlButton>
+            <ControlButton onClick={toggleFullscreen} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}>
+              {isFullscreen ? <Shrink className="w-4 h-4" /> : <Expand className="w-4 h-4" />}
+            </ControlButton>
           </Controls>
-          <Background 
-            color="rgba(148, 163, 184, 0.3)" 
-            gap={20} 
-            size={1}
-            className="dark:!bg-gray-900"
-          />
+          <MiniMap nodeStrokeWidth={3} />
+          <Background />
         </ReactFlow>
       </div>
     );

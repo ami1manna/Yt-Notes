@@ -12,6 +12,7 @@ const {
   getSharedPlaylistsForGroup,
   getSharedPlaylistDetails
 } = require('../controllers/group/GroupController');
+const { getRoadmap } = require('../controllers/roadmap/roadmapController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -36,7 +37,7 @@ router.get('/invites/mine', protect, getMyInvites);
 router.post('/:groupId/share-playlist', protect, sharePlaylistWithGroup);
 // Fetch shared playlist Details
 router.get('/:groupId/shared-playlist/:playlistId', protect, getSharedPlaylistDetails);
+// Get roadmap data
+router.get('/:groupId/roadmap', protect, getRoadmap);
 
-
-
-module.exports = router; 
+module.exports = router;
