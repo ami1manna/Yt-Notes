@@ -1,9 +1,7 @@
 # 🎥 YT-Notes
 
 <div align="center">
-  <p align="center">
-    <img src="frontend/public/logo.svg" alt="YT-Notes Logo" width="150" height="150">
-  </p>
+   
   <h1>Enhance Your YouTube Learning Experience</h1>
   <p>Take timestamped notes, collaborate with others, and get AI-powered insights from YouTube videos.</p>
   
@@ -13,6 +11,8 @@
   [![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
 
   🌐 **Live Demo:** [YT Notes Manager](https://yt-notes-frontend.netlify.app/)
+
+  🎥 **Video Demo:** [Watch on YouTube](https://www.youtube.com/watch?v=uH7wczpbs90)
 </div>
 
 ## 🖼️ Project Screenshots
