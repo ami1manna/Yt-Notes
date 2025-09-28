@@ -12,7 +12,7 @@ const FallBackScreen = () => {
         className="text-center w-full h-full flex flex-col justify-center items-center"
       >
         <motion.img
-          src="./empty.gif"
+          src="./empty-box.png"
           alt="Empty State"
           className="w-64 h-64 object-cover mx-auto rounded-full shadow-lg mb-6"
           whileHover={{ scale: 1.05 }}
