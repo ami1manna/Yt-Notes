@@ -15,6 +15,10 @@
   🎥 **Video Demo:** [Watch on YouTube](https://www.youtube.com/watch?v=uH7wczpbs90)
 </div>
 
+## 🖼️ Database
+<img width="4290" height="2307" alt="Mermaid Chart - Create complex, visual diagrams with text -2025-11-02-113023" src="https://github.com/user-attachments/assets/b10f9764-695e-4420-814d-6e128f706ed2" />
+
+
 ## 🖼️ Project Screenshots
 
 | Playlist Dashboard | Video Player with Notes & Summary |
